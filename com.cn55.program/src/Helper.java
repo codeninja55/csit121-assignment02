@@ -1,7 +1,7 @@
 //package assignment1;
+
 import java.util.InputMismatchException;
 import java.util.Scanner;
-import java.lang.String;
 
 /*
  * @author Dinh Che

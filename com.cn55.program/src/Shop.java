@@ -1,11 +1,5 @@
-//package assignment1;
-import java.util.Random;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.*;
+import cn55.card.*;
 
 /*
  * @author Dinh Che
@@ -89,8 +83,8 @@ public class Shop {
              * if the card does not exist, prompt user to make one. */
             for (Card card : cardsCopy) {
 
-                if (card.id.equals(cardID)) {
-                    String cardType = card.cardType;
+                if (card.getID().equals(cardID)) {
+                    String cardType = card.getCardType();
                     Purchase newPurchase = new Purchase(cardID,cardType,categories,receiptID);
                     card.calcPoints(newPurchase.calcCategoriesTotal());
 
@@ -323,7 +317,7 @@ public class Shop {
 
                 /*If the card.points is in the range of the min at index 0 and max at index 1
                 * increase the thresholdResults value by 1*/
-                if (card.points >= item.getValue()[0] && card.points < item.getValue()[1])
+                if (card.getPoints() >= item.getValue()[0] && card.getPoints() < item.getValue()[1])
                     thresholdResults.put(item.getKey(), thresholdResults.get(item.getKey()) + 1);
             }
         }
@@ -427,9 +421,9 @@ public class Shop {
             for (Card card : cards) {
                 totalPoints += card.getPoints();
 
-                if (card.points < 500D) {
+                if (card.getPoints() < 500D) {
                     low++;
-                } else if (card.points > 500D && card.points < 2000D) {
+                } else if (card.getPoints() > 500D && card.getPoints() < 2000D) {
                     medium++;
                 } else {
                     high++;
