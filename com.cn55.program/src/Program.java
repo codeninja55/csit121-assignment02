@@ -1,4 +1,5 @@
 //package assignment1;
+import javax.swing.*;
 import java.util.*;
 
 /*
@@ -12,6 +13,12 @@ import java.util.*;
 public class Program {
 
     public static void main(String[] args) {
+
+        /*try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }*/
 
         Shop shop = new Shop();
 
