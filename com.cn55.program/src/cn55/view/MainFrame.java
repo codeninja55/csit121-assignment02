@@ -24,7 +24,7 @@ public class MainFrame extends JFrame {
         welcomePanel = new JPanel();
         welcomePanel.setLayout(new GridBagLayout());
         JLabel welcomeLabel = new JLabel("Welcome to Marvel Rewards");
-        welcomeLabel.setFont(new Font("Verdana",1,42));
+        welcomeLabel.setFont(new Font("Verdana",1,56));
         welcomePanel.add(welcomeLabel);
 
         cardPanel = new CardPanel();

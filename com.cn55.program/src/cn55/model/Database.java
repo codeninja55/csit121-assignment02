@@ -14,5 +14,5 @@ package cn55.model;
 * */
 
 public class Database {
-    
+
 }
