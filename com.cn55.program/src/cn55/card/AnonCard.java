@@ -1,4 +1,5 @@
-//package assignment1;
+package cn55.card;
+
 /*
  * @author Dinh Che
  * Student Number: 5721970
@@ -11,17 +12,24 @@ public class AnonCard extends Card {
     /*########## CONSTRUCTORS ##########*/
 
     // default constructor
-    public AnonCard() { super(null,0,"AnonCard"); }
+    public AnonCard() {
+        super(null,0,"AnonCard"); }
 
-    public AnonCard(String id) { super(id,0,"AnonCard"); }
+    public AnonCard(String id) {
+        super(id,0,"AnonCard"); }
 
     /*########## SETTERS ##########*/
     @Override
-    public void calcPoints(double totalAmount) { this.points += POINTS_RATE * totalAmount; }
+    public void calcPoints(double totalAmount) {
+        this.points += POINTS_RATE * totalAmount;
+    }
 
     /*########## GETTERS ##########*/
     @Override
     public String toString() {
         return String.format("%-12s %-10s %-10.2f",this.cardType, this.id, this.points);
     }
+
+    public String getID() { return id; }
+
 }

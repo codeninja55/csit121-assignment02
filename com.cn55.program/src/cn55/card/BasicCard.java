@@ -1,4 +1,5 @@
-//package assignment1;
+package cn55.card;
+
 /*
  *
  * @author Dinh Che

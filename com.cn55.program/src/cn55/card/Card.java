@@ -1,4 +1,5 @@
-//package assignment1;
+package cn55.card;
+
 /*
  * @author Dinh Che
  * Student Number: 5721970
@@ -33,7 +34,7 @@ public abstract class Card {
     public void calcBalance(double totalAmount) {}
 
     /*########## GETTERS ##########*/
-    public String getCardType() { return this.cardType; }
-
-    public double getPoints() { return this.points; }
+    public String getCardType() { return cardType; }
+    public String getID() { return id; }
+    public double getPoints() { return points; }
 }
