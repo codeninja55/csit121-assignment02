@@ -1,4 +1,7 @@
+package cn55.swing;
+
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,6 +15,10 @@ public class CardsToolbar extends JPanel {
     private JButton searchButton;
 
     public CardsToolbar() {
+
+        Border innerBorder = BorderFactory.createTitledBorder("Actions");
+        Border outerBorder = BorderFactory.createEmptyBorder(5,5,5,5);
+        setBorder(BorderFactory.createCompoundBorder(outerBorder, innerBorder));
 
         addCard = new JButton("Add Card");
         deleteCard = new JButton("Delete Card");

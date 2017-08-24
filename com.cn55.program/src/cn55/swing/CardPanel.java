@@ -1,3 +1,4 @@
+package cn55.swing;
 import javax.swing.*;
 import java.awt.*;
 
@@ -15,5 +16,6 @@ public class CardPanel extends JPanel {
         add(toolbar, BorderLayout.NORTH);
         add(cardPanel, BorderLayout.CENTER);
 
+        //setBorder(BorderFactory.createEtchedBorder());
     }
 }

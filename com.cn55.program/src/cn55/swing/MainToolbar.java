@@ -1,3 +1,4 @@
+package cn55.swing;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
