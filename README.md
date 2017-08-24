@@ -37,8 +37,8 @@ Students who wish to submit and advanced assignment must ensure that have alread
 ### Advanced Level (CSCIT821 students must complete this level)
 The advanced level includes all the requirements of the standard level plus the following features:
 
-    1. An additional form (tab) that allows a user to add or delete purchase categories. You must have a category called “Other”. When a category is deleted, all amounts in the existing purchases are moved into this “Other” category. A consequence of this is the form that allows a user to make a purchase must have a dynamic number of TextFields, to support one TextField for each category amount. You may need to manually create the corresponding Java swing code for this.
-    2. The form that allows a user to view the list of cards will offer three sorts: (i) cards in the order that were created (ii) in the order of their names (iii) in the order of their points. You must make appropriate use of the Java sort methods here i.e. use an appropriate Collects.sort method.
+1. An additional form (tab) that allows a user to add or delete purchase categories. You must have a category called “Other”. When a category is deleted, all amounts in the existing purchases are moved into this “Other” category. A consequence of this is the form that allows a user to make a purchase must have a dynamic number of TextFields, to support one TextField for each category amount. You may need to manually create the corresponding Java swing code for this.
+2. The form that allows a user to view the list of cards will offer three sorts: (i) cards in the order that were created (ii) in the order of their names (iii) in the order of their points. You must make appropriate use of the Java sort methods here i.e. use an appropriate Collects.sort method.
 
 
 ### Marking (CSIT121 students)
