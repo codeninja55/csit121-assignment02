@@ -1,4 +1,4 @@
-package cn55.card;
+package cn55.model;
 
 /*
  * @author Dinh Che

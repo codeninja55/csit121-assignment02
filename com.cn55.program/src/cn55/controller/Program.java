@@ -1,8 +1,10 @@
-import cn55.swing.MainFrame;
+package cn55.controller;
+
+import cn55.view.MainFrame;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
-import cn55.card.*;
+import cn55.model.*;
 
 /*
  * @author Dinh Che
@@ -26,27 +28,6 @@ public class Program {
 
         createTestCode(shop);
 
-        /*while (true) {
-            Helper.printMenu();
-
-            int menuChoice = Helper.userSelection();
-
-            switch (menuChoice) {
-                case 0: System.exit(0);
-                case 1: shop.createCategories(shop.userCategories(false));
-                        break;
-                case 2: shop.showCards();
-                        break;
-                case 3: shop.showPurchases();
-                        break;
-                //case 4: shop.makePurchase();
-                //        break;
-                case 4: shop.showTotalPurchases();
-                        break;
-                case 5: shop.showPoints();
-                        break;
-            }
-        } // end while loop*/
     } // end of main method
 
     private static void createTestCode(Shop shop) {

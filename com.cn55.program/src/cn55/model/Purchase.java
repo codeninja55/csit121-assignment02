@@ -1,4 +1,4 @@
-//package assignment1;
+package cn55.model;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -40,14 +40,14 @@ public class Purchase {
         this.purchaseTime = setPurchaseTime();
     } // end of constructor for cash
 
-    // constructor for card purchases
+    // constructor for model purchases
     public Purchase(String cardID, String cardType, Map<String, Double> categories, int receiptID) {
         this.receiptID = receiptID;
         this.cardID = cardID;
         this.cardType = cardType;
         this.categories = categories;
         this.purchaseTime = setPurchaseTime();
-    } // end of constructor for card
+    } // end of constructor for model
 
     /*########## SETTERS ##########*/
 
@@ -72,7 +72,7 @@ public class Purchase {
                 "Receipt ID", this.receiptID,
                 "Card ID:",this.cardID,
                 "Card Type:",this.cardType,
-                "Purchase Time:",this.purchaseTime);
+                "cn55.model.Purchase Time:",this.purchaseTime);
 
         String secondOutput = "";
 

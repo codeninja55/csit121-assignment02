@@ -1,11 +1,15 @@
+package cn55.controller;
+
 import java.util.*;
-import cn55.card.*;
+import cn55.model.*;
 
 /*
  * @author Dinh Che
  * Student Number: 5721970
  * Email: dbac496@uowmail.edu.au
  */
+
+/* CONTROLLER CLASS */
 
 public class Shop {
 
@@ -64,23 +68,16 @@ public class Shop {
         *       Total Amount for each category*/
         //setCategories();
 
-        /*NOTE: Regarding ConcurrentModificationError when iterating over ArrayList
-        * There are 2 options available:
-        * 1. Create a copy of cards ArrayList using ArrayList(Collection<? extends E> c)
-        *    to avoid Modifying the original cards list
-        * 2. Iterating over original ArrayList to find index of existing cards and making
-        *    modifications to any existing card objects using its index in the ArrayList*/
-
         ArrayList<Card> cardsCopy = new ArrayList<>(cards);
 
-        boolean newCard = true; // flag to see if new card required
+        boolean newCard = true; // flag to see if new model required
 
         if (cardID.equalsIgnoreCase("cash")) {
-            /* If it just a cash purchase, no updates required to card */
+            /* If it just a cash purchase, no updates required to model */
             purchases.add(new Purchase(categories, receiptID));
         } else {
             /* Loop through cards ArrayList to validate for existing cards
-             * if the card does not exist, prompt user to make one. */
+             * if the model does not exist, prompt user to make one. */
             for (Card card : cardsCopy) {
 
                 if (card.getID().equals(cardID)) {
@@ -92,13 +89,13 @@ public class Shop {
                         card.calcBalance(newPurchase.calcCategoriesTotal());
 
                     purchases.add(newPurchase);
-                    newCard = false; // set flag so new card not created
+                    newCard = false; // set flag so new model not created
                     break;
                 }
             }
 
             if (newCard) {
-                System.out.print("\nPlease create a new card for this purchase\n");
+                System.out.print("\nPlease create a new model for this purchase\n");
                 createCard(cardID, categories);
             }
         }
@@ -116,7 +113,7 @@ public class Shop {
         double totalAmount = newPurchase.calcCategoriesTotal();
 
         if (cardChoice.isEmpty()) {
-            System.out.println("\nExiting from creating card...");
+            System.out.println("\nExiting from creating model...");
         } else if (cardChoice.equalsIgnoreCase("AnonCard")) {
             System.out.println("\nCreating an Anon Card");
 
@@ -233,7 +230,7 @@ public class Shop {
         * HashMap so the user cannot input a value twice. Exits loop when user enters 0
         * or presses enter on a blank newline character */
         while (true) {
-            System.out.printf("%nPlease select Purchase Category from below to add amount:%n");
+            System.out.printf("%nPlease select cn55.model.Purchase Category from below to add amount:%n");
             System.out.printf("[ 0 ] %s%n", "Finished");
 
             for (Map.Entry<Integer, String> item : categoriesMenu.entrySet())
@@ -315,7 +312,7 @@ public class Shop {
         for (Card card : cards) {
             for (Map.Entry<String, int[]> item : thresholdList.entrySet()) {
 
-                /*If the card.points is in the range of the min at index 0 and max at index 1
+                /*If the model.points is in the range of the min at index 0 and max at index 1
                 * increase the thresholdResults value by 1*/
                 if (card.getPoints() >= item.getValue()[0] && card.getPoints() < item.getValue()[1])
                     thresholdResults.put(item.getKey(), thresholdResults.get(item.getKey()) + 1);

@@ -1,5 +1,4 @@
-package cn55.swing;
-
+package cn55.view;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;

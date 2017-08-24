@@ -1,4 +1,4 @@
-package cn55.swing;
+package cn55.view;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
