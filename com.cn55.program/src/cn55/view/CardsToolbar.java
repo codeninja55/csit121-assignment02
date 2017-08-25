@@ -46,7 +46,7 @@ public class CardsToolbar extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             if(e.getSource() == addCard) {
-                JOptionPane.showMessageDialog(null,"Adding Card Selected");
+                new CardForm();
             } else if (e.getSource() == deleteCard) {
                 JOptionPane.showMessageDialog(null,"Deleting Card Selected");
             } else if (e.getSource() == sortCards) {
