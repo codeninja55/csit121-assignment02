@@ -16,18 +16,13 @@ class CardPanel extends JPanel {
     CardPanel() {
         toolbar = new CardsToolbar();
         cardTextArea = new JTextArea();
-        cardTextArea.setFont(new Font("Arial",Font.BOLD, 20));
+        cardTextArea.setFont(new Font("Verdana",Font.BOLD, 20));
 
         setLayout(new BorderLayout());
 
         add(toolbar, BorderLayout.NORTH);
         add(new JScrollPane(cardTextArea), BorderLayout.CENTER);
     }
-
-    /* DATA NEEDED FROM SHOP
-    *  - cards
-    *  - cardID
-    *  */
 
     void setCreateCardListener(FormListener listener) {
         toolbar.setCreateCardListener(listener);
@@ -40,6 +35,7 @@ class CardPanel extends JPanel {
     void setCardData(ArrayList<Card> cards) { this.cards = cards; }
 
     void refresh() {
+        cardTextArea.setText(null);
         for (Card card : cards) {
             cardTextArea.append(card.toString());
         }

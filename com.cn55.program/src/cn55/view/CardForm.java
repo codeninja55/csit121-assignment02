@@ -4,8 +4,11 @@ import cn55.model.Card;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 class CardForm {
+
+    HashMap<String,String> newCard;
 
     /*====================  CONSTRUCTOR for Creating Cards ====================*/
     CardForm(String cardID) {
@@ -126,20 +129,24 @@ class CardForm {
         // TODO make a temp card
 
         if (confirm == JOptionPane.OK_OPTION) {
-            // Add to Database
-        } else {
-            // DELETE the temp card
+            HashMap<String,String> cardMap = new HashMap<>();
+            cardMap.put("cardType", "AnonCard");
+            cardMap.put("cardID", cardID);
+
+            this.newCard = cardMap;
         }
     }
 
-    private void createOtherCardForm(Object cardType, String cardID) {
+    private void createOtherCardForm(Object cardChoice, String cardID) {
 
-        String title;
+        String title, cardType;
 
-        if (cardType.equals("Basic Card")) {
+        if (cardChoice.equals("Basic Card")) {
             title = "Create Basic Card";
+            cardType = "BasicCard";
         } else {
             title = "Create Premium Card";
+            cardType = "PremiumCard";
         }
 
         // TODO use generateCardID method from shop class
@@ -193,12 +200,21 @@ class CardForm {
                 JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE);
 
-        // TODO make temp new card before confirm
+        if (confirm == JOptionPane.OK_OPTION) {
+            HashMap<String,String> cardMap = new HashMap<>();
 
-        /*if (result == JOptionPane.OK_OPTION) {
-            // Add to Database
-        } else {
-            // DELETE the CARd
-        }*/
+            cardMap.put("cardType", cardType);
+            cardMap.put("cardID",cardID);
+            cardMap.put("name", name.getText());
+            cardMap.put("email", email.getText());
+
+            this.newCard = cardMap;
+        }
+    }
+
+    /*====================  GETTER for Creating Cards ====================*/
+
+    public HashMap<String, String> getCardMap() {
+        return newCard;
     }
 }

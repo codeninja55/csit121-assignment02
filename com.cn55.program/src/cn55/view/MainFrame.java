@@ -4,6 +4,7 @@ import cn55.model.Shop;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashMap;
 
 public class MainFrame extends JFrame {
 
@@ -57,7 +58,9 @@ public class MainFrame extends JFrame {
         // Listens to events in Toolbar and handles the event
         cardPanel.setCreateCardListener(new FormListener() {
             public void cardFormActionEvent() {
-                new CardForm(shop.generateCardID());
+                CardForm createCardForm = new CardForm(shop.generateCardID());
+                HashMap<String,String> newCard = createCardForm.getCardMap();
+                shop.makeCard(newCard);
             }
         });
 
