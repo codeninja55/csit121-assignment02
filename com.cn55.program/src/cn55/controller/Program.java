@@ -31,6 +31,7 @@ public class Program {
         Shop shop = new Shop(true);
         db = shop.getDatabase();
         createTestCode(shop);
+        db.mapCards();
 
         new MainFrame(shop);
 
