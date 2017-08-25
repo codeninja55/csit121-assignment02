@@ -28,7 +28,7 @@ public class Program {
             throw new RuntimeException(e);
         }*/
 
-        Shop shop = new Shop();
+        Shop shop = new Shop(true);
         db = shop.getDatabase();
         createTestCode(shop);
 
