@@ -1,6 +1,6 @@
 package cn55.view;
 
-import cn55.model.Shop;
+import cn55.model.Database;
 import javax.swing.*;
 import java.awt.*;
 
@@ -14,7 +14,7 @@ public class MainFrame extends JFrame {
     private CategoriesPanel categoriesPanel;
     private SummaryPanel summaryPanel;
 
-    public MainFrame(Shop shop) {
+    public MainFrame(Database db) {
         super("Marvel Rewards");
 
         setLayout(new BorderLayout());
@@ -35,7 +35,7 @@ public class MainFrame extends JFrame {
         categoriesPanel = new CategoriesPanel();
         summaryPanel = new SummaryPanel();
 
-        cardPanel.setCardData(shop.getCards());
+        cardPanel.setCardData(db.getCards());
 
         // Add panels, toolbars, and panes to main Frame
         //add(mainToolbar, BorderLayout.NORTH);
