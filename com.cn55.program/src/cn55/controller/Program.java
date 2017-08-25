@@ -1,10 +1,10 @@
 package cn55.controller;
 
+import cn55.model.*;
 import cn55.view.MainFrame;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
-import cn55.model.*;
 
 /*
  * @author Dinh Che
@@ -20,6 +20,7 @@ import cn55.model.*;
 public class Program {
 
     private static ArrayList<Card> cards;
+    private static Database db;
 
     public static void main(String[] args) {
 
@@ -31,12 +32,13 @@ public class Program {
 
         Shop shop = new Shop();
 
-        cards = shop.getCards();
+        db = shop.getDatabase();
+        cards = db.getCards();
 
         createTestCode(shop);
         //shop.showCards();
 
-        new MainFrame(shop);
+        new MainFrame(db);
 
     } // end of main method
 
@@ -55,8 +57,7 @@ public class Program {
         shop.makePurchase("cash", cat1);
 
         // AnonCard Test
-
-        cards.add(new AnonCard("111"));
+        db.addCards(new AnonCard("111"));
 
         Map<String, Double> cat2 = new HashMap<>();
         cat2.put("Deals", 0D);
@@ -69,7 +70,7 @@ public class Program {
         shop.makePurchase("111", cat2);
 
         // BasicCard Test
-        cards.add(new BasicCard("69", "Natasha Romanov",
+        db.addCards(new BasicCard("69", "Natasha Romanov",
                 "blackwidow@avengers.team", 0));
 
         Map<String, Double> cat3 = new HashMap<>();
@@ -83,8 +84,8 @@ public class Program {
         shop.makePurchase("69", cat3);
 
         // BasicCard Test 2
-        cards.add(new BasicCard("001", "Steve Rogers",
-                        "captain_a@avengers.team",0D));
+        db.addCards(new BasicCard("001", "Steve Rogers",
+                "captain_a@avengers.team",0D));
 
         Map<String, Double> cat4 = new HashMap<>();
         cat4.put("Electronics", 100D);
@@ -97,7 +98,7 @@ public class Program {
         shop.makePurchase("001", cat4);
 
         // PremiumCard Test
-        cards.add(new PremiumCard("75", "Tony Stark",
+        db.addCards(new PremiumCard("75", "Tony Stark",
                 "ironman@avengers.team",0));
 
         Map<String, Double> cat5 = new HashMap<>();
@@ -111,7 +112,7 @@ public class Program {
         shop.makePurchase("75", cat5);
 
         // PremiumCard Test 2
-        cards.add(new PremiumCard("666", "Nick Fury",
+        db.addCards(new PremiumCard("666", "Nick Fury",
                 "nick@shield.com",0));
 
         Map<String, Double> cat6 = new HashMap<>();
@@ -124,9 +125,8 @@ public class Program {
 
         shop.makePurchase("666", cat6);
 
-        cards.add(new BasicCard("444","Hank Pym","ants@avengers.team",0));
-        cards.add(new BasicCard("88","Peter Parker", "spidey@avengers.team",0));
-
+        db.addCards(new BasicCard("444","Hank Pym","ants@avengers.team",0));
+        db.addCards(new BasicCard("88","Peter Parker", "spidey@avengers.team",0));
     }
 
 } // end of Assignment1 class
