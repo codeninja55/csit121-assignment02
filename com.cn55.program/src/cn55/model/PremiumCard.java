@@ -24,6 +24,13 @@ public class PremiumCard extends Card {
         this.balance = 0;
     }
 
+    public PremiumCard(String id, String name, String email) {
+        super(id,0,"PremiumCard");
+        this.name = name;
+        this.email = email;
+        this.balance = 0;
+    }
+
     // constructor with details
     public PremiumCard(String id, String name, String email, double totalAmount) {
         super(id,0,"PremiumCard");
@@ -47,7 +54,7 @@ public class PremiumCard extends Card {
     /*########## GETTERS ##########*/
     @Override
     public String toString() {
-        return String.format("%n%s: %s%n%s: %s%n%s: %.2f%n%s: $%.2f%n%s: %s%n%s: %s%n",
+        return String.format("%n%s: %-30s %s: %-30s %s: %-30.2f %s: $%-30.2f %s: %-30s %s: %-30s%n",
                 "Card Type",this.cardType,
                 "Card ID",this.id,
                 "Points",this.points,
