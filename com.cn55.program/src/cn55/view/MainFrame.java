@@ -6,34 +6,26 @@ import java.awt.*;
 
 public class MainFrame extends JFrame {
 
-    //private MainToolbar mainToolbar;
-    private JTabbedPane tabPane;
-    private JPanel welcomePanel;
-    private CardPanel cardPanel;
-    private PurchasesPanel purchasesPanel;
-    private CategoriesPanel categoriesPanel;
-    private SummaryPanel summaryPanel;
-
     public MainFrame(Database db) {
         super("Marvel Rewards");
 
         setLayout(new BorderLayout());
 
         //mainToolbar = new MainToolbar();
-        tabPane = new JTabbedPane();
+        JTabbedPane tabPane = new JTabbedPane();
 
         // Initialize panels for tabs
-        welcomePanel = new JPanel();
+        JPanel welcomePanel = new JPanel();
         // Without configuring, GraibBayLayout automatically puts in middle
         welcomePanel.setLayout(new GridBagLayout());
         JLabel welcomeLabel = new JLabel("Welcome to Marvel Rewards");
-        welcomeLabel.setFont(new Font("Verdana",1,56));
+        welcomeLabel.setFont(new Font("Verdana", Font.BOLD,56));
         welcomePanel.add(welcomeLabel);
 
-        cardPanel = new CardPanel();
-        purchasesPanel = new PurchasesPanel();
-        categoriesPanel = new CategoriesPanel();
-        summaryPanel = new SummaryPanel();
+        CardPanel cardPanel = new CardPanel();
+        PurchasesPanel purchasesPanel = new PurchasesPanel();
+        CategoriesPanel categoriesPanel = new CategoriesPanel();
+        SummaryPanel summaryPanel = new SummaryPanel();
 
         cardPanel.setCardData(db.getCards());
 
@@ -60,7 +52,7 @@ public class MainFrame extends JFrame {
         //setSize(2160,1440);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setUndecorated(false);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
     }
 }
