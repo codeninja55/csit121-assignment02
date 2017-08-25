@@ -42,8 +42,13 @@ public class BasicCard extends Card {
 
     /*########## GETTERS ##########*/
     public String toString() {
-        return String.format("%-12s %-10s %-10.2f %s%-14.2f %-20s %-20s",
-                this.cardType,this.id,this.points,"$",this.balance,this.name,this.email);
+        return String.format("%n%s: %-30s%n%s: %-30s%n%s: %-30.2f%n%s: $%-30.2f%n%s: %-30s%n%s: %-30s%n",
+                "Card Type",this.cardType,
+                "Card ID",this.id,
+                "Points",this.points,
+                "Balance",this.balance,
+                "Customer Name",this.name,
+                "Customer Email",this.email);
     }
 
     public String getName() { return name; }

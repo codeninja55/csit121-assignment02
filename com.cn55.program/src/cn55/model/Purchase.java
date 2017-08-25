@@ -72,7 +72,7 @@ public class Purchase {
                 "Receipt ID", this.receiptID,
                 "Card ID:",this.cardID,
                 "Card Type:",this.cardType,
-                "cn55.model.Purchase Time:",this.purchaseTime);
+                "Purchase Time:",this.purchaseTime);
 
         String secondOutput = "";
 

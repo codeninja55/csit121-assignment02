@@ -47,8 +47,13 @@ public class PremiumCard extends Card {
     /*########## GETTERS ##########*/
     @Override
     public String toString() {
-        return String.format("%-12s %-10s %-10.2f %s%-14.2f %-20s %-20s",
-                this.cardType,this.id,this.points,"$",this.balance,this.name,this.email);
+        return String.format("%n%s: %s%n%s: %s%n%s: %.2f%n%s: $%.2f%n%s: %s%n%s: %s%n",
+                "Card Type",this.cardType,
+                "Card ID",this.id,
+                "Points",this.points,
+                "Balance",this.balance,
+                "Customer Name",this.name,
+                "Customer Email",this.email);
     }
 
     public String getName() { return name; }

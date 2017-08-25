@@ -2,6 +2,8 @@ package cn55.view;
 
 import cn55.model.Database;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 
 public class MainFrame extends JFrame {
@@ -40,14 +42,11 @@ public class MainFrame extends JFrame {
         tabPane.addTab("Categories", categoriesPanel);
         tabPane.addTab("Summary", summaryPanel);
 
-        /*tabPane.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                if (tabPane.getSelectedComponent() == cardPanel) {
-                    cardPanel.refresh();
-                }
+        tabPane.addChangeListener(e -> {
+            if (tabPane.getSelectedComponent() == cardPanel) {
+                cardPanel.refresh();
             }
-        });*/
+        });
 
         //setSize(2160,1440);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
