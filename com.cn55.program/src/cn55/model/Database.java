@@ -18,6 +18,7 @@ import java.util.*;
 public class Database {
 
     private ArrayList<Card> cards;
+    private HashMap<String, Integer> cardMap;
     private ArrayList<Purchase> purchases;
     private Map<String, Double> categories;
     private Set<Integer> receiptSet;
@@ -25,6 +26,7 @@ public class Database {
 
     Database() {
         cards = new ArrayList<>();
+        cardMap = new HashMap<>();
         purchases = new ArrayList<>();
         categories = new HashMap<>();
         receiptSet = new HashSet<>();
@@ -32,6 +34,15 @@ public class Database {
     }
 
     /*==================== MUTATORS ====================*/
+    public void mapCards() {
+        HashMap<String, Integer> cardMap = new HashMap<>();
+        for (int index = 0 ; index < cards.size() ; index++) {
+            cardMap.put(cards.get(index).getID(), index);
+        }
+
+        this.cardMap = cardMap;
+    }
+
     public void addCards(Card card) {
         this.cards.add(card);
     }
@@ -56,6 +67,8 @@ public class Database {
     public ArrayList<Card> getCards() {
         return cards;
     }
+
+    public HashMap<String, Integer> getCardMap() { return cardMap; }
 
     public ArrayList<Purchase> getPurchases() {
         return purchases;
