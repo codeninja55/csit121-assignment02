@@ -11,15 +11,10 @@ import cn55.controller.Helper;
 
 public class Shop {
 
-    /* TODO Implement this new Database temp object to store everything after refactoring */
-    // TODO Add method to auto-generated cardID
-
     private Database db;
     private Scanner input = new Scanner(System.in);
 
-    /*###########################################################*/
     /*#################### CONSTRUCTORS #########################*/
-    /*###########################################################*/
 
     // default
     public Shop() {
@@ -33,9 +28,7 @@ public class Shop {
         this.createCategories(userCategories(auto));
     }
 
-    /*###########################################################*/
     /*######################### SETTERS #########################*/
-    /*###########################################################*/
 
     /*This method generates a receiptID and checks if that ID has already been generated
     * and placed in the receiptSet instance variable*/
@@ -99,64 +92,39 @@ public class Shop {
 
             if (newCard) {
                 System.out.print("\nPlease create a new model for this purchase\n");
-                makeCard(categories);
+                //makeCard(categories);
             }
         }
     } // end of makePurchase method
 
-    private void makeCard(Map<String, Double> categories) {
+    public void makeCard(HashMap<String, String> newCard) {
 
-        String name, email;
-        Card newCard;
+        String name = newCard.get("name");
+        String email = newCard.get("email");
+        String cardType = newCard.get("cardType");
+        String cardID = newCard.get("cardID");
+        Card card;
 
-        String cardChoice = Helper.cardSelection();
-        input.nextLine(); // consume newline character leftover from nextInt()
-
-        Purchase newPurchase = new Purchase(generateCardID(), cardChoice, categories, generateReceiptID());
-        double totalAmount = newPurchase.calcCategoriesTotal();
-
-        if (cardChoice.isEmpty()) {
-            System.out.println("\nExiting from creating model...");
-        } else if (cardChoice.equalsIgnoreCase("AnonCard")) {
+        if (cardType.equalsIgnoreCase("AnonCard")) {
             System.out.println("\nCreating an Anon Card");
 
-            newCard = new AnonCard(generateCardID());
-
-            newCard.calcPoints(totalAmount);
-            db.addCards(newCard);
+            card = new AnonCard(cardID);
+            db.addCards(card);
 
         } else {
 
-            if (cardChoice.equalsIgnoreCase("BasicCard")) {
-                System.out.println("\nCreating a Basic Card");
-            } else {
-                System.out.println("\nCreating a Premium Card");
-                System.out.println("Please note there is a $25.0 fee to sign up.");
-                System.out.println("This will be added to your purchase.");
-            }
-
-            System.out.print("\nEnter Customer Name:  ");
-            name = input.nextLine();
-
-            System.out.print("\nEnter Customer Email:  ");
-            email = input.nextLine();
-
-            if (cardChoice.equalsIgnoreCase("BasicCard"))
-                newCard = new BasicCard(generateCardID(), name, email, totalAmount);
+            if (cardType.equalsIgnoreCase("BasicCard"))
+                card = new BasicCard(cardID, name, email);
             else
-                newCard = new PremiumCard(generateCardID(), name, email, totalAmount);
+                card = new PremiumCard(generateCardID(), name, email);
 
-            newCard.calcPoints(totalAmount);
-
-            db.addCards(newCard);
+            db.addCards(card);
         }
-
-        db.addPurchases(newPurchase);
     } // end of createCard method
 
     /*This method allows users to create a whole new set of categories
     * or add to the currently stored categories after putting the ArrayList
-    * through the createCategories method to store them as a hashmap.*/
+    * through the createCategories method to store them as a HashMap.*/
     private ArrayList<String> userCategories(boolean auto) {
         ArrayList<String> categoriesList = new ArrayList<>();
         String option;
@@ -324,15 +292,11 @@ public class Shop {
         return thresholdResults;
     }
 
-    /*###########################################################*/
     /*######################### GETTERS #########################*/
-    /*###########################################################*/
 
     public Database getDatabase() { return db; }
 
-    /*###########################################################*/
     /*######################### HELPERS #########################*/
-    /*###########################################################*/
 
     public void showPurchases() {
         for (Purchase purchase : db.getPurchases())
