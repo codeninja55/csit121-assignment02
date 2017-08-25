@@ -119,6 +119,18 @@ public class Shop {
         }
     } // end of createCard method
 
+    public boolean cardExists(String cardID) {
+        HashMap<String, Integer> cardMap = db.getCardMap();
+        return cardMap.containsKey(cardID);
+    }
+
+    public void deleteCard(String cardID) {
+        if (db.getCardMap().containsKey(cardID)) {
+            int index = db.getCardMap().get(cardID);
+            db.getCards().remove(index);
+        }
+    }
+
     /*This method allows users to create a whole new set of categories
     * or add to the currently stored categories after putting the ArrayList
     * through the createCategories method to store them as a HashMap.*/
