@@ -334,16 +334,6 @@ public class Shop {
     /*######################### HELPERS #########################*/
     /*###########################################################*/
 
-    public void showCards() {
-        System.out.printf("%n%n%-12s %-10s %-10s %-15s %-20s %-20s%n",
-                "Card Type","Card ID","Points","Balance", "Name", "Email");
-
-        for (Card card : db.getCards())
-            System.out.println(card.toString());
-
-        System.out.println();
-    }
-
     public void showPurchases() {
         for (Purchase purchase : db.getPurchases())
             System.out.println(purchase.toString());
