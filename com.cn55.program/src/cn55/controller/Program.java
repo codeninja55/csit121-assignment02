@@ -4,7 +4,6 @@ import cn55.model.*;
 import cn55.view.MainFrame;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.ArrayList;
 
 /*
  * @author Dinh Che
@@ -19,7 +18,6 @@ import java.util.ArrayList;
 
 public class Program {
 
-    private static ArrayList<Card> cards;
     private static Database db;
 
     public static void main(String[] args) {
@@ -33,7 +31,6 @@ public class Program {
         Shop shop = new Shop();
 
         db = shop.getDatabase();
-        cards = db.getCards();
 
         createTestCode(shop);
         //shop.showCards();
@@ -68,6 +65,18 @@ public class Program {
         cat2.put("Motors", 0D);
 
         shop.makePurchase("111", cat2);
+
+        db.addCards(new AnonCard("112"));
+
+        Map<String, Double> cat8 = new HashMap<>();
+        cat8.put("Deals", 100D);
+        cat8.put("Electronics", 0D);
+        cat8.put("Fashion", 80D);
+        cat8.put("Sporting Goods", 0D);
+        cat8.put("Toys", 0D);
+        cat8.put("Motors", 0D);
+
+        shop.makePurchase("112", cat8);
 
         // BasicCard Test
         db.addCards(new BasicCard("69", "Natasha Romanov",
@@ -125,8 +134,15 @@ public class Program {
 
         shop.makePurchase("666", cat6);
 
+        db.addCards(new AnonCard("113"));
+        db.addCards(new AnonCard("114"));
+        db.getCards().get(7).calcPoints(300D);
+
         db.addCards(new BasicCard("444","Hank Pym","ants@avengers.team",0));
         db.addCards(new BasicCard("88","Peter Parker", "spidey@avengers.team",0));
+        db.addCards(new PremiumCard("5000","Danny Rand","danny@randcorp.com",5000));
+        db.addCards(new BasicCard("33","Matthew Murdock","thedevil@hellskitchen.com", 666));
+        db.addCards(new BasicCard("9000", "Thor Odinson", "thor@asgard.com",9000));
     }
 
 } // end of Assignment1 class
