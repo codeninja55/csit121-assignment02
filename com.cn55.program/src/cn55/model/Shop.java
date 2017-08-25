@@ -39,7 +39,7 @@ public class Shop {
 
     /*This method generates a receiptID and checks if that ID has already been generated
     * and placed in the receiptSet instance variable*/
-    private int generateReceiptID() {
+    public int generateReceiptID() {
         Random randomObj = new Random();
 
         int receiptID = randomObj.ints(10000000,99999999).findFirst().getAsInt();
@@ -52,7 +52,7 @@ public class Shop {
         }
     }
 
-    private String generateCardID() {
+    public String generateCardID() {
         Random randomObj = new Random();
         int cardID = randomObj.ints(10000,99999).findFirst().getAsInt();
 
