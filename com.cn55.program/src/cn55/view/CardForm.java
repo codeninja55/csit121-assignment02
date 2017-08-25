@@ -9,12 +9,26 @@ public class CardForm {
         String[] cardType = {"Anon Card", "Basic Card", "Premium Card"};
         JComboBox<String> cardTypeCombo = new JComboBox<>(cardType);
 
-        JPanel panel = new JPanel(new GridLayout());
-        panel.add(cardTypeCombo);
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints gc = new GridBagConstraints();
+        gc.gridx = 0;
+        gc.gridy = 0;
+        gc.weightx = 1;
+        gc.weighty = 1;
+        gc.fill = GridBagConstraints.NONE;
+        //gc.anchor = GridBagConstraints.FIRST_LINE_START;
+        gc.insets = new Insets(10,0,30,0);
+
+        panel.add(new JLabel("Choose the Card Type to Create"), gc);
+
+        gc.gridx = 0;
+        gc.gridy = 1;
+        gc.insets = new Insets(10,0,50,0);
+        panel.add(cardTypeCombo, gc);
 
         int result = JOptionPane.showConfirmDialog(null,
                 panel,
-                "Choose Card Type",
+                "Card Type",
                 JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE);
 
@@ -89,8 +103,8 @@ public class CardForm {
         // TODO use generateCardID method from shop class
         JTextField cardID = new JTextField("Test Card ID", 30);
         cardID.setEditable(false);
-        JTextField name = new JTextField(50);
-        JTextField email = new JTextField(50);
+        JTextField name = new JTextField(40);
+        JTextField email = new JTextField(40);
 
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gc = new GridBagConstraints();
