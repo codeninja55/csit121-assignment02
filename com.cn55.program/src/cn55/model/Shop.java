@@ -164,11 +164,7 @@ public class Shop {
             for (String item : categoriesList)
                 System.out.println(item);
 
-            if (Helper.confirm("Do you wish to continue? [Y/n]: ") == 1)
-                return categoriesList;
-            else
-                return userCategories(false);
-        }
+            return categoriesList; }
     } // end of userCategories method
 
     /*This method takes the ArrayList from the userCategories method and adds or creates
@@ -179,12 +175,12 @@ public class Shop {
     }
 
     /*This method allows user to input the total amount for each category*/
-    private void setCategories() {
+    /*private void setCategories() {
 
-        /*Creates a new HashMap for the Menu
+        *//*Creates a new HashMap for the Menu
         * Loop through the categories HashMap, retrieve the keys and place them in
         * a new HashMap with an int as the key. This way the menu option has an int
-        * to print to the screen. */
+        * to print to the screen. *//*
         Map<Integer, String> categoriesMenu = new HashMap<>();
         int counter = 1;
 
@@ -193,10 +189,10 @@ public class Shop {
             counter++;
         }
 
-        /*Displays the menu to the screen and through options of categories for user
+        *//*Displays the menu to the screen and through options of categories for user
         * to select with an int input. It will then remove than item fromm the menu
         * HashMap so the user cannot input a value twice. Exits loop when user enters 0
-        * or presses enter on a blank newline character */
+        * or presses enter on a blank newline character *//*
         while (true) {
             System.out.printf("%nPlease select cn55.model.Purchase Category from below to add amount:%n");
             System.out.printf("[ 0 ] %s%n", "Finished");
@@ -204,15 +200,12 @@ public class Shop {
             for (Map.Entry<Integer, String> item : categoriesMenu.entrySet())
                 System.out.printf("[ %d ] %s%n", item.getKey(), item.getValue());
 
-            int choice = Helper.userSelection();
             String selection = "";
             boolean sentinel = true;
 
             for (Map.Entry<Integer, String> item : categoriesMenu.entrySet()) {
-                if (choice == item.getKey()) {
-                    selection = item.getValue();
-                    sentinel = false;
-                }
+                selection = item.getValue();
+                sentinel = false;
             }
 
             if (sentinel)
@@ -227,11 +220,11 @@ public class Shop {
                 categoriesMenu.remove(choice);
             }
         }
-    } // end of setCategories method
+    } // end of setCategories method*/
 
     /*This method creates a container to store the number of thresholds with
      *each being a String for the key and an 2 int Array for min and max values*/
-    private Map<String, int[]> createThresholdContainer() {
+    /*private Map<String, int[]> createThresholdContainer() {
 
         System.out.printf("%n%s%n%s%n%s%n%s%n%s",
                 "You can set the Points Threshold as follows:",
@@ -242,7 +235,7 @@ public class Shop {
 
         int thresholdNumber = Helper.thresholdInput("\nInput the number of thresholds:  ");
 
-        /*HashMap to store each threshold and its min and max values*/
+        *//*HashMap to store each threshold and its min and max values*//*
         Map<String, int[]> thresholdList = new HashMap<>();
 
         // Grab input from user for a min and max and store them as elements in int[]
@@ -250,15 +243,15 @@ public class Shop {
             int[] valArr = new int[2];
             String name = "Threshold " + Integer.toString(counter);
 
-            /*Using the helper method to check for validation and empty strings*/
+            *//*Using the helper method to check for validation and empty strings*//*
             int min = Helper.thresholdInput(String.format("%nInput %s minimum value:  ", name));
             int max = Helper.thresholdInput(String.format("Input %s maximum value:  ", name));
 
             // TODO Need to do some validation checking if numbers are fine
             valArr[0] = min;
 
-            /*Checks the last Threshold value if it is set to 0 and sets the value to
-             *the MAX_VALUE allowed for an integer */
+            *//*Checks the last Threshold value if it is set to 0 and sets the value to
+             *the MAX_VALUE allowed for an integer *//*
             if (counter == thresholdNumber && max == 0)
                 valArr[1] = Integer.MAX_VALUE;
             else
@@ -267,27 +260,27 @@ public class Shop {
             thresholdList.put(name, valArr);
         }
         return thresholdList;
-    }
+    }*/
 
-    private Map<String, Integer> calcPointsThreshold(Map<String, int[]> thresholdList) {
+    /*private Map<String, Integer> calcPointsThreshold(Map<String, int[]> thresholdList) {
 
         Map<String, Integer> thresholdResults = new HashMap<>();
 
-        /*Populate the map with just the keys and iniatialize the value to 0*/
+        *//*Populate the map with just the keys and iniatialize the value to 0*//*
         for (Map.Entry<String, int[]> item : thresholdList.entrySet())
             thresholdResults.put(item.getKey(), 0);
 
         for (Card card : db.getCards()) {
             for (Map.Entry<String, int[]> item : thresholdList.entrySet()) {
 
-                /*If the model.points is in the range of the min at index 0 and max at index 1
-                * increase the thresholdResults value by 1*/
+                *//*If the model.points is in the range of the min at index 0 and max at index 1
+                * increase the thresholdResults value by 1*//*
                 if (card.getPoints() >= item.getValue()[0] && card.getPoints() < item.getValue()[1])
                     thresholdResults.put(item.getKey(), thresholdResults.get(item.getKey()) + 1);
             }
         }
         return thresholdResults;
-    }
+    }*/
 
     /*######################### GETTERS #########################*/
 
@@ -300,11 +293,11 @@ public class Shop {
             System.out.println(purchase.toString());
     }
 
-    public void showTotalPurchases() {
+    /*public void showTotalPurchases() {
         System.out.printf("%n%n%-20s %s%n","Category","Total");
 
-        /*Create a Map of the default categories map with the same keys
-        * and the value being an array. */
+        *//*Create a Map of the default categories map with the same keys
+        * and the value being an array. *//*
         Map<String, ArrayList<Double>> categoryTotal = new HashMap<>();
 
         for (Map.Entry<String, Double> item : db.getCategories().entrySet())
@@ -314,13 +307,13 @@ public class Shop {
         for (Purchase purchase : db.getPurchases()) {
             Map<String, Double> categoriesMap = purchase.getCategoriesMap();
 
-            /* Loop through the categories stored in purchase and add them to the ArrayList of
-             * of the default categories map */
+            *//* Loop through the categories stored in purchase and add them to the ArrayList of
+             * of the default categories map *//*
             for (Map.Entry<String, Double> item : categoriesMap.entrySet())
                 categoryTotal.get(item.getKey()).add(item.getValue());
         }
 
-        /*Loop through each List and sum them together to print*/
+        *//*Loop through each List and sum them together to print*//*
         for (Map.Entry<String, ArrayList<Double>> item : categoryTotal.entrySet()) {
             double sum = 0;
 
@@ -330,9 +323,9 @@ public class Shop {
             System.out.printf("%n%-20s $%.2f", (item.getKey() + ":"), sum);
         }
         System.out.println("\n\n");
-    }
+    }*/
 
-    public void showPoints() {
+    /*public void showPoints() {
 
         double totalPoints = 0;
 
@@ -354,7 +347,7 @@ public class Shop {
             System.out.printf("%n%nTotal Points for All Customers: %.2f%n%n", totalPoints);
             System.out.println("Customers by Thresholds");
 
-            /*Print out the list based on the stored results in thresholdResults HashMap*/
+            *//*Print out the list based on the stored results in thresholdResults HashMap*//*
             for (Map.Entry<String, Integer> item : thresholdResults.entrySet()) {
                 System.out.printf("%n%s (Min: %d; Max: %d): %d",
                         item.getKey(), thresholdList.get(item.getKey())[0],
@@ -384,5 +377,5 @@ public class Shop {
             System.out.printf("Low (less than 500): %d%nMedium (500 to 2000): %d%n" +
                     "High (more than 2000): %d%n%n", low, medium, high);
         }
-    }
+    }*/
 }

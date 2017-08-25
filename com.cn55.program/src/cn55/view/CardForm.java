@@ -212,9 +212,7 @@ class CardForm {
         }
     }
 
-    /*====================  GETTER for Creating Cards ====================*/
+    /*====================  ACCESSORS ====================*/
 
-    public HashMap<String, String> getCardMap() {
-        return newCard;
-    }
+    public HashMap<String, String> getCardMap() { return newCard; }
 }
