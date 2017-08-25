@@ -106,11 +106,8 @@ public class Shop {
         Card card;
 
         if (cardType.equalsIgnoreCase("AnonCard")) {
-            System.out.println("\nCreating an Anon Card");
-
             card = new AnonCard(cardID);
             db.addCards(card);
-
         } else {
 
             if (cardType.equalsIgnoreCase("BasicCard"))
