@@ -23,18 +23,6 @@ public class CardPanel extends JPanel {
 
         cardTablePanel.setRowHeight(30);
 
-        // Set some cells to center
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
-        cardTablePanel.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
-        cardTablePanel.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
-        cardTablePanel.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
-        cardTablePanel.getColumnModel().getColumn(3).setCellRenderer(centerRenderer);
-        DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
-        rightRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
-        cardTablePanel.getColumnModel().getColumn(4).setCellRenderer(rightRenderer);
-        cardTablePanel.getColumnModel().getColumn(5).setCellRenderer(rightRenderer);
-
         setLayout(new BorderLayout());
 
         add(toolbar, BorderLayout.NORTH);
