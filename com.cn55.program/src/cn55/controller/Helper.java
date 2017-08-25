@@ -1,4 +1,4 @@
-package cn55.controller;//package assignment1;
+package cn55.controller;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -15,7 +15,7 @@ public class Helper {
 
     private static Scanner input = new Scanner(System.in);
 
-    static int userSelection() {
+    public static int userSelection() {
         try {
             System.out.print("\nEnter your option:  ");
             int userChoice = input.nextInt();
@@ -37,7 +37,7 @@ public class Helper {
         }
     }
 
-    static int confirm(String message) {
+    public static int confirm(String message) {
 
         System.out.print("\n" + message);
 
@@ -53,7 +53,7 @@ public class Helper {
         }
     }
 
-    static void printMenu() {
+    public static void printMenu() {
         System.out.println("\n******************************");
         System.out.println("********* Main Menu **********");
         System.out.println("******************************");
@@ -68,7 +68,7 @@ public class Helper {
         System.out.println("\n******************************");
     }
 
-    static void createCardMenu() {
+    public static void createCardMenu() {
         System.out.printf("%nPlease select a Card Type choice from below:%n" +
                 "[ 1 ] Anon Card%n" +
                 "[ 2 ] Basic Card%n" +
@@ -76,7 +76,7 @@ public class Helper {
                 "[ 0 ] Exit%n");
     }
 
-    static String cardSelection() {
+    public static String cardSelection() {
         createCardMenu();
 
         int selection = userSelection();
@@ -90,7 +90,7 @@ public class Helper {
         }
     }
 
-    static int thresholdInput(String message) {
+    public static int thresholdInput(String message) {
         System.out.printf("%n%s", message);
 
         String value = input.nextLine();
