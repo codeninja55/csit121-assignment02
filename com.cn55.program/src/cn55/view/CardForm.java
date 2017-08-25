@@ -1,17 +1,16 @@
 package cn55.view;
 
-import cn55.model.Card;
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 class CardForm {
 
-    HashMap<String,String> newCard;
+    private HashMap<String,String> newCard;
+    private String cardID;
 
     /*====================  CONSTRUCTOR for Creating Cards ====================*/
-    CardForm(String cardID) {
+    CardForm(String generatedCardID) {
         String[] cardType = {"Anon Card", "Basic Card", "Premium Card"};
         JComboBox<String> cardTypeCombo = new JComboBox<>(cardType);
 
@@ -39,55 +38,77 @@ class CardForm {
                 JOptionPane.PLAIN_MESSAGE);
 
         if (result == JOptionPane.OK_OPTION) {
-            System.out.println(cardTypeCombo.getSelectedItem().toString());
-
-            if (cardTypeCombo.getSelectedItem() == "Anon Card") {
-                this.createAnonCard(cardID);
-            } else {
-                this.createOtherCardForm(cardTypeCombo.getSelectedItem(), cardID);
-            }
-        } else {
-            System.out.println("Cancelled");
+            if (cardTypeCombo.getSelectedItem() == "Anon Card") this.createAnonCard(generatedCardID);
+            else this.createOtherCardForm(cardTypeCombo.getSelectedItem(), generatedCardID);
         }
     }
 
-    /*====================  CONSTRUCTOR for Deleting Cards ====================*/
-    CardForm(ArrayList<Card> cards) {
+    /*==================== DEFAULT CONSTRUCTOR for Deleting Cards ====================*/
+    CardForm() {
+        this.deleteForm(false);
+    }
 
-        // TODO Need to have cards list passed in
-        JTextField cardIDTextField = new JTextField(20);
+    public void deleteForm(boolean complete) {
 
-        JPanel panel = new JPanel(new GridBagLayout());
-        GridBagConstraints gc = new GridBagConstraints();
-        gc.gridx = 1;
-        gc.gridy = 0;
-        gc.weightx = 1;
-        gc.weighty = 1;
-        gc.fill = GridBagConstraints.NONE;
-        gc.anchor = GridBagConstraints.LINE_START;
-        gc.insets = new Insets(10,0,30,0);
-        panel.add(new JLabel("Input Card ID to Delete Card"), gc);
+        if (!complete) {
+            JTextField cardIDTextField = new JTextField(20);
 
-        gc.gridx = 0;
-        gc.gridy = 1;
-        gc.insets = new Insets(10,0,50,0);
-        gc.anchor = GridBagConstraints.LINE_END;
-        panel.add(new JLabel("Card ID: "), gc);
+            JPanel panel = new JPanel(new GridBagLayout());
+            GridBagConstraints gc = new GridBagConstraints();
+            gc.gridx = 1;
+            gc.gridy = 0;
+            gc.weightx = 1;
+            gc.weighty = 1;
+            gc.fill = GridBagConstraints.NONE;
+            gc.anchor = GridBagConstraints.LINE_START;
+            gc.insets = new Insets(10,0,30,0);
+            panel.add(new JLabel("Input Card ID to Delete Card"), gc);
 
-        gc.gridx = 1;
-        gc.gridy = 1;
-        gc.insets = new Insets(10,0,50,0);
-        gc.anchor = GridBagConstraints.LINE_START;
-        panel.add(cardIDTextField, gc);
+            gc.gridx = 0;
+            gc.gridy = 1;
+            gc.insets = new Insets(10,0,50,0);
+            gc.anchor = GridBagConstraints.LINE_END;
+            panel.add(new JLabel("Card ID: "), gc);
 
-        int result = JOptionPane.showConfirmDialog(null,
-                panel,
-                "Delete Card",
+            gc.gridx = 1;
+            gc.gridy = 1;
+            gc.insets = new Insets(10,0,50,0);
+            gc.anchor = GridBagConstraints.LINE_START;
+            panel.add(cardIDTextField, gc);
+
+            int result = JOptionPane.showConfirmDialog(null,
+                    panel,
+                    "Delete Card",
+                    JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.PLAIN_MESSAGE);
+
+            if (result == JOptionPane.OK_OPTION) {
+                this.cardID = cardIDTextField.getText();
+                System.out.println("CardForm");
+                System.out.println(cardID);
+            } else {
+                System.out.println("CardForm Else");
+            }
+        } else {
+            this.deleteError();
+        }
+
+    }
+
+    private void deleteError () {
+        Object[] options = {"Yes", "No"};
+
+        int confirm = JOptionPane.showOptionDialog(null,
+                "The card does not exist." +
+                        "\nWould you like to try again?",
+                "Delete Card Error",
                 JOptionPane.OK_CANCEL_OPTION,
-                JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.ERROR_MESSAGE,
+                null,
+                options,
+                options[0]);
 
-        // TODO Delete CARD
-
+        if (confirm == JOptionPane.OK_OPTION) this.deleteForm(false);
     }
 
     /*====================  FORMS for Creating Cards ====================*/
@@ -215,4 +236,5 @@ class CardForm {
     /*====================  ACCESSORS ====================*/
 
     public HashMap<String, String> getCardMap() { return newCard; }
+    public String getCardID() { return cardID; }
 }

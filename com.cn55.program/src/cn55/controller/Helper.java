@@ -1,5 +1,7 @@
 package cn55.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.InputMismatchException;
 
 /*
@@ -13,12 +15,6 @@ import java.util.InputMismatchException;
 public class Helper {
 
     /*==================== NEW HUI SUPPORT METHODS ====================*/
-    public static boolean cardExists() {
-
-
-
-        return true;
-    }
 
     /*==================== OLD CONSOLE SUPPORT METHODS ====================*/
     /*public static int userSelection() {
