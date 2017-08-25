@@ -12,12 +12,9 @@ import cn55.controller.Helper;
 public class Shop {
 
     /* TODO Implement this new Database temp object to store everything after refactoring */
-    private Database db = new Database();
+    // TODO Add method to auto-generated cardID
 
-    private ArrayList<Purchase> purchases;
-    private Map<String, Double> categories;
-    private Set<Integer> receiptSet;
-    // TODO Add cardIDSet for auto-generated cardID
+    private Database db;
     private Scanner input = new Scanner(System.in);
 
     /*###########################################################*/
@@ -26,17 +23,13 @@ public class Shop {
 
     // default
     public Shop() {
-        this.purchases = new ArrayList<>();
-        this.categories = new HashMap<>();
-        this.receiptSet = new HashSet<>();
+        this.db = new Database();
         this.createCategories(userCategories(true));
     }
 
     // constructor to initialize shop with custom categories
     public Shop(boolean auto) {
-        this.purchases = new ArrayList<>();
-        this.categories = new HashMap<>();
-        this.receiptSet = new HashSet<>();
+        this.db = new Database();
         this.createCategories(userCategories(auto));
     }
 
@@ -51,10 +44,10 @@ public class Shop {
 
         int receiptID = randomObj.ints(10000000,99999999).findFirst().getAsInt();
 
-        if (receiptSet.contains(receiptID)) {
+        if (db.getReceiptSet().contains(receiptID)) {
             return generateReceiptID();
         } else {
-            receiptSet.add(receiptID);
+            db.addReceipt(receiptID);
             return receiptID;
         }
     }
@@ -65,13 +58,13 @@ public class Shop {
         *       Total Amount for each category*/
         //setCategories();
 
-        ArrayList<Card> cardsCopy = new ArrayList<>(cards);
+        ArrayList<Card> cardsCopy = new ArrayList<>(db.getCards());
 
         boolean newCard = true; // flag to see if new model required
 
         if (cardID.equalsIgnoreCase("cash")) {
             /* If it just a cash purchase, no updates required to model */
-            purchases.add(new Purchase(categories, generateReceiptID()));
+            db.addPurchases(new Purchase(categories, generateReceiptID()));
         } else {
             /* Loop through cards ArrayList to validate for existing cards
              * if the model does not exist, prompt user to make one. */
@@ -85,7 +78,7 @@ public class Shop {
                     if (!cardType.equalsIgnoreCase("AnonCard"))
                         card.calcBalance(newPurchase.calcCategoriesTotal());
 
-                    purchases.add(newPurchase);
+                    db.addPurchases(newPurchase);
                     newCard = false; // set flag so new model not created
                     break;
                 }
@@ -93,12 +86,12 @@ public class Shop {
 
             if (newCard) {
                 System.out.print("\nPlease create a new model for this purchase\n");
-                createCard(cardID, categories);
+                makeCard(cardID, categories);
             }
         }
     } // end of makePurchase method
 
-    private void createCard(String cardID, Map<String, Double> categories) {
+    private void makeCard(String cardID, Map<String, Double> categories) {
 
         String name, email;
         Card newCard;
@@ -117,7 +110,7 @@ public class Shop {
             newCard = new AnonCard(cardID);
 
             newCard.calcPoints(totalAmount);
-            cards.add(newCard);
+            db.addCards(newCard);
 
         } else {
 
@@ -142,10 +135,10 @@ public class Shop {
 
             newCard.calcPoints(totalAmount);
 
-            cards.add(newCard);
+            db.addCards(newCard);
         }
 
-        purchases.add(newPurchase);
+        db.addPurchases(newPurchase);
     } // end of createCard method
 
     /*This method allows users to create a whole new set of categories
@@ -202,9 +195,9 @@ public class Shop {
 
     /*This method takes the ArrayList from the userCategories method and adds or creates
     * them to store in the hashmap instance variable categories*/
-    public final void createCategories(ArrayList<String> categoriesList) {
+    private void createCategories(ArrayList<String> categoriesList) {
         for (String item : categoriesList)
-            this.categories.put(item, 0D);
+            db.addCategory(item, 0D);
     }
 
     /*This method allows user to input the total amount for each category*/
@@ -217,7 +210,7 @@ public class Shop {
         Map<Integer, String> categoriesMenu = new HashMap<>();
         int counter = 1;
 
-        for (Map.Entry<String, Double> item : this.categories.entrySet()) {
+        for (Map.Entry<String, Double> item : db.getCategories().entrySet()) {
             categoriesMenu.put(counter,item.getKey());
             counter++;
         }
@@ -252,7 +245,7 @@ public class Shop {
             } else {
                 System.out.printf("Enter Total Amount for %s Category:  ", selection);
                 double categoryAmount = input.nextDouble();
-                categories.put(selection, categoryAmount);
+                db.addCategory(selection, categoryAmount);
                 categoriesMenu.remove(choice);
             }
         }
@@ -306,7 +299,7 @@ public class Shop {
         for (Map.Entry<String, int[]> item : thresholdList.entrySet())
             thresholdResults.put(item.getKey(), 0);
 
-        for (Card card : cards) {
+        for (Card card : db.getCards()) {
             for (Map.Entry<String, int[]> item : thresholdList.entrySet()) {
 
                 /*If the model.points is in the range of the min at index 0 and max at index 1
@@ -322,9 +315,7 @@ public class Shop {
     /*######################### GETTERS #########################*/
     /*###########################################################*/
 
-    public ArrayList<Card> getCards() { return cards; }
-
-    public ArrayList<Purchase> getPurchases() { return purchases; }
+    public Database getDatabase() { return db; }
 
     /*###########################################################*/
     /*######################### HELPERS #########################*/
@@ -334,14 +325,14 @@ public class Shop {
         System.out.printf("%n%n%-12s %-10s %-10s %-15s %-20s %-20s%n",
                 "Card Type","Card ID","Points","Balance", "Name", "Email");
 
-        for (Card card : cards)
+        for (Card card : db.getCards())
             System.out.println(card.toString());
 
         System.out.println();
     }
 
     public void showPurchases() {
-        for (Purchase purchase : purchases)
+        for (Purchase purchase : db.getPurchases())
             System.out.println(purchase.toString());
     }
 
@@ -352,11 +343,11 @@ public class Shop {
         * and the value being an array. */
         Map<String, ArrayList<Double>> categoryTotal = new HashMap<>();
 
-        for (Map.Entry<String, Double> item : categories.entrySet())
+        for (Map.Entry<String, Double> item : db.getCategories().entrySet())
             categoryTotal.put(item.getKey(), new ArrayList<>());
 
         // Loop through purchase ArrayList and get the categories from each purchase
-        for (Purchase purchase : purchases) {
+        for (Purchase purchase : db.getPurchases()) {
             Map<String, Double> categoriesMap = purchase.getCategoriesMap();
 
             /* Loop through the categories stored in purchase and add them to the ArrayList of
@@ -393,7 +384,7 @@ public class Shop {
             Map<String, int[]> thresholdList = createThresholdContainer();
             Map<String, Integer> thresholdResults = calcPointsThreshold(thresholdList);
 
-            for (Card card : cards)
+            for (Card card : db.getCards())
                 totalPoints += card.getPoints();
 
             System.out.printf("%n%nTotal Points for All Customers: %.2f%n%n", totalPoints);
@@ -412,7 +403,7 @@ public class Shop {
             int medium = 0;
             int high = 0;
 
-            for (Card card : cards) {
+            for (Card card : db.getCards()) {
                 totalPoints += card.getPoints();
 
                 if (card.getPoints() < 500D) {
