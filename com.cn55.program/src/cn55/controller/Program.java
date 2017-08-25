@@ -29,13 +29,10 @@ public class Program {
         }*/
 
         Shop shop = new Shop();
-
         db = shop.getDatabase();
-
         createTestCode(shop);
-        //shop.showCards();
 
-        new MainFrame(db);
+        new MainFrame(shop);
 
     } // end of main method
 
