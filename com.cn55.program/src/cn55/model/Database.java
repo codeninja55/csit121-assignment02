@@ -13,6 +13,24 @@ package cn55.model;
 *
 * */
 
-public class Database {
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
+class Database {
+
+    private ArrayList<Card> cards;
+    private ArrayList<Purchase> purchases;
+    private ArrayList<String> categories;
+    private Set<Integer> receiptSet;
+    private Set<String> cardIDSet;
+
+    public Database() {
+        cards = new ArrayList<>();
+        purchases = new ArrayList<>();
+        categories = new ArrayList<>();
+        receiptSet = new HashSet<>();
+        cardIDSet = new HashSet<>();
+
+    }
 }
