@@ -50,4 +50,8 @@ public class PremiumCard extends Card {
         return String.format("%-12s %-10s %-10.2f %s%-14.2f %-20s %-20s",
                 this.cardType,this.id,this.points,"$",this.balance,this.name,this.email);
     }
+
+    public String getName() { return name; }
+    public String getEmail() { return email; }
+    public double getBalance() { return balance; }
 }
