@@ -52,6 +52,19 @@ public class Shop {
         }
     }
 
+    private String generateCardID() {
+        Random randomObj = new Random();
+        int cardID = randomObj.ints(10000,99999).findFirst().getAsInt();
+
+        if (db.getCardIDSet().contains(cardID)) {
+            return generateCardID();
+        } else {
+            String cardIDStr = Integer.toString(cardID);
+            db.addCardID(cardIDStr);
+            return cardIDStr;
+        }
+    }
+
     public void makePurchase(String cardID, Map<String, Double> categories) {
 
         /*NOTE: If using inputs, then setCategories() would allow user to input
@@ -86,12 +99,12 @@ public class Shop {
 
             if (newCard) {
                 System.out.print("\nPlease create a new model for this purchase\n");
-                makeCard(cardID, categories);
+                makeCard(categories);
             }
         }
     } // end of makePurchase method
 
-    private void makeCard(String cardID, Map<String, Double> categories) {
+    private void makeCard(Map<String, Double> categories) {
 
         String name, email;
         Card newCard;
@@ -99,7 +112,7 @@ public class Shop {
         String cardChoice = Helper.cardSelection();
         input.nextLine(); // consume newline character leftover from nextInt()
 
-        Purchase newPurchase = new Purchase(cardID, cardChoice, categories, generateReceiptID());
+        Purchase newPurchase = new Purchase(generateCardID(), cardChoice, categories, generateReceiptID());
         double totalAmount = newPurchase.calcCategoriesTotal();
 
         if (cardChoice.isEmpty()) {
@@ -107,7 +120,7 @@ public class Shop {
         } else if (cardChoice.equalsIgnoreCase("AnonCard")) {
             System.out.println("\nCreating an Anon Card");
 
-            newCard = new AnonCard(cardID);
+            newCard = new AnonCard(generateCardID());
 
             newCard.calcPoints(totalAmount);
             db.addCards(newCard);
@@ -129,9 +142,9 @@ public class Shop {
             email = input.nextLine();
 
             if (cardChoice.equalsIgnoreCase("BasicCard"))
-                newCard = new BasicCard(cardID, name, email, totalAmount);
+                newCard = new BasicCard(generateCardID(), name, email, totalAmount);
             else
-                newCard = new PremiumCard(cardID, name, email, totalAmount);
+                newCard = new PremiumCard(generateCardID(), name, email, totalAmount);
 
             newCard.calcPoints(totalAmount);
 
@@ -144,7 +157,7 @@ public class Shop {
     /*This method allows users to create a whole new set of categories
     * or add to the currently stored categories after putting the ArrayList
     * through the createCategories method to store them as a hashmap.*/
-    public final ArrayList<String> userCategories(boolean auto) {
+    private ArrayList<String> userCategories(boolean auto) {
         ArrayList<String> categoriesList = new ArrayList<>();
         String option;
 
@@ -194,7 +207,7 @@ public class Shop {
     } // end of userCategories method
 
     /*This method takes the ArrayList from the userCategories method and adds or creates
-    * them to store in the hashmap instance variable categories*/
+    * them to store in the HashMap instance variable categories*/
     private void createCategories(ArrayList<String> categoriesList) {
         for (String item : categoriesList)
             db.addCategory(item, 0D);
