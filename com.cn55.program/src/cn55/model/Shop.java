@@ -1,7 +1,7 @@
-package cn55.controller;
+package cn55.model;
 
 import java.util.*;
-import cn55.model.*;
+import cn55.controller.Helper;
 
 /*
  * @author Dinh Che
@@ -9,14 +9,15 @@ import cn55.model.*;
  * Email: dbac496@uowmail.edu.au
  */
 
-/* CONTROLLER CLASS */
-
 public class Shop {
 
-    private ArrayList<Card> cards;
+    /* TODO Implement this new Database temp object to store everything after refactoring */
+    private Database db = new Database();
+
     private ArrayList<Purchase> purchases;
     private Map<String, Double> categories;
     private Set<Integer> receiptSet;
+    // TODO Add cardIDSet for auto-generated cardID
     private Scanner input = new Scanner(System.in);
 
     /*###########################################################*/
@@ -26,7 +27,6 @@ public class Shop {
     // default
     public Shop() {
         this.purchases = new ArrayList<>();
-        this.cards = new ArrayList<>();
         this.categories = new HashMap<>();
         this.receiptSet = new HashSet<>();
         this.createCategories(userCategories(true));
@@ -35,7 +35,6 @@ public class Shop {
     // constructor to initialize shop with custom categories
     public Shop(boolean auto) {
         this.purchases = new ArrayList<>();
-        this.cards = new ArrayList<>();
         this.categories = new HashMap<>();
         this.receiptSet = new HashSet<>();
         this.createCategories(userCategories(auto));
@@ -62,8 +61,6 @@ public class Shop {
 
     public void makePurchase(String cardID, Map<String, Double> categories) {
 
-        int receiptID = generateReceiptID();
-
         /*NOTE: If using inputs, then setCategories() would allow user to input
         *       Total Amount for each category*/
         //setCategories();
@@ -74,7 +71,7 @@ public class Shop {
 
         if (cardID.equalsIgnoreCase("cash")) {
             /* If it just a cash purchase, no updates required to model */
-            purchases.add(new Purchase(categories, receiptID));
+            purchases.add(new Purchase(categories, generateReceiptID()));
         } else {
             /* Loop through cards ArrayList to validate for existing cards
              * if the model does not exist, prompt user to make one. */
@@ -82,7 +79,7 @@ public class Shop {
 
                 if (card.getID().equals(cardID)) {
                     String cardType = card.getCardType();
-                    Purchase newPurchase = new Purchase(cardID,cardType,categories,receiptID);
+                    Purchase newPurchase = new Purchase(cardID,cardType,categories,generateReceiptID());
                     card.calcPoints(newPurchase.calcCategoriesTotal());
 
                     if (!cardType.equalsIgnoreCase("AnonCard"))

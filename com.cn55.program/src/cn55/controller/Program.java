@@ -12,7 +12,14 @@ import cn55.model.*;
  * Email: dbac496@uowmail.edu.au
  */
 
+/* CONTROLLER CLASS */
+/* GUI view package will only interact
+ * with data through this controller class
+ * and MainFrame controller class */
+
 public class Program {
+
+    private static ArrayList<Card> cards;
 
     public static void main(String[] args) {
 
@@ -24,16 +31,17 @@ public class Program {
 
         Shop shop = new Shop();
 
-        new MainFrame();
+        cards = shop.getCards();
 
         createTestCode(shop);
+        //shop.showCards();
+
+        new MainFrame(shop);
 
     } // end of main method
 
     private static void createTestCode(Shop shop) {
         /*########## TESTING CODE ##########*/
-
-        ArrayList<Card> cards = shop.getCards();
 
         // Cash purchase test
         Map<String, Double> cat1 = new HashMap<>();
