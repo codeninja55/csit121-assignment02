@@ -1,20 +1,25 @@
 package cn55.view;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.Normalizer;
 
-public class CardsToolbar extends JPanel {
+class CardsToolbar extends JPanel {
 
     private JButton addCard;
     private JButton deleteCard;
     private JButton sortCards;
     //private JTextField searchField;
     private JButton searchButton;
+    private FormListener createCardListener;
+    private FormListener deleteCardListener;
 
-    public CardsToolbar() {
+    // Constructor
+    CardsToolbar() {
 
         Border innerBorder = BorderFactory.createTitledBorder(
                 BorderFactory.createMatteBorder(1,1,1,1,Color.BLACK),
@@ -53,13 +58,26 @@ public class CardsToolbar extends JPanel {
         searchButton.addActionListener(handler);
     }
 
+    void setCreateCardListener(FormListener listener) {
+        this.createCardListener = listener;
+    }
+
+    void setDeleteCardListener(FormListener listener) {
+        this.deleteCardListener = listener;
+    }
+
     public class ButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if(e.getSource() == addCard) {
-                new CardForm();
+            if (e.getSource() == addCard) {
+                //new CardForm();
+                if (createCardListener != null) {
+                    createCardListener.cardFormActionEvent();
+                }
             } else if (e.getSource() == deleteCard) {
-                JOptionPane.showMessageDialog(null,"Deleting Card Selected");
+                if (deleteCardListener != null) {
+                    deleteCardListener.cardFormActionEvent();
+                }
             } else if (e.getSource() == sortCards) {
                 JOptionPane.showMessageDialog(null,"Sorting Cards Selected");
             } else if (e.getSource() == searchButton) {

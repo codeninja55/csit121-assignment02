@@ -1,14 +1,15 @@
 package cn55.view;
 
-import cn55.model.Database;
+import cn55.model.Shop;
+
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 
 public class MainFrame extends JFrame {
 
-    public MainFrame(Database db) {
+    //private Database db;
+
+    public MainFrame(Shop shop) {
         super("Marvel Rewards");
 
         setLayout(new BorderLayout());
@@ -30,7 +31,7 @@ public class MainFrame extends JFrame {
         CategoriesPanel categoriesPanel = new CategoriesPanel();
         SummaryPanel summaryPanel = new SummaryPanel();
 
-        cardPanel.setCardData(db.getCards());
+        cardPanel.setCardData(shop.getDatabase().getCards());
 
         // Add panels, toolbars, and panes to main Frame
         //add(mainToolbar, BorderLayout.NORTH);
@@ -43,9 +44,26 @@ public class MainFrame extends JFrame {
         tabPane.addTab("Categories", categoriesPanel);
         tabPane.addTab("Summary", summaryPanel);
 
+        // Listens to change events for tabs and handles the events
         tabPane.addChangeListener(e -> {
             if (tabPane.getSelectedComponent() == cardPanel) {
                 cardPanel.refresh();
+            } else {
+                // TODO DO NOT LEAVE THIS LIKE THIS - USED FOR TESTING ONLY
+                cardPanel.refresh();
+            }
+        });
+
+        // Listens to events in Toolbar and handles the event
+        cardPanel.setCreateCardListener(new FormListener() {
+            public void cardFormActionEvent() {
+                new CardForm(shop.generateCardID());
+            }
+        });
+
+        cardPanel.setDeleteCardListener(new FormListener() {
+            public void cardFormActionEvent() {
+                new CardForm(shop.getDatabase().getCards());
             }
         });
 

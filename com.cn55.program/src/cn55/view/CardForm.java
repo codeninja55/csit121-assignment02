@@ -1,11 +1,14 @@
 package cn55.view;
 
+import cn55.model.Card;
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
-public class CardForm {
+class CardForm {
 
-    public CardForm() {
+    /*====================  CONSTRUCTOR for Creating Cards ====================*/
+    CardForm(String cardID) {
         String[] cardType = {"Anon Card", "Basic Card", "Premium Card"};
         JComboBox<String> cardTypeCombo = new JComboBox<>(cardType);
 
@@ -36,20 +39,59 @@ public class CardForm {
             System.out.println(cardTypeCombo.getSelectedItem().toString());
 
             if (cardTypeCombo.getSelectedItem() == "Anon Card") {
-                this.createAnonCard();
+                this.createAnonCard(cardID);
             } else {
-                this.createOtherCardForm(cardTypeCombo.getSelectedItem());
+                this.createOtherCardForm(cardTypeCombo.getSelectedItem(), cardID);
             }
         } else {
             System.out.println("Cancelled");
         }
     }
 
-    public void createAnonCard() {
+    /*====================  CONSTRUCTOR for Deleting Cards ====================*/
+    CardForm(ArrayList<Card> cards) {
 
-        // TODO use generateCardID method from shop class
-        JTextField cardID = new JTextField("Test Card ID", 30);
-        cardID.setEditable(false);
+        // TODO Need to have cards list passed in
+        JTextField cardIDTextField = new JTextField(20);
+
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints gc = new GridBagConstraints();
+        gc.gridx = 1;
+        gc.gridy = 0;
+        gc.weightx = 1;
+        gc.weighty = 1;
+        gc.fill = GridBagConstraints.NONE;
+        gc.anchor = GridBagConstraints.LINE_START;
+        gc.insets = new Insets(10,0,30,0);
+        panel.add(new JLabel("Input Card ID to Delete Card"), gc);
+
+        gc.gridx = 0;
+        gc.gridy = 1;
+        gc.insets = new Insets(10,0,50,0);
+        gc.anchor = GridBagConstraints.LINE_END;
+        panel.add(new JLabel("Card ID: "), gc);
+
+        gc.gridx = 1;
+        gc.gridy = 1;
+        gc.insets = new Insets(10,0,50,0);
+        gc.anchor = GridBagConstraints.LINE_START;
+        panel.add(cardIDTextField, gc);
+
+        int result = JOptionPane.showConfirmDialog(null,
+                panel,
+                "Delete Card",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE);
+
+        // TODO Delete CARD
+
+    }
+
+    /*====================  FORMS for Creating Cards ====================*/
+    private void createAnonCard(String cardID) {
+
+        JTextField cardIDTextField = new JTextField(cardID, 15);
+        cardIDTextField.setEditable(false);
 
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gc = new GridBagConstraints();
@@ -73,7 +115,7 @@ public class CardForm {
         gc.gridy = 1;
         gc.anchor = GridBagConstraints.LINE_START;
         gc.insets = new Insets(10,0,50,0);
-        panel.add(cardID, gc);
+        panel.add(cardIDTextField, gc);
 
         int confirm = JOptionPane.showConfirmDialog(null,
                 panel,
@@ -83,14 +125,14 @@ public class CardForm {
 
         // TODO make a temp card
 
-        /*if (confirm == JOptionPane.OK_OPTION) {
+        if (confirm == JOptionPane.OK_OPTION) {
             // Add to Database
         } else {
             // DELETE the temp card
-        }*/
+        }
     }
 
-    public void createOtherCardForm(Object cardType) {
+    private void createOtherCardForm(Object cardType, String cardID) {
 
         String title;
 
@@ -101,10 +143,10 @@ public class CardForm {
         }
 
         // TODO use generateCardID method from shop class
-        JTextField cardID = new JTextField("Test Card ID", 30);
-        cardID.setEditable(false);
-        JTextField name = new JTextField(40);
-        JTextField email = new JTextField(40);
+        JTextField cardIDTextField = new JTextField(cardID, 15);
+        cardIDTextField.setEditable(false);
+        JTextField name = new JTextField(30);
+        JTextField email = new JTextField(30);
 
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gc = new GridBagConstraints();
@@ -123,7 +165,7 @@ public class CardForm {
         gc.gridy = 0;
         gc.anchor = GridBagConstraints.LINE_START;
         gc.insets = new Insets(10,0,30,0);
-        panel.add(cardID, gc);
+        panel.add(cardIDTextField, gc);
 
         gc.gridx = 0;
         gc.gridy = 1;
