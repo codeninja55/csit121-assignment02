@@ -66,7 +66,17 @@ public class MainFrame extends JFrame {
 
         cardPanel.setDeleteCardListener(new FormListener() {
             public void cardFormActionEvent() {
-                new CardForm(shop.getDatabase().getCards());
+                CardForm deleteCardForm = new CardForm();
+
+                if (!shop.cardExists(deleteCardForm.getCardID())) {
+                    System.out.println("MainFrame");
+                    System.out.println(deleteCardForm.getCardID());
+                    deleteCardForm.deleteForm(false);
+                } else {
+                    System.out.println("Deleting Card: " + deleteCardForm.getCardID());
+                    shop.deleteCard(deleteCardForm.getCardID());
+                }
+
             }
         });
 
