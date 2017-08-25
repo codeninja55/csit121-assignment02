@@ -42,7 +42,6 @@ public class CardsToolbar extends JPanel {
     }
 
     public class ButtonListener implements ActionListener {
-
         @Override
         public void actionPerformed(ActionEvent e) {
             if(e.getSource() == addCard) {
