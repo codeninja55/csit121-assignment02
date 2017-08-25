@@ -30,16 +30,15 @@ public class CardsToolbar extends JPanel {
         add(addCard);
         add(deleteCard);
         add(sortCards);
-
         add(searchButton);
         //add(searchField);
 
+        // Registration of listeners
         ButtonListener handler = new ButtonListener();
         addCard.addActionListener(handler);
         deleteCard.addActionListener(handler);
         sortCards.addActionListener(handler);
         searchButton.addActionListener(handler);
-
     }
 
     public class ButtonListener implements ActionListener {
