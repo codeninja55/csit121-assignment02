@@ -1,6 +1,7 @@
 package cn55.view;
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,15 +16,26 @@ public class CardsToolbar extends JPanel {
 
     public CardsToolbar() {
 
-        Border innerBorder = BorderFactory.createTitledBorder("Actions");
-        Border outerBorder = BorderFactory.createEmptyBorder(5,5,5,5);
+        Border innerBorder = BorderFactory.createTitledBorder(
+                BorderFactory.createMatteBorder(1,1,1,1,Color.BLACK),
+                "Actions",
+                TitledBorder.LEFT,
+                TitledBorder.CENTER,
+                new Font("Verdana",Font.BOLD,22));
+
+        Border outerBorder = BorderFactory.createEmptyBorder(20,10,20,10);
         setBorder(BorderFactory.createCompoundBorder(outerBorder, innerBorder));
 
+        Font btnFont = new Font("Verdana", Font.BOLD, 24);
         addCard = new JButton("Add Card");
+        addCard.setFont(btnFont);
         deleteCard = new JButton("Delete Card");
+        deleteCard.setFont(btnFont);
         sortCards = new JButton("Sort Cards");
+        sortCards.setFont(btnFont);
         //searchField = new JTextField("Search for Card", 50);
         searchButton = new JButton("Search");
+        searchButton.setFont(btnFont);
 
         setLayout(new FlowLayout(FlowLayout.LEFT));
 

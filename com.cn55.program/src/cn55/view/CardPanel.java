@@ -1,8 +1,6 @@
 package cn55.view;
 
-import cn55.model.BasicCard;
 import cn55.model.Card;
-import cn55.model.PremiumCard;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,7 +15,7 @@ public class CardPanel extends JPanel {
     public CardPanel() {
         toolbar = new CardsToolbar();
         cardTextArea = new JTextArea();
-        cardTextArea.setFont(new Font("Arial",Font.BOLD, 24));
+        cardTextArea.setFont(new Font("Arial",Font.BOLD, 20));
 
         setLayout(new BorderLayout());
 

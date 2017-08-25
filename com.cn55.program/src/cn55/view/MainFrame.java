@@ -15,14 +15,15 @@ public class MainFrame extends JFrame {
 
         //mainToolbar = new MainToolbar();
         JTabbedPane tabPane = new JTabbedPane();
+        tabPane.setFont(new Font("Verdana", Font.BOLD, 32));
 
-        // Initialize panels for tabs
+        /*// Initialize panels for tabs
         JPanel welcomePanel = new JPanel();
         // Without configuring, GraibBayLayout automatically puts in middle
         welcomePanel.setLayout(new GridBagLayout());
         JLabel welcomeLabel = new JLabel("Welcome to Marvel Rewards");
         welcomeLabel.setFont(new Font("Verdana", Font.BOLD,56));
-        welcomePanel.add(welcomeLabel);
+        welcomePanel.add(welcomeLabel);*/
 
         CardPanel cardPanel = new CardPanel();
         PurchasesPanel purchasesPanel = new PurchasesPanel();
@@ -36,7 +37,7 @@ public class MainFrame extends JFrame {
         add(tabPane, BorderLayout.CENTER);
 
         // Add tabs to tabPane group
-        tabPane.addTab("Welcome", welcomePanel);
+        //tabPane.addTab("Welcome", welcomePanel);
         tabPane.addTab("Cards", cardPanel);
         tabPane.addTab("Purchases", purchasesPanel);
         tabPane.addTab("Categories", categoriesPanel);
