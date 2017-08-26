@@ -8,7 +8,7 @@ public class Style {
     public static Font titledBorderFont() { return new Font("Verdana", Font.BOLD, 24); }
     public static Font textFieldFont() { return new Font("Monospaced", Font.PLAIN, 20); }
     public static Font tabPaneFont() { return  new Font("Monospaced", Font.BOLD, 34); }
-    public static Font tableDataFont() { return new Font("Monospaced", Font.PLAIN, 14); }
+    public static Font tableDataFont() { return new Font("Monospaced", Font.PLAIN, 18); }
 
     public static Color btnColor() { return new Color(244,67,54); }
     public static Color red500() { return new Color(244,67,54); }
