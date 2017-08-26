@@ -14,6 +14,8 @@ class CardForm {
         String[] cardType = {"Anon Card", "Basic Card", "Premium Card"};
         JComboBox<String> cardTypeCombo = new JComboBox<>(cardType);
         cardTypeCombo.setFont(Style.buttonFont());
+        JLabel cardTypeComboLabel = new JLabel("Choose the Card Type to Create");
+        cardTypeComboLabel.setFont(Style.labelFont());
 
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gc = new GridBagConstraints();
@@ -25,7 +27,7 @@ class CardForm {
         //gc.anchor = GridBagConstraints.FIRST_LINE_START;
         gc.insets = new Insets(10,0,30,0);
 
-        panel.add(new JLabel("Choose the Card Type to Create"), gc);
+        panel.add(cardTypeComboLabel, gc);
 
         gc.gridx = 0;
         gc.gridy = 1;

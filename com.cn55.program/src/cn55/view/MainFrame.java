@@ -9,6 +9,11 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/* CONTROLLER CLASS */
+/* GUI view package will only interact
+ * with data through this controller class
+ * and Program controller class */
+
 public class MainFrame extends JFrame {
 
     private Shop shop;
@@ -120,6 +125,14 @@ public class MainFrame extends JFrame {
                 if (!cardID.isEmpty() && shop.cardExists(cardID)) {
                     int cardIndex = shop.getDatabase().getCardMap().get(cardID);
                     String cardText = shop.getDatabase().getCards().get(cardIndex).toString();
+                    //String cardText = String.format("");
+
+                    JOptionPane.showMessageDialog(
+                            null,
+                            cardText,
+                            "Card",
+                            JOptionPane.INFORMATION_MESSAGE);
+
                     // UNCOMMENT TO USE TEXTAREA  cardPanel.appendCardTextArea(cardText);
                 } else if (!shop.cardExists(cardID)) {
                     JOptionPane.showMessageDialog(null,

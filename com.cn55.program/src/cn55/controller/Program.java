@@ -5,7 +5,6 @@ import cn55.view.MainFrame;
 import cn55.view.Style;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,7 +49,7 @@ public class Program {
         // Cash purchase test
         Map<String, Double> cat1 = new HashMap<>();
         cat1.put("Toys", 0D);
-        cat1.put("Sporting Goods", 800D);
+        cat1.put("Other", 800D);
         cat1.put("Electronics", 0D);
         cat1.put("Motors", 100D);
         cat1.put("Fashion", 0D);
@@ -65,7 +64,7 @@ public class Program {
         cat2.put("Deals", 0D);
         cat2.put("Electronics", 200D);
         cat2.put("Fashion", 80D);
-        cat2.put("Sporting Goods", 0D);
+        cat2.put("Other", 0D);
         cat2.put("Toys", 100D);
         cat2.put("Motors", 0D);
 
@@ -77,7 +76,7 @@ public class Program {
         cat8.put("Deals", 100D);
         cat8.put("Electronics", 0D);
         cat8.put("Fashion", 80D);
-        cat8.put("Sporting Goods", 0D);
+        cat8.put("Other", 0D);
         cat8.put("Toys", 0D);
         cat8.put("Motors", 0D);
 
@@ -90,7 +89,7 @@ public class Program {
         Map<String, Double> cat3 = new HashMap<>();
         cat3.put("Electronics", 3000D);
         cat3.put("Fashion", 5000D);
-        cat3.put("Sporting Goods", 500D);
+        cat3.put("Other", 500D);
         cat3.put("Motors", 0D);
         cat3.put("Toys", 1000D);
         cat3.put("Deals", 2000D);
@@ -104,7 +103,7 @@ public class Program {
         Map<String, Double> cat4 = new HashMap<>();
         cat4.put("Electronics", 100D);
         cat4.put("Fashion", 0D);
-        cat4.put("Sporting Goods", 500D);
+        cat4.put("Other", 500D);
         cat4.put("Motors", 0D);
         cat4.put("Toys", 100D);
         cat4.put("Deals", 2000D);
@@ -120,7 +119,7 @@ public class Program {
         cat5.put("Deals", 500000D);
         cat5.put("Toys", 300D);
         cat5.put("Motors", 10000D);
-        cat5.put("Sporting Goods", 500D);
+        cat5.put("Other", 500D);
         cat5.put("Fashion", 2000D);
 
         shop.makePurchase("75", cat5);
@@ -134,7 +133,7 @@ public class Program {
         cat6.put("Deals", 0D);
         cat6.put("Toys", 300D);
         cat6.put("Motors", 1000000D);
-        cat6.put("Sporting Goods", 500D);
+        cat6.put("Other", 500D);
         cat6.put("Fashion", 2000D);
 
         shop.makePurchase("666", cat6);
