@@ -8,7 +8,12 @@ import java.util.HashMap;
 
 public class MainFrame extends JFrame {
 
-    //private Database db;
+    private JTabbedPane tabbedPane;
+    //private JPanel welcomePanel;
+    private CardPanel cardPanel;
+    private PurchasesPanel purchasesPanel;
+    private CategoriesPanel categoriesPanel;
+    private SummaryPanel summaryPanel;
 
     public MainFrame(Shop shop) {
         super("Marvel Rewards");
@@ -16,21 +21,21 @@ public class MainFrame extends JFrame {
         setLayout(new BorderLayout());
 
         //mainToolbar = new MainToolbar();
-        JTabbedPane tabPane = new JTabbedPane();
+        this.tabPane = new JTabbedPane();
         tabPane.setFont(new Font("Verdana", Font.BOLD, 32));
 
         /*// Initialize panels for tabs
-        JPanel welcomePanel = new JPanel();
-        // Without configuring, GraibBayLayout automatically puts in middle
+        this.welcomePanel = new JPanel();
+        // Without configuring, GridBagLayout automatically puts in middle
         welcomePanel.setLayout(new GridBagLayout());
         JLabel welcomeLabel = new JLabel("Welcome to Marvel Rewards");
         welcomeLabel.setFont(new Font("Verdana", Font.BOLD,56));
         welcomePanel.add(welcomeLabel);*/
 
-        CardPanel cardPanel = new CardPanel();
-        PurchasesPanel purchasesPanel = new PurchasesPanel();
-        CategoriesPanel categoriesPanel = new CategoriesPanel();
-        SummaryPanel summaryPanel = new SummaryPanel();
+        this.cardPanel = new CardPanel();
+        this.purchasesPanel = new PurchasesPanel();
+        this.categoriesPanel = new CategoriesPanel();
+        this.summaryPanel = new SummaryPanel();
 
         cardPanel.setCardData(shop.getDatabase().getCards());
 
@@ -44,6 +49,18 @@ public class MainFrame extends JFrame {
         tabPane.addTab("Purchases", purchasesPanel);
         tabPane.addTab("Categories", categoriesPanel);
         tabPane.addTab("Summary", summaryPanel);
+
+        //setSize(2160,1440);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setUndecorated(false);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setVisible(true);
+
+        this.eventControlling();
+    }
+
+    /*==================== HANDLE EVENTS ====================*/
+    private void eventControlling() {
 
         // Listens to change events for tabs and handles the events
         tabPane.addChangeListener(e -> {
@@ -79,11 +96,5 @@ public class MainFrame extends JFrame {
 
             }
         });
-
-        //setSize(2160,1440);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
-        setUndecorated(false);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setVisible(true);
     }
 }
