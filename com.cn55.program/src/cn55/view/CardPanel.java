@@ -9,17 +9,20 @@ import java.util.ArrayList;
 class CardPanel extends JPanel {
 
     private CardsToolbar toolbar;
+    private SearchPanel searchPanel;
     private JTextArea cardTextArea;
     private ArrayList<Card> cards;
 
     // Constructor
     CardPanel() {
         toolbar = new CardsToolbar();
+        searchPanel = new SearchPanel();
         cardTextArea = new JTextArea();
         cardTextArea.setFont(new Font("Verdana",Font.BOLD, 20));
 
         setLayout(new BorderLayout());
 
+        add(searchPanel, BorderLayout.WEST);
         add(toolbar, BorderLayout.NORTH);
         add(new JScrollPane(cardTextArea), BorderLayout.CENTER);
     }
