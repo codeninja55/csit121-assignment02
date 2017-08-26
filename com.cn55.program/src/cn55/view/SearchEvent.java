@@ -1,13 +1,12 @@
 package cn55.view;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 
-public class SearchEvent extends ActionEvent {
+public class SearchEvent extends EventObject {
     private String searchID;
 
     public SearchEvent(Object source) {
         super(source);
-
     }
 
     public SearchEvent(Object source, String searchID) {

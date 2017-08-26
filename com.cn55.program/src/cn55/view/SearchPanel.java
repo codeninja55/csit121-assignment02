@@ -9,13 +9,15 @@ import java.awt.event.ActionListener;
 
 public class SearchPanel extends JPanel {
 
+    private SearchListener searchListener;
+
     public SearchPanel() {
         JTextField searchIDTextField = new JTextField(15);
         JButton searchBtn = new JButton("Search");
         JLabel searchLabel = new JLabel("Search by Card ID");
 
         Dimension dim = getPreferredSize();
-        dim.width = 720;
+        dim.width = 500;
         setPreferredSize(dim);
         setLayout(new GridBagLayout());
 
@@ -38,7 +40,7 @@ public class SearchPanel extends JPanel {
         gc.anchor = GridBagConstraints.CENTER;
         gc.insets = new Insets(20,10,10,20);
 
-        searchLabel.setFont(new Font("Verdana", Font.BOLD, 24));
+        searchLabel.setFont(Style.labelFont());
         add(searchLabel, gc);
 
         gc.gridx = 1;
@@ -49,6 +51,7 @@ public class SearchPanel extends JPanel {
         textFieldDim.width = 350;
         textFieldDim.height = 40;
         searchIDTextField.setPreferredSize(textFieldDim);
+        searchIDTextField.setFont(Style.textFieldFont());
         add(searchIDTextField, gc);
 
         gc.gridx = 0;
@@ -57,7 +60,9 @@ public class SearchPanel extends JPanel {
         gc.weighty = 3;
         gc.anchor = GridBagConstraints.FIRST_LINE_END;
         gc.insets = new Insets(20,10,10,20);
-        searchBtn.setFont(new Font("Verdana", Font.BOLD, 24));
+        searchBtn.setFont(Style.buttonFont());
+        searchBtn.setBackground(Style.btnColor());
+        searchBtn.setForeground(Style.btnTextColor());
         add(searchBtn, gc);
 
         /* Register listener, handle the event, and raise an Event object
@@ -68,7 +73,13 @@ public class SearchPanel extends JPanel {
                 String searchID = searchIDTextField.getText();
 
                 SearchEvent event = new SearchEvent(this, searchID);
+
+                if (searchListener != null) {
+                    searchListener.searchEventOccurred(event);
+                }
             }
         });
     }
+
+    void setSearchListener(SearchListener listener) { this.searchListener = listener; }
 }
