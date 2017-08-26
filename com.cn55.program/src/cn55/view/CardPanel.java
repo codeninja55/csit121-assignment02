@@ -20,11 +20,22 @@ class CardPanel extends JPanel {
         this.toolbar = new CardsToolbar();
         this.searchPanel = new SearchPanel();
         this.cardTextArea = new JTextArea();
+        this.card
         cardTextArea.setFont(Style.textFieldFont());
         cardTextArea.setEditable(false);
         cardTextArea.setVisible(false);
 
         setLayout(new BorderLayout());
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+        cardTablePanel.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+        cardTablePanel.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
+        cardTablePanel.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
+        cardTablePanel.getColumnModel().getColumn(3).setCellRenderer(centerRenderer);
+        DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+        rightRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
+        cardTablePanel.getColumnModel().getColumn(4).setCellRenderer(rightRenderer);
+        cardTablePanel.getColumnModel().getColumn(5).setCellRenderer(rightRenderer);
 
         add(searchPanel, BorderLayout.WEST);
         add(toolbar, BorderLayout.NORTH);
