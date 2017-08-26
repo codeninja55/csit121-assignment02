@@ -30,7 +30,7 @@ public class Purchase {
     }
 
     // constructor for cash purchases
-    public Purchase(Map<String, Double> categories, int receiptID) {
+    Purchase(Map<String, Double> categories, int receiptID) {
         this.receiptID = receiptID;
         this.cardID = null;
         this.cardType = "Cash";
@@ -39,7 +39,7 @@ public class Purchase {
     } // end of constructor for cash
 
     // constructor for model purchases
-    public Purchase(String cardID, String cardType, Map<String, Double> categories, int receiptID) {
+    Purchase(String cardID, String cardType, Map<String, Double> categories, int receiptID) {
         this.receiptID = receiptID;
         this.cardID = cardID;
         this.cardType = cardType;
@@ -49,17 +49,24 @@ public class Purchase {
 
     /*########## SETTERS ##########*/
 
-    private final Date setPurchaseTime() {
+    private Date setPurchaseTime() {
         // create a java calendar instance and sets that to a Date object
         // REFERENCE: https://alvinalexander.com/java/java-timestamp-example-current-time-now
         Calendar calendar = Calendar.getInstance();
-        Date now = calendar.getTime();
-        return now;
+        return calendar.getTime();
     } // end of setPurchaseTime method
 
     /*########## GETTERS ##########*/
+    public int getReceiptID() { return receiptID; }
 
-    @Override
+    public String getCardID() { return cardID; }
+
+    public String getCardType() { return cardType; }
+
+    public Date getPurchaseTime() { return purchaseTime; }
+
+    public Map<String, Double> getCategories() { return categories; }
+
     public String toString() {
 
         String firstOutput = String.format(
@@ -80,14 +87,9 @@ public class Purchase {
         return firstOutput + secondOutput;
     }
 
-    public double calcCategoriesTotal() {
+    public double getCategoriesTotal() {
         double total = 0;
-
-        for (Map.Entry<String, Double> item : this.categories.entrySet())
-            total += item.getValue();
-
+        for (Map.Entry<String, Double> item : this.categories.entrySet()) total += item.getValue();
         return total;
     }
-
-    public Map<String, Double> getCategoriesMap() { return this.categories; }
 }
