@@ -15,9 +15,7 @@ public class Purchase {
     private final int receiptID;
     private final String cardID;
     private final String cardType;
-
     private Date purchaseTime;
-
     private Map<String, Double> categories;
 
     /*########## CONSTRUCTORS ##########*/
