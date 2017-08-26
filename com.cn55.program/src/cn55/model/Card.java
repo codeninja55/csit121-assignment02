@@ -37,4 +37,5 @@ public abstract class Card {
     public String getCardType() { return cardType; }
     public String getID() { return id; }
     public double getPoints() { return points; }
+    public abstract String toString();
 }
