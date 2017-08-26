@@ -92,7 +92,7 @@ class CardPanel extends JPanel {
         cardTableModel.fireTableDataChanged();
     }
 
-    // INNER CLASS
+    // INNER CLASS FOR CARD TABLE MODEL
     public class CardTableModel extends AbstractTableModel {
 
         private ArrayList<Card> cards;
