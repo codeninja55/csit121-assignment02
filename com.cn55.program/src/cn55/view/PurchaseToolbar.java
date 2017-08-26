@@ -32,7 +32,7 @@ class PurchaseToolbar extends JPanel {
         addPurchaseBtn.setFont(btnFont);
         addPurchaseBtn.setForeground(textColor);
         addPurchaseBtn.setBackground(btnColor);
-        deletePurchaseBtn = new JButton("Delete Card");
+        deletePurchaseBtn = new JButton("Delete Purchase");
         deletePurchaseBtn.setFont(btnFont);
         deletePurchaseBtn.setForeground(textColor);
         deletePurchaseBtn.setBackground(btnColor);

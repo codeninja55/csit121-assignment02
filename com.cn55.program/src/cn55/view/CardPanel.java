@@ -17,7 +17,6 @@ class CardPanel extends JPanel {
     // UNCOMMENT TO USE TEXTAREA private JTextArea cardTextArea;
     private CardTableModel cardTableModel;
     private JTable cardTablePanel;
-    private ArrayList<Card> cards;
 
     // Constructor
     CardPanel() {
