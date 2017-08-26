@@ -17,7 +17,7 @@ public class SearchPanel extends JPanel {
         JLabel searchLabel = new JLabel("Search by Card ID");
 
         Dimension dim = getPreferredSize();
-        dim.width = 500;
+        dim.width = 300;
         setPreferredSize(dim);
         setLayout(new GridBagLayout());
 
@@ -36,19 +36,21 @@ public class SearchPanel extends JPanel {
         gc.gridy = 0;
         gc.weightx = 1;
         gc.weighty = 0.1;
-        gc.fill = GridBagConstraints.LINE_END;
+        gc.fill = GridBagConstraints.NONE;
         gc.anchor = GridBagConstraints.CENTER;
         gc.insets = new Insets(20,10,10,20);
 
         searchLabel.setFont(Style.labelFont());
         add(searchLabel, gc);
 
-        gc.gridx = 1;
-        gc.gridy = 0;
-        gc.anchor = GridBagConstraints.LINE_START;
-        gc.insets = new Insets(20,0,10,0);
+        gc.gridx = 0;
+        gc.gridy = 1;
+        gc.weightx = 1;
+        gc.weighty = 0.1;
+        gc.anchor = GridBagConstraints.CENTER;
+        gc.insets = new Insets(10,0,10,0);
         Dimension textFieldDim = getPreferredSize();
-        textFieldDim.width = 350;
+        textFieldDim.width = 250;
         textFieldDim.height = 40;
         searchIDTextField.setPreferredSize(textFieldDim);
         searchIDTextField.setFont(Style.textFieldFont());
@@ -57,9 +59,9 @@ public class SearchPanel extends JPanel {
         gc.gridx = 0;
         gc.gridy = 2;
         gc.weightx = 1;
-        gc.weighty = 3;
-        gc.anchor = GridBagConstraints.FIRST_LINE_END;
-        gc.insets = new Insets(20,10,10,20);
+        gc.weighty = 2;
+        gc.anchor = GridBagConstraints.PAGE_START;
+        gc.insets = new Insets(10,10,10,10);
         searchBtn.setFont(Style.buttonFont());
         searchBtn.setBackground(Style.btnColor());
         searchBtn.setForeground(Style.btnTextColor());
