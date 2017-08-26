@@ -46,7 +46,7 @@ class CardForm {
 
     /*==================== DEFAULT CONSTRUCTOR for Deleting Cards ====================*/
     CardForm() {
-        this.deleteForm(false);
+        deleteForm(false);
     }
 
     void deleteForm(boolean complete) {
@@ -113,6 +113,7 @@ class CardForm {
                 options[0]);
 
         if (confirm == JOptionPane.OK_OPTION) this.deleteForm(false);
+        else { System.out.println("Delete Redo Cancelled"); }
     }
 
     /*====================  FORMS for Creating Cards ====================*/
