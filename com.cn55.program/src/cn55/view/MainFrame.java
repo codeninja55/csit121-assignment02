@@ -1,7 +1,6 @@
 package cn55.view;
 
 import cn55.model.Shop;
-import jdk.nashorn.internal.scripts.JO;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,7 +25,6 @@ public class MainFrame extends JFrame {
 
         //mainToolbar = new MainToolbar();
         this.tabPane = new JTabbedPane();
-
 
         /*// Initialize panels for tabs
         this.welcomePanel = new JPanel();
@@ -91,14 +89,15 @@ public class MainFrame extends JFrame {
             public void cardFormActionOccurred() {
                 CardForm deleteCardForm = new CardForm();
 
-                if (deleteCardForm.getCardID() != null
-                        && shop.cardExists(deleteCardForm.getCardID())) {
+                if (!shop.cardExists(deleteCardForm.getCardID())) {
                     System.out.println("MainFrame");
                     System.out.println(deleteCardForm.getCardID());
-                    deleteCardForm.deleteForm(false);
+                    deleteCardForm.deleteForm(true);
                 } else {
+                    System.out.println("MainFrame");
                     System.out.println("Deleting Card: " + deleteCardForm.getCardID());
                     shop.deleteCard(deleteCardForm.getCardID());
+                    cardPanel.setCardData(shop.getDatabase().getCards());
                     cardPanel.refresh();
                 }
             }
@@ -111,7 +110,7 @@ public class MainFrame extends JFrame {
                 if (!cardID.isEmpty() && shop.cardExists(cardID)) {
                     int cardIndex = shop.getDatabase().getCardMap().get(cardID);
                     String cardText = shop.getDatabase().getCards().get(cardIndex).toString();
-                    cardPanel.appendCardTextArea(cardText);
+                    // UNCOMMENT TO USE TEXTAREA  cardPanel.appendCardTextArea(cardText);
                 } else if (!shop.cardExists(cardID)) {
                     JOptionPane.showMessageDialog(null,
                             "Card Does Not Exist",
