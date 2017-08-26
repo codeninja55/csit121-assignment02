@@ -15,10 +15,12 @@ class CardPanel extends JPanel {
 
     // Constructor
     CardPanel() {
-        toolbar = new CardsToolbar();
-        searchPanel = new SearchPanel();
-        cardTextArea = new JTextArea();
-        cardTextArea.setFont(new Font("Verdana",Font.BOLD, 20));
+        this.toolbar = new CardsToolbar();
+        this.searchPanel = new SearchPanel();
+        this.cardTextArea = new JTextArea();
+        cardTextArea.setFont(Style.textFieldFont());
+        cardTextArea.setEditable(false);
+        cardTextArea.setVisible(false);
 
         setLayout(new BorderLayout());
 
@@ -27,6 +29,15 @@ class CardPanel extends JPanel {
         add(new JScrollPane(cardTextArea), BorderLayout.CENTER);
     }
 
+    void appendCardTextArea(String text) {
+        cardTextArea.setVisible(true);
+        cardTextArea.setText(null);
+        cardTextArea.append(text);
+    }
+
+    /*==================== EVENT LISTENERS METHODS ====================*/
+    /* These listener methods just pass the listener event to their relevant
+     * panels with the buttons where the Event Handler is placed. */
     void setCreateCardListener(FormListener listener) {
         toolbar.setCreateCardListener(listener);
     }
@@ -35,10 +46,13 @@ class CardPanel extends JPanel {
         toolbar.setDeleteCardListener(listener);
     }
 
+    void setSearchListener(SearchListener listener) { searchPanel.setSearchListener(listener); }
+
     void setCardData(ArrayList<Card> cards) { this.cards = cards; }
 
     void refresh() {
         cardTextArea.setText(null);
+        cardTextArea.setVisible(true);
         for (Card card : cards) {
             cardTextArea.append(card.toString());
         }

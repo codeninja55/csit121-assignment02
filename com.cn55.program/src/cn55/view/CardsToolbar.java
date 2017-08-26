@@ -6,7 +6,6 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.Normalizer;
 
 class CardsToolbar extends JPanel {
 
@@ -26,36 +25,40 @@ class CardsToolbar extends JPanel {
                 "Actions",
                 TitledBorder.LEFT,
                 TitledBorder.CENTER,
-                new Font("Verdana",Font.BOLD,22));
+                Style.titledBorderFont());
 
         Border outerBorder = BorderFactory.createEmptyBorder(20,10,20,10);
         setBorder(BorderFactory.createCompoundBorder(outerBorder, innerBorder));
 
-        Font btnFont = new Font("Verdana", Font.BOLD, 24);
+        Font btnFont = Style.buttonFont();
+        Color btnColor = Style.btnColor();
+        Color textColor = Style.btnTextColor();
         addCard = new JButton("Add Card");
         addCard.setFont(btnFont);
+        addCard.setForeground(textColor);
+        addCard.setBackground(btnColor);
         deleteCard = new JButton("Delete Card");
         deleteCard.setFont(btnFont);
+        deleteCard.setForeground(textColor);
+        deleteCard.setBackground(btnColor);
         sortCards = new JButton("Sort Cards");
         sortCards.setFont(btnFont);
-        //searchField = new JTextField("Search for Card", 50);
-        searchButton = new JButton("Search");
-        searchButton.setFont(btnFont);
+        sortCards.setForeground(textColor);
+        sortCards.setBackground(btnColor);
 
         setLayout(new FlowLayout(FlowLayout.LEFT));
 
         add(addCard);
         add(deleteCard);
+
+        // TODO Add a combobox for the type of sorting required
         add(sortCards);
-        add(searchButton);
-        //add(searchField);
 
         // Registration of listeners
         ButtonListener handler = new ButtonListener();
         addCard.addActionListener(handler);
         deleteCard.addActionListener(handler);
         sortCards.addActionListener(handler);
-        searchButton.addActionListener(handler);
     }
 
     void setCreateCardListener(FormListener listener) {
@@ -72,16 +75,14 @@ class CardsToolbar extends JPanel {
             if (e.getSource() == addCard) {
                 //new CardForm();
                 if (createCardListener != null) {
-                    createCardListener.cardFormActionEvent();
+                    createCardListener.cardFormActionOccurred();
                 }
             } else if (e.getSource() == deleteCard) {
                 if (deleteCardListener != null) {
-                    deleteCardListener.cardFormActionEvent();
+                    deleteCardListener.cardFormActionOccurred();
                 }
             } else if (e.getSource() == sortCards) {
                 JOptionPane.showMessageDialog(null,"Sorting Cards Selected");
-            } else if (e.getSource() == searchButton) {
-                JOptionPane.showMessageDialog(null, "Search Selected");
             }
         }
     }
