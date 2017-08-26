@@ -2,6 +2,7 @@ package cn55.model;
 
 import java.util.*;
 
+@SuppressWarnings("ConstantConditions")
 public class Shop {
 
     private Database db;
