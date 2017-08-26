@@ -1,9 +1,12 @@
 package cn55.view;
 
+import cn55.model.Card;
+import cn55.model.Purchase;
 import cn55.model.Shop;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MainFrame extends JFrame {
@@ -39,7 +42,12 @@ public class MainFrame extends JFrame {
         this.categoriesPanel = new CategoriesPanel();
         this.summaryPanel = new SummaryPanel();
 
-        cardPanel.setCardData(shop.getDatabase().getCards());
+        /* Pass in copies of the ArrayList instead of hte db data */
+        ArrayList<Card> cards = new ArrayList<>(shop.getDatabase().getCards());
+        cardPanel.setCardData(cards);
+        ArrayList<Purchase> purchases = new ArrayList<>(shop.getDatabase().getPurchases());
+        purchasesPanel.setPurchaseData(purchases);
+
 
         // Add panels, toolbars, and panes to main Frame
         //add(mainToolbar, BorderLayout.NORTH);
