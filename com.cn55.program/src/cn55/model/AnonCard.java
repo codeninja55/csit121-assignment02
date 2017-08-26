@@ -27,7 +27,7 @@ public class AnonCard extends Card {
     /*########## GETTERS ##########*/
     @Override
     public String toString() {
-        return String.format("%n%s: %-30s %s: %-30s%s: %-30.2f%n",
+        return String.format("%n%s: %s %s: %s%s: %.2f%n",
                 "Card Type", this.cardType,
                 "Card ID", this.id,
                 "Points", this.points);

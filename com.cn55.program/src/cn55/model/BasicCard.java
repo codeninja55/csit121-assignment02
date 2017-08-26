@@ -49,7 +49,7 @@ public class BasicCard extends Card {
 
     /*########## GETTERS ##########*/
     public String toString() {
-        return String.format("%n%s: %-30s%s: %-30s%s: %-30.2f%s: $%-30.2f%s: %-30s%s: %-30s%n",
+        return String.format("%n%s: %s%s: %s%s: %.2f%s: $%.2f%s: %s%s: %s%n",
                 "Card Type",this.cardType,
                 "Card ID",this.id,
                 "Points",this.points,
