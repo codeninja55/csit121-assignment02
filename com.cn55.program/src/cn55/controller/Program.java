@@ -2,6 +2,10 @@ package cn55.controller;
 
 import cn55.model.*;
 import cn55.view.MainFrame;
+import cn55.view.Style;
+
+import javax.swing.*;
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,6 +31,9 @@ public class Program {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }*/
+
+        UIManager.put("TabbedPane.selected", Style.blueGrey500());
+        UIManager.put("TabbedPane.selectedForeground", Style.red500());
 
         Shop shop = new Shop(true);
         db = shop.getDatabase();
