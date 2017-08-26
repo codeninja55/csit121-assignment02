@@ -35,7 +35,7 @@ public class Program {
         UIManager.put("TabbedPane.selected", Style.blueGrey500());
         UIManager.put("TabbedPane.selectedForeground", Style.red500());
 
-        Shop shop = new Shop(true);
+        Shop shop = new Shop();
         db = shop.getDatabase();
         createTestCode(shop);
         db.mapCards();

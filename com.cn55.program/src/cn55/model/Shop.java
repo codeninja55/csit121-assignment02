@@ -1,37 +1,21 @@
 package cn55.model;
 
 import java.util.*;
-import cn55.controller.Helper;
-
-/*
- * @author Dinh Che
- * Student Number: 5721970
- * Email: dbac496@uowmail.edu.au
- */
 
 public class Shop {
 
     private Database db;
-    private Scanner input = new Scanner(System.in);
 
     /*#################### CONSTRUCTORS #########################*/
 
     // default
     public Shop() {
         this.db = new Database();
-        this.createCategories(userCategories(true));
+        this.createBaseCatMap(db.getCategoriesList());
     }
 
-    // constructor to initialize shop with custom categories
-    public Shop(boolean auto) {
-        this.db = new Database();
-        this.createCategories(userCategories(auto));
-    }
+    /*######################### MUTATORS #########################*/
 
-    /*######################### SETTERS #########################*/
-
-    /*This method generates a receiptID and checks if that ID has already been generated
-    * and placed in the receiptSet instance variable*/
     public int generateReceiptID() {
         Random randomObj = new Random();
 
@@ -139,22 +123,30 @@ public class Shop {
 
     }
 
+    /*This method takes the ArrayList from the userCategories method and adds or creates
+    * them to store in the HashMap instance variable categories*/
+    private void createBaseCatMap(ArrayList<String> categoriesList) {
+        for (String item : categoriesList)
+            db.addCategory(item, 0D);
+    }
+
     /*This method allows users to create a whole new set of categories
     * or add to the currently stored categories after putting the ArrayList
     * through the createCategories method to store them as a HashMap.*/
-    private ArrayList<String> userCategories(boolean auto) {
+    /*private ArrayList<String> userCategories(boolean auto) {
         ArrayList<String> categoriesList = new ArrayList<>();
         String option;
 
         if (auto) {
-            /*If the auto flag is true, the categories list will automatically
-            * populate with the default*/
+            *//*If the auto flag is true, the categories list will automatically
+            * populate with the default*//*
             categoriesList.add("Motors");
             categoriesList.add("Electronics");
             categoriesList.add("Fashion");
             categoriesList.add("Toys");
             categoriesList.add("Sporting Goods");
             categoriesList.add("Deals");
+            categoriesList.add("Other");
 
             return categoriesList;
         } else {
@@ -185,14 +177,7 @@ public class Shop {
                 System.out.println(item);
 
             return categoriesList; }
-    } // end of userCategories method
-
-    /*This method takes the ArrayList from the userCategories method and adds or creates
-    * them to store in the HashMap instance variable categories*/
-    private void createCategories(ArrayList<String> categoriesList) {
-        for (String item : categoriesList)
-            db.addCategory(item, 0D);
-    }
+    } // end of userCategories method*/
 
     /*This method allows user to input the total amount for each category*/
     /*private void setCategories() {
@@ -286,7 +271,7 @@ public class Shop {
 
         Map<String, Integer> thresholdResults = new HashMap<>();
 
-        *//*Populate the map with just the keys and iniatialize the value to 0*//*
+        *//*Populate the map with just the keys and initialize the value to 0*//*
         for (Map.Entry<String, int[]> item : thresholdList.entrySet())
             thresholdResults.put(item.getKey(), 0);
 
@@ -308,10 +293,10 @@ public class Shop {
 
     /*######################### HELPERS #########################*/
 
-    public void showPurchases() {
+    /*public void showPurchases() {
         for (Purchase purchase : db.getPurchases())
             System.out.println(purchase.toString());
-    }
+    }*/
 
     /*public void showTotalPurchases() {
         System.out.printf("%n%n%-20s %s%n","Category","Total");
