@@ -75,13 +75,15 @@ class CardsToolbar extends JPanel {
             if (e.getSource() == addCard) {
                 //new CardForm();
                 if (createCardListener != null) {
-                    createCardListener.cardFormActionOccurred();
+                    createCardListener.formActionOccurred();
                 }
             } else if (e.getSource() == deleteCard) {
                 if (deleteCardListener != null) {
-                    deleteCardListener.cardFormActionOccurred();
+                    deleteCardListener.formActionOccurred();
                 }
             } else if (e.getSource() == sortCards) {
+
+                // TODO Listen on ComboBox changes
                 JOptionPane.showMessageDialog(null,"Sorting Cards Selected");
             }
         }

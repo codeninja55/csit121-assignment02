@@ -77,7 +77,7 @@ public class MainFrame extends JFrame {
 
         // Listens to events in Toolbar and handles the event
         cardPanel.setCreateCardListener(new FormListener() {
-            public void cardFormActionOccurred() {
+            public void formActionOccurred() {
                 CardForm createCardForm = new CardForm(shop.generateCardID());
                 HashMap<String,String> newCard = createCardForm.getCardMap();
                 shop.makeCard(newCard);
@@ -86,7 +86,7 @@ public class MainFrame extends JFrame {
         });
 
         cardPanel.setDeleteCardListener(new FormListener() {
-            public void cardFormActionOccurred() {
+            public void formActionOccurred() {
                 CardForm deleteCardForm = new CardForm();
 
                 if (!shop.cardExists(deleteCardForm.getCardID())) {
