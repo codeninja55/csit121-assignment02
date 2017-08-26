@@ -17,7 +17,7 @@ public class SearchPanel extends JPanel {
         JLabel searchLabel = new JLabel("Search by Card ID");
 
         Dimension dim = getPreferredSize();
-        dim.width = 300;
+        dim.width = 350;
         setPreferredSize(dim);
         setLayout(new GridBagLayout());
 
