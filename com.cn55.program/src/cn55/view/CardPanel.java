@@ -1,6 +1,8 @@
 package cn55.view;
 
-import cn55.model.*;
+import cn55.model.Card;
+import cn55.model.PremiumCard;
+import cn55.model.BasicCard;
 
 import javax.swing.*;
 import java.awt.*;
