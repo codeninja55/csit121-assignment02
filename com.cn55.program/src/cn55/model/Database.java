@@ -21,16 +21,18 @@ public class Database {
     private HashMap<String, Integer> cardMap;
     private ArrayList<Purchase> purchases;
     private Map<String, Double> categories;
+    private ArrayList<String> categoriesList;
     private Set<Integer> receiptSet;
     private Set<String> cardIDSet;
 
     Database() {
-        cards = new ArrayList<>();
-        cardMap = new HashMap<>();
-        purchases = new ArrayList<>();
-        categories = new HashMap<>();
-        receiptSet = new HashSet<>();
-        cardIDSet = new HashSet<>();
+        this.cards = new ArrayList<>();
+        this.cardMap = new HashMap<>();
+        this.purchases = new ArrayList<>();
+        this.categories = new HashMap<>();
+        this.createCategoriesList();
+        this.receiptSet = new HashSet<>();
+        this.cardIDSet = new HashSet<>();
     }
 
     /*==================== MUTATORS ====================*/
@@ -49,6 +51,18 @@ public class Database {
 
     public void addPurchases(Purchase purchase) {
         this.purchases.add(purchase);
+    }
+
+    private void createCategoriesList() {
+        this.categoriesList = new ArrayList<>();
+
+        categoriesList.add("Motors");
+        categoriesList.add("Electronics");
+        categoriesList.add("Fashion");
+        categoriesList.add("Toys");
+        categoriesList.add("Sporting Goods");
+        categoriesList.add("Deals");
+        categoriesList.add("Other");
     }
 
     public void addCategory(String category, Double value) {
@@ -73,6 +87,8 @@ public class Database {
     public ArrayList<Purchase> getPurchases() {
         return purchases;
     }
+
+    public ArrayList<String> getCategoriesList() { return categoriesList; }
 
     public Map<String, Double> getCategories() {
         return categories;
