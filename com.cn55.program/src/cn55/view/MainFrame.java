@@ -14,11 +14,12 @@ import java.util.HashMap;
  * with data through this controller class
  * and Program controller class */
 
+@SuppressWarnings("Convert2Lambda")
 public class MainFrame extends JFrame {
 
     private Shop shop;
     private JTabbedPane tabPane;
-    //private JPanel welcomePanel;
+    private JPanel welcomePanel;
     private CardPanel cardPanel;
     private PurchasesPanel purchasePanel;
     private CategoriesPanel categoriesPanel;
@@ -34,13 +35,13 @@ public class MainFrame extends JFrame {
         //mainToolbar = new MainToolbar();
         this.tabPane = new JTabbedPane();
 
-        /*// Initialize panels for tabs
+        // Initialize panels for tabs
         this.welcomePanel = new JPanel();
         // Without configuring, GridBagLayout automatically puts in middle
         welcomePanel.setLayout(new GridBagLayout());
         JLabel welcomeLabel = new JLabel("Welcome to Marvel Rewards");
         welcomeLabel.setFont(new Font("Verdana", Font.BOLD,56));
-        welcomePanel.add(welcomeLabel);*/
+        welcomePanel.add(welcomeLabel);
 
         this.cardPanel = new CardPanel();
         this.purchasePanel = new PurchasesPanel();
@@ -63,11 +64,14 @@ public class MainFrame extends JFrame {
         add(tabPane, BorderLayout.CENTER);
 
         // Add tabs to tabPane group
-        //tabPane.addTab("Welcome", welcomePanel);
+        tabPane.addTab("Welcome", welcomePanel);
         tabPane.addTab("Cards", cardPanel);
         tabPane.addTab("Purchases", purchasePanel);
         tabPane.addTab("Categories", categoriesPanel);
         tabPane.addTab("Summary", summaryPanel);
+
+        // DEFAULT PANE BEGIN AT
+        tabPane.setSelectedIndex(2);
 
         //setSize(2160,1440);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -91,7 +95,7 @@ public class MainFrame extends JFrame {
         });
 
         // Listens to events in Toolbar and handles the event
-        cardPanel.setCreateCardListener(new FormListener() {
+        cardPanel.setCreateCardListener(new CardListener() {
             public void formActionOccurred() {
                 CardForm createCardForm = new CardForm(shop.generateCardID());
                 HashMap<String,String> newCard = createCardForm.getCardMap();
@@ -100,7 +104,7 @@ public class MainFrame extends JFrame {
             }
         });
 
-        cardPanel.setDeleteCardListener(new FormListener() {
+        cardPanel.setDeleteCardListener(new CardListener() {
             public void formActionOccurred() {
                 CardForm deleteCardForm = new CardForm();
 
@@ -140,6 +144,13 @@ public class MainFrame extends JFrame {
                             "Error",
                             JOptionPane.ERROR_MESSAGE);
                 }
+            }
+        });
+
+        purchasePanel.setCreatePurchaseListener(new PurchaseListener() {
+            @Override
+            public void formActionOccurred(PurchaseEvent event) {
+                new PurchaseForm(shop.generateReceiptID());
             }
         });
     }
