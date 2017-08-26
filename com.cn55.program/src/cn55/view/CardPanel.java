@@ -6,47 +6,60 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 
 class CardPanel extends JPanel {
 
     private CardsToolbar toolbar;
     private SearchPanel searchPanel;
-    private JTextArea cardTextArea;
+    // UNCOMMENT TO USE TEXTAREA private JTextArea cardTextArea;
     private CardTableModel cardTableModel;
+    private JTable cardTablePanel;
     private ArrayList<Card> cards;
 
     // Constructor
     CardPanel() {
         this.toolbar = new CardsToolbar();
         this.searchPanel = new SearchPanel();
-        this.cardTextArea = new JTextArea();
-        this.card
-        cardTextArea.setFont(Style.textFieldFont());
-        cardTextArea.setEditable(false);
-        cardTextArea.setVisible(false);
+        this.cardTableModel = new CardTableModel();
+        this.cardTablePanel = new JTable(cardTableModel);
+        // UNCOMMENT TO USE TEXTAREA this.cardTextArea = new JTextArea(cardTablePanel);
+        // UNCOMMENT TO USE TEXTAREA cardTextArea.setFont(Style.textFieldFont());
+        // UNCOMMENT TO USE TEXTAREA cardTextArea.setEditable(false);
+        // UNCOMMENT TO USE TEXTAREA cardTextArea.setVisible(false);
 
         setLayout(new BorderLayout());
+
+        // FORMATTING FOR TABLE
+        cardTablePanel.setRowHeight(30);
+        cardTablePanel.setFont(Style.tableDataFont());
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
         cardTablePanel.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+        cardTablePanel.getColumnModel().getColumn(0).setPreferredWidth(3);
         cardTablePanel.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
+        cardTablePanel.getColumnModel().getColumn(1).setPreferredWidth(5);
         cardTablePanel.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
         cardTablePanel.getColumnModel().getColumn(3).setCellRenderer(centerRenderer);
         DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
         rightRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
         cardTablePanel.getColumnModel().getColumn(4).setCellRenderer(rightRenderer);
+        cardTablePanel.getColumnModel().getColumn(4).setPreferredWidth(5);
         cardTablePanel.getColumnModel().getColumn(5).setCellRenderer(rightRenderer);
+        cardTablePanel.getColumnModel().getColumn(5).setPreferredWidth(5);
 
         add(searchPanel, BorderLayout.WEST);
         add(toolbar, BorderLayout.NORTH);
-        add(new JScrollPane(cardTextArea), BorderLayout.CENTER);
+        add(new JScrollPane(cardTablePanel), BorderLayout.CENTER);
+        // UNCOMMENT TO USE TEXTAREA add(new JScrollPane(cardTextArea), BorderLayout.CENTER);
     }
 
-    void appendCardTextArea(String text) {
+    // UNCOMMENT TO USE TEXTAREA
+    /*oid appendCardTextArea(String text) {
         cardTextArea.setVisible(true);
         cardTextArea.setText(null);
         cardTextArea.append(text);
-    }
+    }*/
 
     /*==================== EVENT LISTENERS METHODS ====================*/
     /* These listener methods just pass the listener event to their relevant
@@ -63,7 +76,7 @@ class CardPanel extends JPanel {
 
     /*void setCardData(ArrayList<Card> cards) { this.cards = cards; }*/
 
-    public void setCardData(ArrayList<Card> cards) {
+    void setCardData(ArrayList<Card> cards) {
         cardTableModel.setData(cards);
     }
 
@@ -75,7 +88,7 @@ class CardPanel extends JPanel {
         }
     }*/
 
-    public void refresh() {
+    void refresh() {
         cardTableModel.fireTableDataChanged();
     }
 
@@ -85,7 +98,7 @@ class CardPanel extends JPanel {
         private ArrayList<Card> cards;
         private String[] cardHeaders = {"Card ID", "Card Type", "Name", "Email", "Balance", "Points"};
 
-        public void setData(ArrayList<Card> cards) {
+        void setData(ArrayList<Card> cards) {
             this.cards = cards;
         }
 
