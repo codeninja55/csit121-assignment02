@@ -14,8 +14,8 @@ class CardsToolbar extends JPanel {
     private JButton sortCards;
     //private JTextField searchField;
     private JButton searchButton;
-    private FormListener createCardListener;
-    private FormListener deleteCardListener;
+    private CardListener createCardListener;
+    private CardListener deleteCardListener;
 
     // Constructor
     CardsToolbar() {
@@ -61,11 +61,11 @@ class CardsToolbar extends JPanel {
         sortCards.addActionListener(handler);
     }
 
-    void setCreateCardListener(FormListener listener) {
+    void setCreateCardListener(CardListener listener) {
         this.createCardListener = listener;
     }
 
-    void setDeleteCardListener(FormListener listener) {
+    void setDeleteCardListener(CardListener listener) {
         this.deleteCardListener = listener;
     }
 

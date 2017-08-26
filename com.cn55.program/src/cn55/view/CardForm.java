@@ -41,8 +41,8 @@ class CardForm {
                 JOptionPane.PLAIN_MESSAGE);
 
         if (result == JOptionPane.OK_OPTION) {
-            if (cardTypeCombo.getSelectedItem() == "Anon Card") this.createAnonCard(generatedCardID);
-            else this.createOtherCardForm(cardTypeCombo.getSelectedItem(), generatedCardID);
+            if (cardTypeCombo.getSelectedItem() == "Anon Card") createAnonCard(generatedCardID);
+            else createOtherCardForm(cardTypeCombo.getSelectedItem(), generatedCardID);
         }
     }
 

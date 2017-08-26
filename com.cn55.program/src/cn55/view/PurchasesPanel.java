@@ -6,7 +6,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableCellRenderer;
 
 public class PurchasesPanel extends JPanel {
     private PurchaseToolbar toolbar;
@@ -26,6 +25,8 @@ public class PurchasesPanel extends JPanel {
         add(toolbar, BorderLayout.NORTH);
         add(new JScrollPane(purchaseTablePanel), BorderLayout.CENTER);
     }
+
+    void setCreatePurchaseListener (PurchaseListener listener) { toolbar.setCreatePurchaseListener(listener);}
 
     void setPurchaseData(ArrayList<Purchase> purchases) { purchaseTableModel.setData(purchases); }
 

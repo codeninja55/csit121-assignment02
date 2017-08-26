@@ -11,8 +11,8 @@ class PurchaseToolbar extends JPanel {
 
     private JButton addPurchaseBtn;
     private JButton deletePurchaseBtn;
-    private FormListener createPurchaseListener;
-    private FormListener deletePurchaseListener;
+    private PurchaseListener createPurchaseListener;
+    private PurchaseListener deletePurchaseListener;
 
     // Constructor
     PurchaseToolbar() {
@@ -48,11 +48,11 @@ class PurchaseToolbar extends JPanel {
         deletePurchaseBtn.addActionListener(handler);
     }
 
-    void setCreatePurchaseListener(FormListener listener) {
+    void setCreatePurchaseListener(PurchaseListener listener) {
         this.createPurchaseListener = listener;
     }
 
-    void setDeletePurchaseListener(FormListener listener) {
+    void setDeletePurchaseListener(PurchaseListener listener) {
         this.deletePurchaseListener = listener;
     }
 
@@ -60,9 +60,12 @@ class PurchaseToolbar extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == addPurchaseBtn) {
-                /*if (createCardListener != null) {
-                    createCardListener.cardFormActionOccurred();
-                }*/
+
+                PurchaseEvent event = new PurchaseEvent(this);
+
+                if (createPurchaseListener != null) {
+                    createPurchaseListener.formActionOccurred(event);
+                }
             } else if (e.getSource() == deletePurchaseBtn) {
                 /*if (deleteCardListener != null) {
                     deleteCardListener.cardFormActionOccurred();

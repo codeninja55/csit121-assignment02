@@ -65,11 +65,11 @@ class CardPanel extends JPanel {
     /*==================== EVENT LISTENERS METHODS ====================*/
     /* These listener methods just pass the listener event to their relevant
      * panels with the buttons where the Event Handler is placed. */
-    void setCreateCardListener(FormListener listener) {
+    void setCreateCardListener(CardListener listener) {
         toolbar.setCreateCardListener(listener);
     }
 
-    void setDeleteCardListener(FormListener listener) {
+    void setDeleteCardListener(CardListener listener) {
         toolbar.setDeleteCardListener(listener);
     }
 
