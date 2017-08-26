@@ -125,10 +125,18 @@ public class Shop {
     }
 
     public void deleteCard(String cardID) {
-        if (db.getCardMap().containsKey(cardID)) {
-            int index = db.getCardMap().get(cardID);
-            db.getCards().remove(index);
+        try {
+            if (db.getCardMap().containsKey(cardID)) {
+                db.mapCards();
+                int index = db.getCardMap().get(cardID);
+                db.getCards().remove(index);
+                System.out.println(db.getCards());
+            }
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("Exception");
+            System.out.println(db.getCards());
         }
+
     }
 
     /*This method allows users to create a whole new set of categories
