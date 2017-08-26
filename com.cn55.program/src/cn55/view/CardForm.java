@@ -48,7 +48,7 @@ class CardForm {
         this.deleteForm(false);
     }
 
-    public void deleteForm(boolean complete) {
+    void deleteForm(boolean complete) {
 
         if (!complete) {
             JTextField cardIDTextField = new JTextField(20);
