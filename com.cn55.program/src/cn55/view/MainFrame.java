@@ -15,7 +15,7 @@ public class MainFrame extends JFrame {
     private JTabbedPane tabPane;
     //private JPanel welcomePanel;
     private CardPanel cardPanel;
-    private PurchasesPanel purchasesPanel;
+    private PurchasesPanel purchasePanel;
     private CategoriesPanel categoriesPanel;
     private SummaryPanel summaryPanel;
 
@@ -38,7 +38,7 @@ public class MainFrame extends JFrame {
         welcomePanel.add(welcomeLabel);*/
 
         this.cardPanel = new CardPanel();
-        this.purchasesPanel = new PurchasesPanel();
+        this.purchasePanel = new PurchasesPanel();
         this.categoriesPanel = new CategoriesPanel();
         this.summaryPanel = new SummaryPanel();
 
@@ -46,7 +46,7 @@ public class MainFrame extends JFrame {
         ArrayList<Card> cards = new ArrayList<>(shop.getDatabase().getCards());
         cardPanel.setCardData(cards);
         ArrayList<Purchase> purchases = new ArrayList<>(shop.getDatabase().getPurchases());
-        purchasesPanel.setPurchaseData(purchases);
+        purchasePanel.setPurchaseData(purchases);
 
 
         // Add panels, toolbars, and panes to main Frame
@@ -60,7 +60,7 @@ public class MainFrame extends JFrame {
         // Add tabs to tabPane group
         //tabPane.addTab("Welcome", welcomePanel);
         tabPane.addTab("Cards", cardPanel);
-        tabPane.addTab("Purchases", purchasesPanel);
+        tabPane.addTab("Purchases", purchasePanel);
         tabPane.addTab("Categories", categoriesPanel);
         tabPane.addTab("Summary", summaryPanel);
 
@@ -80,6 +80,8 @@ public class MainFrame extends JFrame {
         tabPane.addChangeListener(e -> {
             if (tabPane.getSelectedComponent() == cardPanel) {
                 cardPanel.refresh();
+            } else if (tabPane.getSelectedComponent() == purchasePanel) {
+                purchasePanel.refresh();
             }
         });
 
