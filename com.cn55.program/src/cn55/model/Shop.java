@@ -63,10 +63,10 @@ public class Shop {
                 if (card.getID().equals(cardID)) {
                     String cardType = card.getCardType();
                     Purchase newPurchase = new Purchase(cardID,cardType,categories,generateReceiptID());
-                    card.calcPoints(newPurchase.calcCategoriesTotal());
+                    card.calcPoints(newPurchase.getCategoriesTotal());
 
                     if (!cardType.equalsIgnoreCase("AnonCard"))
-                        card.calcBalance(newPurchase.calcCategoriesTotal());
+                        card.calcBalance(newPurchase.getCategoriesTotal());
 
                     db.addPurchases(newPurchase);
                     newCard = false; // set flag so new model not created
