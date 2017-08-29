@@ -2,6 +2,7 @@ package cn55.view.PurchaseView;
 
 import cn55.view.ButtonListener;
 import cn55.view.CardView.CardType;
+import cn55.view.CustomComponents.FormButton;
 import cn55.view.CustomComponents.FormLabel;
 import cn55.view.CustomComponents.FormTextField;
 import cn55.view.CustomComponents.Style;
@@ -16,6 +17,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class PurchaseForm extends JPanel {
 
@@ -24,6 +26,7 @@ public class PurchaseForm extends JPanel {
 
     private DefaultComboBoxModel<String> existingCardModel;
     private ArrayList<String> categoriesList;
+    private HashMap<FormLabel, FormTextField> categoriesMap;
 
     private JComboBox<String> purchaseTypeCombo;
     private DefaultComboBoxModel<String> options;
@@ -31,27 +34,26 @@ public class PurchaseForm extends JPanel {
     private JPanel createPurchaseFormPanel;
     private FormLabel receiptIDLabel;
     private FormTextField receiptIDTextField;
-    private JLabel cardIDLabel;
-    private JTextField cardIDTextField;
-    private JLabel existingCardLabel;
+    private FormLabel cardIDLabel;
+    private FormTextField cardIDTextField;
+    private FormLabel existingCardLabel;
     private JComboBox<String> existingCardCombo;
 
     private ButtonGroup cardTypeRBGroup;
-    private JLabel cardTypeLabel;
+    private FormLabel cardTypeLabel;
     private JRadioButton anonCardRB;
     private JRadioButton basicCardRB;
     private JRadioButton premiumCardRB;
 
-    private JLabel cardNameLabel;
-    private JTextField cardNameTextField;
-    private JLabel cardEmailLabel;
-    private JTextField cardEmailTextField;
+    private FormLabel cardNameLabel;
+    private FormTextField cardNameTextField;
+    private FormLabel cardEmailLabel;
+    private FormTextField cardEmailTextField;
 
-    private HashMap<FormLabel, FormTextField> categoriesMap;
-
+    private PurchaseListener createPurchaseListener;
     private ButtonListener cancelListener;
-    private JButton createBtn;
-    private JButton clearBtn;
+    private FormButton createBtn;
+    private FormButton clearBtn;
 
     /* CONSTRUCTOR */
     PurchaseForm() {
@@ -59,6 +61,35 @@ public class PurchaseForm extends JPanel {
         purchaseTypeCombo = new JComboBox<>();
         options = new DefaultComboBoxModel<>();
         JButton cancelBtn = new JButton(" Cancel New Purchase ");
+
+        /* NOTE: All FormLabels and FormTextField are hidden by default */
+        receiptIDLabel = new FormLabel("Receipt ID: ");
+        receiptIDTextField = new FormTextField(20);
+        receiptIDTextField.setText(Integer.toString(generatedReceiptID));
+        cardIDLabel = new FormLabel("Card ID: ");
+        cardIDTextField = new FormTextField(20);
+        existingCardLabel = new FormLabel("Select Existing Card ID: ");
+        existingCardCombo = new JComboBox<>();
+
+        cardTypeLabel = new FormLabel("Card Type: ");
+        cardTypeRBGroup = new ButtonGroup();
+        anonCardRB = new JRadioButton(CardType.AnonCard.getName());
+        basicCardRB = new JRadioButton(CardType.BasicCard.getName());
+        premiumCardRB = new JRadioButton(CardType.PremiumCard.getName());
+
+        cardNameLabel = new FormLabel("Customer Name: ");
+        cardNameTextField = new FormTextField(20);
+        cardEmailLabel = new FormLabel("Customer Email: ");
+        cardEmailTextField = new FormTextField(20);
+
+        createBtn = new FormButton(" Add Purchase ");
+        clearBtn = new FormButton(" Clear ");
+
+        /* SET UP CARD TYPE GROUP */
+        cardTypeRBGroup.add(anonCardRB);
+        cardTypeRBGroup.add(basicCardRB);
+        cardTypeRBGroup.add(premiumCardRB);
+        anonCardRB.setSelected(true);
 
         setLayout(new BorderLayout());
         /* SIZING - Make sure the form is at least always 600 pixels */
@@ -74,7 +105,7 @@ public class PurchaseForm extends JPanel {
                 TitledBorder.LEFT,
                 TitledBorder.CENTER,
                 new Font("Verdana",Font.BOLD,22));
-        Border inInnerBorder = BorderFactory.createEmptyBorder(30,30,30,30);
+        Border inInnerBorder = BorderFactory.createEmptyBorder(25,25,25,25);
         Border innerBorder = BorderFactory.createCompoundBorder(outInnerBorder, inInnerBorder);
         Border outerBorder = BorderFactory.createEmptyBorder(1,10,10,10);
         setBorder(BorderFactory.createCompoundBorder(outerBorder,innerBorder));
@@ -130,53 +161,19 @@ public class PurchaseForm extends JPanel {
         setVisible(false);
     }
 
-    /*===================================================*/
     /*==================== BASE FORM ====================*/
-    /*===================================================*/
 
     public void createPurchaseFormPanel() {
         /* CREATE BASE CARD FORM WITH PURCHASE - PANEL */
         createPurchaseFormPanel = new JPanel();
 
-        receiptIDLabel = new FormLabel("Receipt ID: ");
-        receiptIDTextField = new FormTextField(20);
-        cardIDLabel = new JLabel("Card ID: ");
-        cardIDTextField = new JTextField(20);
-        existingCardLabel = new JLabel("Select Existing Card ID: ");
-        existingCardCombo = new JComboBox<>();
-
-        cardTypeLabel = new JLabel("Card Type: ");
-        cardTypeRBGroup = new ButtonGroup();
-        anonCardRB = new JRadioButton(" Anon Card");
-        basicCardRB = new JRadioButton(" Basic Card");
-        premiumCardRB = new JRadioButton(" Premium Card");
-
-        cardNameLabel = new JLabel("Customer Name: ");
-        cardNameTextField = new JTextField(20);
-        cardEmailLabel = new JLabel("Customer Email: ");
-        cardEmailTextField = new JTextField(20);
-
-        createBtn = new JButton(" Add Purchase ");
-        clearBtn = new JButton(" Clear ");
-
         createPurchaseFormPanel.setLayout(new GridBagLayout());
         this.add(createPurchaseFormPanel, BorderLayout.CENTER);
 
+        /* Dynamically creates categoriesMap HashMap<FormLabel, FormTextField> */
         createCategoriesListForm();
 
-        receiptIDTextField.setText(Integer.toString(generatedReceiptID));
-
-        /* SET UP CARD TYPE GROUP */
-        cardTypeRBGroup.add(anonCardRB);
-        cardTypeRBGroup.add(basicCardRB);
-        cardTypeRBGroup.add(premiumCardRB);
-        anonCardRB.setSelected(true);
-        anonCardRB.setActionCommand(CardType.AnonCard.getName());
-        basicCardRB.setActionCommand(CardType.BasicCard.getName());
-        premiumCardRB.setActionCommand(CardType.PremiumCard.getName());
-
         GridBagConstraints gc = new GridBagConstraints();
-        Insets labelInset = new Insets(10,0,0,10);
 
         /*========== FIRST ROW - RECEIPT ID ==========*/
         gc.fill = GridBagConstraints.NONE;
@@ -184,9 +181,7 @@ public class PurchaseForm extends JPanel {
         gc.anchor = GridBagConstraints.FIRST_LINE_END;
         gc.insets = new Insets(20,0,0,10);
 
-        //receiptIDLabel.setFont(Style.labelFont());
         createPurchaseFormPanel.add(receiptIDLabel, gc);
-        receiptIDLabel.setVisible(false);
 
         gc.gridx = 1;
         gc.anchor = GridBagConstraints.FIRST_LINE_START;
@@ -197,26 +192,20 @@ public class PurchaseForm extends JPanel {
 
         /*========== NEW ROW - CARD ID ==========*/
         labelGridConstraints(gc);
-        cardIDLabel.setFont(Style.labelFont());
         createPurchaseFormPanel.add(cardIDLabel, gc);
-        cardIDLabel.setVisible(false);
 
         textFieldGridConstraints(gc);
-        cardIDTextField.setFont(Style.textFieldFont());
-        cardIDTextField.setEditable(false);
         createPurchaseFormPanel.add(cardIDTextField, gc);
-        cardIDTextField.setVisible(false);
 
         /*========== NEW ROW - EXISTING CARD ID ==========*/
         labelGridConstraints(gc);
-        existingCardLabel.setFont(Style.labelFont());
         createPurchaseFormPanel.add(existingCardLabel, gc);
-        existingCardLabel.setVisible(false);
 
         textFieldGridConstraints(gc);
         existingCardCombo.setFont(Style.textFieldFont());
         existingCardCombo.setEditable(false);
-        existingCardCombo.setPreferredSize(receiptIDTextField.getPreferredSize());
+        existingCardCombo.setPreferredSize(new Dimension(224,25));
+        existingCardCombo.setMinimumSize(existingCardCombo.getPreferredSize());
         createPurchaseFormPanel.add(existingCardCombo, gc);
         existingCardCombo.setVisible(false);
 
@@ -224,11 +213,8 @@ public class PurchaseForm extends JPanel {
             /* LABEL FOR RADIO GROUP + RADIO BUTTON 1 */
             gc.gridy++; gc.gridx = 0; gc.weighty = 0.005;
             gc.anchor = GridBagConstraints.LINE_END;
-            gc.insets = labelInset;
-
-            cardTypeLabel.setFont(Style.labelFont());
+            gc.insets = new Insets(10,0,0,10);
             createPurchaseFormPanel.add(cardTypeLabel, gc);
-            cardTypeLabel.setVisible(false);
 
             textFieldGridConstraints(gc);
             anonCardRB.setFont(Style.labelFont());
@@ -253,33 +239,26 @@ public class PurchaseForm extends JPanel {
         labelGridConstraints(gc);
         gc.weighty = 0.02;
         gc.insets = new Insets(20,0,0,5);
-        cardNameLabel.setFont(Style.labelFont());
         createPurchaseFormPanel.add(cardNameLabel, gc);
-        cardNameLabel.setVisible(false);
 
         textFieldGridConstraints(gc);
         gc.insets = new Insets(20,0,0,0);
-
-        cardNameTextField.setFont(Style.textFieldFont());
         createPurchaseFormPanel.add(cardNameTextField, gc);
-        cardNameTextField.setVisible(false);
 
         /*========== NEW ROW ==========*/
         labelGridConstraints(gc);
-        cardEmailLabel.setFont(Style.labelFont());
         createPurchaseFormPanel.add(cardEmailLabel, gc);
-        cardEmailLabel.setVisible(false);
 
         textFieldGridConstraints(gc);
-        cardEmailTextField.setFont(Style.textFieldFont());
         createPurchaseFormPanel.add(cardEmailTextField, gc);
-        cardEmailTextField.setVisible(false);
 
         /*========== NEW ROW - CATEGORIES LIST ==========*/
         for (HashMap.Entry<FormLabel, FormTextField> item : categoriesMap.entrySet()) {
             labelGridConstraints(gc);
-            gc.insets = new Insets(10,0,0,0);
+            gc.insets = new Insets(10,0,0,5);
+            item.getKey().setName("Cat");
             createPurchaseFormPanel.add(item.getKey(), gc);
+            item.getValue().setName("Cat");
             textFieldGridConstraints(gc);
             createPurchaseFormPanel.add(item.getValue(), gc);
         }
@@ -289,37 +268,79 @@ public class PurchaseForm extends JPanel {
         gc.anchor = GridBagConstraints.FIRST_LINE_END;
         gc.insets = new Insets(20,0,0,10);
 
-        createBtn.setFont(new Font("Verdana", Font.BOLD, 20));
-        createBtn.setBackground(Style.red500());
-        createBtn.setForeground(Color.WHITE);
         createPurchaseFormPanel.add(createBtn, gc);
-        createBtn.setVisible(false);
+
+        createBtn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+                String receiptIDStr = receiptIDTextField.getText();
+                int receiptID = Integer.parseInt(receiptIDStr);
+
+                CardType cardType;
+                if (anonCardRB.isSelected()) {
+                    cardType = CardType.AnonCard;
+                } else if (basicCardRB.isSelected()) {
+                    cardType = CardType.BasicCard;
+                } else if (premiumCardRB.isSelected()) {
+                    cardType = CardType.PremiumCard;
+                }
+
+                /* CATEGORIES */
+                Map<String, Double> categories = new HashMap<>();
+                for (HashMap.Entry<FormLabel, FormTextField> item : categoriesMap.entrySet()) {
+                    System.out.println(item.getValue().getText());
+                    String textFieldStr = item.getValue().getText();
+                    String labelStr = item.getKey().getText();
+
+                    if (textFieldStr.isEmpty()) {
+                        categories.put(, 0);
+                    } else if (textFieldStr)
+                }
+
+                String cardID;
+                if (purchaseTypeCombo.getSelectedItem() == options.getElementAt(1)) {
+                    System.out.println("ADDING: Purchase with Existing Card");
+                    cardID = (String)existingCardCombo.getSelectedItem();
+
+                } else if (purchaseTypeCombo.getSelectedItem() == options.getElementAt(2)) {
+                    System.out.println("ADDING: Purchase with New Card");
+                    cardID = cardIDTextField.getText();
+                } else if (purchaseTypeCombo.getSelectedItem() == options.getElementAt(3)) {
+                    System.out.println("ADDING: Cash Purchase");
+                    cardID = cardIDTextField.getText();
+                    /* Purchase(Map<String, Double> categories, int receiptID) */
+                }
+
+                PurchaseEvent event = new PurchaseEvent(
+                        this);
+
+                if (createPurchaseListener != null) {
+                    createPurchaseListener.formActionOccurred(event);
+                }
+            }
+        });
 
         // gc.gridy - take the gridy from previous button -
         gc.gridx = 1;
         gc.anchor = GridBagConstraints.FIRST_LINE_START;
         gc.insets = new Insets(20,10,0,0);
 
-        clearBtn.setFont(new Font("Verdana", Font.BOLD, 20));
-        clearBtn.setBackground(Style.red500());
-        clearBtn.setForeground(Color.WHITE);
         createPurchaseFormPanel.add(clearBtn, gc);
-        clearBtn.setVisible(false);
     }
 
     private void basePurchaseForm() {
         for (Component item : createPurchaseFormPanel.getComponents()) {
-            createPurchaseFormPanel.remove(item);
+            item.setVisible(false);
         }
     }
 
     private void existingCardPurchase() {
-        System.out.println("Existing Card Purchase");
-
         receiptIDLabel.setVisible(true);
+        receiptIDTextField.setText(Integer.toString(generatedReceiptID));
         receiptIDTextField.setVisible(true);
 
         cardIDLabel.setVisible(false);
+        cardIDTextField.setText(null);
         cardIDTextField.setVisible(false);
 
         existingCardCombo.setModel(existingCardModel);
@@ -337,10 +358,7 @@ public class PurchaseForm extends JPanel {
         cardEmailLabel.setVisible(false);
         cardEmailTextField.setVisible(false);
 
-        for (HashMap.Entry<FormLabel, FormTextField> item : categoriesMap.entrySet()) {
-            item.getKey().setVisible(true);
-            item.getValue().setVisible(true);
-        }
+        setCategoriesVisible(true);
 
         createBtn.setEnabled(false);
         createBtn.setVisible(true);
@@ -355,24 +373,17 @@ public class PurchaseForm extends JPanel {
                 }
             }
         });
-
-        /*if (existingCardCombo.getActionCommand().equals("Please Select")) {
-            createBtn.setEnabled(false);
-        } else {
-            createBtn.setEnabled(true);
-        }*/
     }
 
     private void newCardPurchase() {
-        System.out.println("New Card Purchase");
-
         receiptIDLabel.setVisible(true);
         receiptIDTextField.setVisible(true);
 
         existingCardLabel.setVisible(false);
         existingCardCombo.setVisible(false);
         cardIDLabel.setVisible(true);
-        cardIDTextField.setText(generatedCardID);
+        cardIDTextField.setText(null);
+        cardIDTextField.setEnabled(true);
         cardIDTextField.setVisible(true);
 
         cardTypeLabel.setVisible(true);
@@ -403,18 +414,19 @@ public class PurchaseForm extends JPanel {
             }
         });
 
+        setCategoriesVisible(true);
+
         createBtn.setVisible(true);
         clearBtn.setVisible(true);
     }
 
     private void cashPurchase() {
-        System.out.println("Cash Purchase");
-
         receiptIDLabel.setVisible(true);
         receiptIDTextField.setVisible(true);
 
         cardIDLabel.setVisible(true);
         cardIDTextField.setText("Cash");
+        cardIDTextField.setEnabled(false);
         cardIDTextField.setVisible(true);
 
         existingCardLabel.setVisible(false);
@@ -430,6 +442,8 @@ public class PurchaseForm extends JPanel {
         cardEmailLabel.setVisible(false);
         cardEmailTextField.setVisible(false);
 
+        setCategoriesVisible(true);
+
         createBtn.setEnabled(true);
         createBtn.setVisible(true);
         clearBtn.setVisible(true);
@@ -438,6 +452,8 @@ public class PurchaseForm extends JPanel {
     /*==================== MUTATORS ====================*/
 
     public void setCancelPurchaseListener(ButtonListener listener) { this.cancelListener = listener; }
+
+    public void setCreatePurchaseListener(PurchaseListener listener) { this.createPurchaseListener = listener; }
 
     public void setGeneratedReceiptID(int generatedReceiptID) { this.generatedReceiptID = generatedReceiptID; }
 
@@ -457,6 +473,13 @@ public class PurchaseForm extends JPanel {
                     new FormTextField(20));
         }
         this.categoriesMap = categoriesMap;
+    }
+
+    private void setCategoriesVisible(boolean isVisible) {
+        for (HashMap.Entry<FormLabel, FormTextField> item : categoriesMap.entrySet()) {
+            item.getKey().setVisible(isVisible);
+            item.getValue().setVisible(isVisible);
+        }
     }
 
     private void labelGridConstraints(GridBagConstraints gc) {
