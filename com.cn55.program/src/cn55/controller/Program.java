@@ -160,20 +160,20 @@ class Program {
             /* SELECTED LISTENERS */
             if (tabPane.getSelectedComponent() == cardPanel) {
                 cardPanel.refresh();
-                purchaseForm.setVisible(false);
-
             } else if (tabPane.getSelectedComponent() == purchasePanel) {
                 purchaseToolbar.disableCreatePurchaseButton(false);
                 purchasePanel.refresh();
             }
 
             /* DESELECTED LISTENERS */
-            /*if (tabPane.getSelectedComponent() != purchasePanel) {
-                *//* IF PANEL CHANGED AWAY - REMOVE THE FORM *//*
-                purchaseForm.getPurchaseTypeCombo().setSelectedIndex(0);
-                purchaseForm.setVisible(false);
-                purchaseForm.remove(purchaseForm.getCreatePurchaseFormPanel());
-            }*/
+            if (tabPane.getSelectedComponent() != purchasePanel) {
+                //IF PANEL CHANGED AWAY - REMOVE THE FORM
+                if (purchaseForm.getCreatePurchaseFormPanel() != null) {
+                    purchaseForm.getPurchaseTypeCombo().setSelectedIndex(0);
+                    purchaseForm.setVisible(false);
+                    purchaseForm.remove(purchaseForm.getCreatePurchaseFormPanel());
+                }
+            }
         });
 
         /* TOOLBAR LISTENERS */
@@ -249,9 +249,23 @@ class Program {
                 purchaseForm.getPurchaseTypeCombo().setSelectedIndex(0);
                 purchaseForm.setVisible(false);
                 purchaseForm.remove(purchaseForm.getCreatePurchaseFormPanel());
-
                 purchasePanel.getPurchaseToolbar().disableCreatePurchaseButton(false);
             }
         });
+
+        purchaseForm.setCreatePurchaseListener(new PurchaseListener() {
+            @Override
+            public void formActionOccurred(PurchaseEvent event) {
+
+            }
+        });
+    }
+
+    private void removeCreatePurchaseForm() {
+        /* REMOVE THE FORM FROM PURCHASE */
+        purchaseForm.getPurchaseTypeCombo().setSelectedIndex(0);
+        purchaseForm.setVisible(false);
+        purchaseForm.remove(purchaseForm.getCreatePurchaseFormPanel());
+        purchasePanel.getPurchaseToolbar().disableCreatePurchaseButton(false);
     }
 }
