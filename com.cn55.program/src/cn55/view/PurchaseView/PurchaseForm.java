@@ -1,6 +1,7 @@
 package cn55.view.PurchaseView;
 
 import cn55.view.ButtonListener;
+import cn55.view.CardView.CardType;
 import cn55.view.CustomComponents.FormLabel;
 import cn55.view.CustomComponents.FormTextField;
 import cn55.view.CustomComponents.Style;
@@ -170,9 +171,9 @@ public class PurchaseForm extends JPanel {
         cardTypeRBGroup.add(basicCardRB);
         cardTypeRBGroup.add(premiumCardRB);
         anonCardRB.setSelected(true);
-        anonCardRB.setActionCommand("AnonCard");
-        basicCardRB.setActionCommand("BasicCard");
-        premiumCardRB.setActionCommand("PremiumCard");
+        anonCardRB.setActionCommand(CardType.AnonCard.getName());
+        basicCardRB.setActionCommand(CardType.BasicCard.getName());
+        premiumCardRB.setActionCommand(CardType.PremiumCard.getName());
 
         GridBagConstraints gc = new GridBagConstraints();
         Insets labelInset = new Insets(10,0,0,10);
