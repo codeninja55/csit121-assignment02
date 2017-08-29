@@ -10,6 +10,6 @@ public class FormButton extends JButton {
         setFont(Style.buttonFont());
         setBackground(Style.red500());
         setForeground(Style.btnTextColor());
-
+        setVisible(false);
     }
 }

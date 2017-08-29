@@ -9,21 +9,21 @@ public class FormTextField extends JTextField {
     public FormTextField(int columns) {
         super(columns);
         setMinimumSize(getPreferredSize());
-        setVisible(false);
         setFont(Style.textFieldFont());
+        setVisible(false);
     }
 
     public FormTextField(String text) {
         super(text);
         setMinimumSize(getPreferredSize());
-        setVisible(false);
         setFont(Style.textFieldFont());
+        setVisible(false);
     }
 
     public FormTextField(String text, int columns) {
         super(text, columns);
         setMinimumSize(getPreferredSize());
-        setVisible(false);
         setFont(Style.textFieldFont());
+        setVisible(false);
     }
 }
