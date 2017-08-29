@@ -2,6 +2,9 @@ package cn55.model;
 
 /* THIS CLASS IS A TEMP DATABASE OBJECT */
 
+import cn55.model.CardModel.Card;
+
+import javax.swing.*;
 import java.util.*;
 
 public class Database {
@@ -19,7 +22,7 @@ public class Database {
         this.cardMap = new HashMap<>();
         this.purchases = new ArrayList<>();
         this.categories = new HashMap<>();
-        this.createCategoriesList();
+        createCategoriesList();
         this.receiptSet = new HashSet<>();
         this.cardIDSet = new HashSet<>();
     }
@@ -49,7 +52,6 @@ public class Database {
         categoriesList.add("Electronics");
         categoriesList.add("Fashion");
         categoriesList.add("Toys");
-        categoriesList.add("Sporting Goods");
         categoriesList.add("Deals");
         categoriesList.add("Other");
     }
@@ -89,5 +91,12 @@ public class Database {
 
     public Set<String> getCardIDSet() {
         return cardIDSet;
+    }
+
+    public DefaultComboBoxModel<String> getCardModel() {
+        DefaultComboBoxModel<String> cardModel = new DefaultComboBoxModel<>();
+        cardModel.addElement("Please Select");
+        for (Card card : cards) cardModel.addElement(card.getID());
+        return cardModel;
     }
 }
