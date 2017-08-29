@@ -1,4 +1,6 @@
-package cn55.view;
+package cn55.view.SearchPanel;
+
+import cn55.view.CustomComponents.Style;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -83,5 +85,5 @@ public class SearchPanel extends JPanel {
         });
     }
 
-    void setSearchListener(SearchListener listener) { this.searchListener = listener; }
+    public void setSearchListener(SearchListener listener) { this.searchListener = listener; }
 }

@@ -1,21 +1,23 @@
-package cn55.view;
+package cn55.view.PurchaseView;
 
 import cn55.model.Purchase;
+import cn55.view.CustomComponents.Style;
 
 import javax.swing.*;
+import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.util.ArrayList;
-import javax.swing.table.AbstractTableModel;
 
 public class PurchasesPanel extends JPanel {
-    private PurchaseToolbar toolbar;
     private PurchaseTableModel purchaseTableModel;
-    private JTable purchaseTablePanel;
+    private PurchaseForm purchaseForm;
+    private PurchaseToolbar toolbar;
 
-    PurchasesPanel() {
-        toolbar = new PurchaseToolbar();
+    public PurchasesPanel() {
         purchaseTableModel = new PurchaseTableModel();
-        purchaseTablePanel = new JTable(purchaseTableModel);
+        JTable purchaseTablePanel = new JTable(purchaseTableModel);
+        toolbar = new PurchaseToolbar();
+        purchaseForm = new PurchaseForm();
 
         setLayout(new BorderLayout());
 
@@ -24,15 +26,23 @@ public class PurchasesPanel extends JPanel {
 
         add(toolbar, BorderLayout.NORTH);
         add(new JScrollPane(purchaseTablePanel), BorderLayout.CENTER);
+        add(purchaseForm, BorderLayout.WEST);
+        //add(deletePurchaseForm, BorderLayout.WEST);
     }
 
-    void setCreatePurchaseListener (PurchaseListener listener) { toolbar.setCreatePurchaseListener(listener);}
+    /*==================== MUTATORS ====================*/
 
-    void setPurchaseData(ArrayList<Purchase> purchases) { purchaseTableModel.setData(purchases); }
-
-    void refresh() {
+    public void refresh() {
         purchaseTableModel.fireTableDataChanged();
     }
+
+    /*==================== ACCESSORS ====================*/
+
+    public PurchaseForm getPurchaseForm() { return purchaseForm; }
+
+    public PurchaseToolbar getPurchaseToolbar() { return toolbar; }
+
+    public PurchaseTableModel getPurchaseTableModel() { return purchaseTableModel; }
 
     public class PurchaseTableModel extends AbstractTableModel {
 
@@ -40,20 +50,17 @@ public class PurchasesPanel extends JPanel {
         private String[] tableHeaders = {"Receipt ID","Card ID", "Card Type",
                 "Total Amount","Purchase Time"};
 
-        void setData (ArrayList<Purchase> purchases) { this.purchases = purchases; }
+        public void setData (ArrayList<Purchase> purchases) { this.purchases = purchases; }
 
         public String getColumnName(int column) {
             // TODO - Implement method to loop through categoriesList to print out headers
             return tableHeaders[column];
         }
 
-        public int getRowCount() {
-            return purchases.size();
-        }
+        public int getRowCount() { return purchases.size(); }
 
         public int getColumnCount() { return tableHeaders.length; }
 
-        @Override
         public Object getValueAt(int rowIndex, int columnIndex) {
             Purchase purchase = purchases.get(rowIndex);
 

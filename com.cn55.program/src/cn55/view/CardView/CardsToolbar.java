@@ -1,4 +1,6 @@
-package cn55.view;
+package cn55.view.CardView;
+
+import cn55.view.CustomComponents.Style;
 
 import javax.swing.*;
 import javax.swing.border.Border;

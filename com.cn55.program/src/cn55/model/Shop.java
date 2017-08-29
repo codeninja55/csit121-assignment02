@@ -1,5 +1,7 @@
 package cn55.model;
 
+import cn55.model.CardModel.*;
+
 import java.util.*;
 
 @SuppressWarnings("ConstantConditions")
@@ -70,14 +72,8 @@ public class Shop {
                         card.calcBalance(newPurchase.getCategoriesTotal());
 
                     db.addPurchases(newPurchase);
-                    newCard = false; // set flag so new model not created
                     break;
                 }
-            }
-
-            if (newCard) {
-                System.out.print("\nPlease create a new model for this purchase\n");
-                //makeCard(categories);
             }
         }
     } // end of makePurchase method
@@ -94,7 +90,6 @@ public class Shop {
             card = new AnonCard(cardID);
             db.addCards(card);
         } else {
-
             if (cardType.equalsIgnoreCase("BasicCard"))
                 card = new BasicCard(cardID, name, email);
             else
@@ -102,7 +97,7 @@ public class Shop {
 
             db.addCards(card);
         }
-    } // end of createCard method
+    }
 
     public boolean cardExists(String cardID) {
         HashMap<String, Integer> cardMap = db.getCardMap();

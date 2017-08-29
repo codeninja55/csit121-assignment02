@@ -1,4 +1,4 @@
-package cn55.model;
+package cn55.model.CardModel;
 
 /*
  *

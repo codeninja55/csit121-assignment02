@@ -1,4 +1,4 @@
-package cn55.model;
+package cn55.model.CardModel;
 
 /*
  * @author Dinh Che
@@ -8,8 +8,8 @@ package cn55.model;
 
 public abstract class Card {
     protected String id;
-    protected double points;
-    protected String cardType;
+    double points;
+    String cardType;
 
     /*########## CONSTRUCTORS ##########*/
 

@@ -1,16 +1,18 @@
-package cn55.view;
+package cn55.view.CardView;
+
+import cn55.view.CustomComponents.Style;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
 
-class CardForm {
+public class CardForm {
 
     private HashMap<String,String> newCard;
     private String cardID;
 
     /*====================  CONSTRUCTOR for Creating Cards ====================*/
-    CardForm(String generatedCardID) {
+    public CardForm(String generatedCardID) {
         String[] cardType = {"Anon Card", "Basic Card", "Premium Card"};
         JComboBox<String> cardTypeCombo = new JComboBox<>(cardType);
         cardTypeCombo.setFont(Style.buttonFont());
@@ -47,11 +49,11 @@ class CardForm {
     }
 
     /*==================== DEFAULT CONSTRUCTOR for Deleting Cards ====================*/
-    CardForm() {
+    public CardForm() {
         deleteForm(false);
     }
 
-    void deleteForm(boolean complete) {
+    public void deleteForm(boolean complete) {
 
         if (!complete) {
             JLabel deleteLabel = new JLabel("Input Card ID to Delete Card");
@@ -242,6 +244,6 @@ class CardForm {
 
     /*====================  ACCESSORS ====================*/
 
-    HashMap<String, String> getCardMap() { return newCard; }
-    String getCardID() { return cardID; }
+    public HashMap<String, String> getCardMap() { return newCard; }
+    public String getCardID() { return cardID; }
 }

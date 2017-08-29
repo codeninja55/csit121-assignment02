@@ -1,8 +1,11 @@
-package cn55.view;
+package cn55.view.CardView;
 
-import cn55.model.Card;
-import cn55.model.PremiumCard;
-import cn55.model.BasicCard;
+import cn55.model.CardModel.Card;
+import cn55.model.CardModel.PremiumCard;
+import cn55.model.CardModel.BasicCard;
+import cn55.view.SearchPanel.SearchListener;
+import cn55.view.SearchPanel.SearchPanel;
+import cn55.view.CustomComponents.Style;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,7 +13,7 @@ import java.util.ArrayList;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 
-class CardPanel extends JPanel {
+public class CardPanel extends JPanel {
 
     private CardsToolbar toolbar;
     private SearchPanel searchPanel;
@@ -19,7 +22,7 @@ class CardPanel extends JPanel {
     private JTable cardTablePanel;
 
     // Constructor
-    CardPanel() {
+    public CardPanel() {
         this.toolbar = new CardsToolbar();
         this.searchPanel = new SearchPanel();
         this.cardTableModel = new CardTableModel();
@@ -65,19 +68,19 @@ class CardPanel extends JPanel {
     /*==================== EVENT LISTENERS METHODS ====================*/
     /* These listener methods just pass the listener event to their relevant
      * panels with the buttons where the Event Handler is placed. */
-    void setCreateCardListener(CardListener listener) {
+    public void setCreateCardListener(CardListener listener) {
         toolbar.setCreateCardListener(listener);
     }
 
-    void setDeleteCardListener(CardListener listener) {
+    public void setDeleteCardListener(CardListener listener) {
         toolbar.setDeleteCardListener(listener);
     }
 
-    void setSearchListener(SearchListener listener) { searchPanel.setSearchListener(listener); }
+    public void setSearchListener(SearchListener listener) { searchPanel.setSearchListener(listener); }
 
     /*void setCardData(ArrayList<Card> cards) { this.cards = cards; }*/
 
-    void setCardData(ArrayList<Card> cards) {
+    public void setCardData(ArrayList<Card> cards) {
         cardTableModel.setData(cards);
     }
 
@@ -89,12 +92,12 @@ class CardPanel extends JPanel {
         }
     }*/
 
-    void refresh() {
+    public void refresh() {
         cardTableModel.fireTableDataChanged();
     }
 
     // INNER CLASS FOR CARD TABLE MODEL
-    public class CardTableModel extends AbstractTableModel {
+    class CardTableModel extends AbstractTableModel {
 
         private ArrayList<Card> cards;
         private String[] cardHeaders = {"Card ID", "Card Type", "Name", "Email", "Balance", "Points"};

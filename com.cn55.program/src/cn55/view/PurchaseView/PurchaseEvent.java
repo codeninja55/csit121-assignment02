@@ -1,4 +1,4 @@
-package cn55.view;
+package cn55.view.PurchaseView;
 
 import java.util.EventObject;
 
@@ -13,6 +13,10 @@ public class PurchaseEvent extends EventObject {
     public PurchaseEvent(Object source, String cardID) {
         super(source);
         this.cardID = cardID;
+    }
+
+    public void testEventMethod(String text) {
+        System.out.println(text);
     }
 
 }

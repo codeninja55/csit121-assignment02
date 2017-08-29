@@ -1,4 +1,4 @@
-package cn55.view;
+package cn55.view.SearchPanel;
 
 import java.util.EventObject;
 

@@ -1,4 +1,7 @@
-package cn55.view;
+package cn55.view.PurchaseView;
+
+import cn55.view.CustomComponents.Style;
+import cn55.view.ToolbarButtonListener;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -7,12 +10,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-class PurchaseToolbar extends JPanel {
+public class PurchaseToolbar extends JPanel {
 
     private JButton addPurchaseBtn;
     private JButton deletePurchaseBtn;
-    private PurchaseListener createPurchaseListener;
-    private PurchaseListener deletePurchaseListener;
+    private ToolbarButtonListener createPurchaseListener;
+    private ToolbarButtonListener deletePurchaseListener;
 
     // Constructor
     PurchaseToolbar() {
@@ -43,34 +46,40 @@ class PurchaseToolbar extends JPanel {
         add(deletePurchaseBtn);
 
         // Registration of listeners
-        ButtonListener handler = new ButtonListener();
+        ToolbarListener handler = new ToolbarListener();
         addPurchaseBtn.addActionListener(handler);
         deletePurchaseBtn.addActionListener(handler);
     }
 
-    void setCreatePurchaseListener(PurchaseListener listener) {
+    public void setCreatePurchaseListener(ToolbarButtonListener listener) {
         this.createPurchaseListener = listener;
     }
 
-    void setDeletePurchaseListener(PurchaseListener listener) {
+    public void setDeletePurchaseListener(ToolbarButtonListener listener) {
         this.deletePurchaseListener = listener;
     }
 
-    public class ButtonListener implements ActionListener {
-        @Override
+    public void disableCreatePurchaseButton(boolean isDisabled) { addPurchaseBtn.setEnabled(!isDisabled); }
+
+    class ToolbarListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == addPurchaseBtn) {
 
-                PurchaseEvent event = new PurchaseEvent(this);
+                // THIS EVENT SHOULD OCCUR INSIDE THE FORM TO CAPTURE
+                // INPUTS FROM USER IN THE EVENT OBJECT TO SEND BACK
+                // TO MAINFRAME
+                //PurchaseEvent event = new PurchaseEvent(this);
 
                 if (createPurchaseListener != null) {
-                    createPurchaseListener.formActionOccurred(event);
+                    createPurchaseListener.toolbarButtonEventOccurred();
                 }
-            } else if (e.getSource() == deletePurchaseBtn) {
-                /*if (deleteCardListener != null) {
-                    deleteCardListener.cardFormActionOccurred();
-                }*/
-            }
+            } /*else if (e.getSource() == deletePurchaseBtn) {
+                if (deleteCardListener != null) {
+                    deleteCardListener.formAction();
+                }
+
+                System.out.println("Delete Purchase Button Pressed");
+            }*/
         }
     }
 }
