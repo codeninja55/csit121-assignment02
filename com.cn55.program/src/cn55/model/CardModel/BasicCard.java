@@ -8,6 +8,8 @@ package cn55.model.CardModel;
  *
  */
 
+import cn55.model.CardType;
+
 public class BasicCard extends Card {
     private static final double POINTS_RATE = 0.015;
 
@@ -19,14 +21,14 @@ public class BasicCard extends Card {
 
     // default constructor
     public BasicCard() {
-        super(null,0, "BasicCard");
+        super(null,0, CardType.BasicCard.getName());
         this.name = "";
         this.email = "";
         this.balance = 0;
     }
 
     public BasicCard(String id, String name, String email) {
-        super(id,0,"BasicCard");
+        super(id,0,CardType.BasicCard.getName());
         this.name = name;
         this.email = email;
         this.balance = 0;
@@ -34,7 +36,7 @@ public class BasicCard extends Card {
 
     // constructor with for new cards without purchase
     public BasicCard(String id, String name, String email, double totalAmount) {
-        super(id,0,"BasicCard");
+        super(id,0,CardType.BasicCard.getName());
         this.name = name;
         this.email = email;
         this.balance = totalAmount;

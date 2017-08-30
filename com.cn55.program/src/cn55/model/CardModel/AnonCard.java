@@ -6,6 +6,8 @@ package cn55.model.CardModel;
  * Email: dbac496@uowmail.edu.au
  */
 
+import cn55.model.CardType;
+
 public class AnonCard extends Card {
     private static final double POINTS_RATE = 0.01;
 
@@ -13,10 +15,10 @@ public class AnonCard extends Card {
 
     // default constructor
     public AnonCard() {
-        super(null,0,"AnonCard"); }
+        super(null,0, CardType.Card.getName()); }
 
     public AnonCard(String id) {
-        super(id,0,"AnonCard"); }
+        super(id,0,CardType.AnonCard.getName()); }
 
     /*########## SETTERS ##########*/
     @Override
@@ -28,9 +30,9 @@ public class AnonCard extends Card {
     @Override
     public String toString() {
         return String.format("%n%s: %s %s: %s%s: %.2f%n",
-                "Card Type", this.cardType,
-                "Card ID", this.id,
-                "Points", this.points);
+                "Card Type", super.cardType,
+                "Card ID", super.id,
+                "Points", super.points);
     }
 
     public String getID() { return id; }

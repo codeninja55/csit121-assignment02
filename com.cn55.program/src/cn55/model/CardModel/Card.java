@@ -6,18 +6,19 @@ package cn55.model.CardModel;
  * Email: dbac496@uowmail.edu.au
  */
 
+import cn55.model.CardType;
+
 public abstract class Card {
     protected String id;
     double points;
     String cardType;
 
-    /*########## CONSTRUCTORS ##########*/
-
+    /*============================== CONSTRUCTORS  ==============================*/
     // default constructor
     public Card() {
         this.id = null;
         this.points = 0;
-        this.cardType = "Card";
+        this.cardType = CardType.Card.getName();
     }
 
     // constructor to overload
@@ -27,13 +28,13 @@ public abstract class Card {
         this.cardType = cardType;
     }
 
-    /*########## SETTERS ##########*/
+    /*============================== MUTATORS  ==============================*/
     /*Abstract method to force implementation in all subclasses*/
     public abstract void calcPoints(double totalAmount);
 
     public void calcBalance(double totalAmount) {}
 
-    /*########## GETTERS ##########*/
+    /*============================== ACCESSORS  ==============================*/
     public String getCardType() { return cardType; }
     public String getID() { return id; }
     public double getPoints() { return points; }

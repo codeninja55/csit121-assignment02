@@ -5,6 +5,8 @@ package cn55.model.CardModel;
  * Email: dbac496@uowmail.edu.au
  */
 
+import cn55.model.CardType;
+
 public class PremiumCard extends Card {
     private static final double POINTS_RATE_LOW = 0.025;
     private static final double POINTS_RATE_HIGH = 0.03;
@@ -18,14 +20,14 @@ public class PremiumCard extends Card {
 
     // default constructor
     public PremiumCard() {
-        super(null,0,"PremiumCard");
+        super(null,0, CardType.PremiumCard.getName());
         this.name = "";
         this.email = "";
         this.balance = 0;
     }
 
     public PremiumCard(String id, String name, String email) {
-        super(id,0,"PremiumCard");
+        super(id,0,CardType.PremiumCard.getName());
         this.name = name;
         this.email = email;
         this.balance = 0;
@@ -33,7 +35,7 @@ public class PremiumCard extends Card {
 
     // constructor with details
     public PremiumCard(String id, String name, String email, double totalAmount) {
-        super(id,0,"PremiumCard");
+        super(id,0,CardType.PremiumCard.getName());
         this.name = name;
         this.email = email;
         this.balance = totalAmount; //- SIGNUP_FEE; - we were told to ignore this
