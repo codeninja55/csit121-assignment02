@@ -27,7 +27,7 @@ public class MainFrame extends JFrame {
     private CategoriesPanel categoriesPanel;
     private SummaryPanel summaryPanel;
 
-    public MainFrame(ArrayList<Purchase> purchasesClone, ArrayList<Card> cardsClone) {
+    public MainFrame(ArrayList<Purchase> purchases, ArrayList<Card> cards) {
         super("Marvel Rewards");
 
         setLayout(new BorderLayout());
@@ -48,11 +48,11 @@ public class MainFrame extends JFrame {
         this.summaryPanel = new SummaryPanel();
 
         /* Pass in copies of the ArrayList instead of hte db data */
-        cardPanel.setCardData(cardsClone);
-        purchasePanel.getPurchaseTableModel().setData(purchasesClone);
+        cardPanel.setCardData(cards);
+        purchasePanel.getPurchaseTableModel().setData(purchases);
 
         // Add panels, toolbars, and panes to main Frame
-        tabPane.setBackground(Style.red500());
+        tabPane.setBackground(Style.blueGrey500());
         tabPane.setForeground(Style.btnTextColor());
         tabPane.setFont(Style.tabPaneFont());
 
@@ -66,7 +66,7 @@ public class MainFrame extends JFrame {
         tabPane.addTab("Summary", summaryPanel);
 
         // DEFAULT PANE BEGIN AT
-        tabPane.setSelectedIndex(2);
+        tabPane.setSelectedIndex(1);
 
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setUndecorated(false);
@@ -74,10 +74,7 @@ public class MainFrame extends JFrame {
         setVisible(true);
     }
 
-    /*===================================================*/
-    /*==================== ACCESSORS ====================*/
-    /*===================================================*/
-
+    /*============================== ACCESSORS  ==============================*/
     public JTabbedPane getTabPane() { return tabPane; }
 
     public CardPanel getCardPanel() { return cardPanel; }
