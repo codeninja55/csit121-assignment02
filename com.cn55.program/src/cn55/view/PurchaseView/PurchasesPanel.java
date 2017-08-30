@@ -10,19 +10,19 @@ import java.util.ArrayList;
 
 public class PurchasesPanel extends JPanel {
     private PurchaseTableModel purchaseTableModel;
+    private JTable purchaseTablePanel;
     private PurchaseForm purchaseForm;
     private PurchaseToolbar toolbar;
 
+    /*============================== CONSTRUCTORS ==============================*/
     public PurchasesPanel() {
         purchaseTableModel = new PurchaseTableModel();
-        JTable purchaseTablePanel = new JTable(purchaseTableModel);
+        purchaseTablePanel = new JTable(purchaseTableModel);
         toolbar = new PurchaseToolbar();
         purchaseForm = new PurchaseForm();
 
         setLayout(new BorderLayout());
-
-        purchaseTablePanel.setRowHeight(30);
-        purchaseTablePanel.setFont(Style.tableDataFont());
+        tableFormatter();
 
         add(toolbar, BorderLayout.NORTH);
         add(new JScrollPane(purchaseTablePanel), BorderLayout.CENTER);
@@ -30,14 +30,18 @@ public class PurchasesPanel extends JPanel {
         //add(deletePurchaseForm, BorderLayout.WEST);
     }
 
-    /*==================== MUTATORS ====================*/
-
-    public void refresh() {
+    /*============================== MUTATORS ==============================*/
+    public void refresh(ArrayList<Purchase> purchases) {
+        purchaseTableModel.setData(purchases);
         purchaseTableModel.fireTableDataChanged();
     }
 
-    /*==================== ACCESSORS ====================*/
+    private void tableFormatter() {
+        purchaseTablePanel.setRowHeight(30);
+        purchaseTablePanel.setFont(Style.tableDataFont());
+    }
 
+    /*============================== ACCESSORS ==============================*/
     public PurchaseForm getPurchaseForm() { return purchaseForm; }
 
     public PurchaseToolbar getPurchaseToolbar() { return toolbar; }
@@ -53,7 +57,6 @@ public class PurchasesPanel extends JPanel {
         public void setData (ArrayList<Purchase> purchases) { this.purchases = purchases; }
 
         public String getColumnName(int column) {
-            // TODO - Implement method to loop through categoriesList to print out headers
             return tableHeaders[column];
         }
 
