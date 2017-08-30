@@ -17,6 +17,7 @@ public class Database {
     private Set<Integer> receiptSet;
     private Set<String> cardIDSet;
 
+    /*============================== CONSTRUCTORS  ==============================*/
     Database() {
         this.cards = new ArrayList<>();
         this.cardMap = new HashMap<>();
@@ -27,7 +28,7 @@ public class Database {
         this.cardIDSet = new HashSet<>();
     }
 
-    /*==================== MUTATORS ====================*/
+    /*============================== MUTATORS  ==============================*/
     public void mapCards() {
         HashMap<String, Integer> cardMap = new HashMap<>();
         for (int index = 0 ; index < cards.size() ; index++) {
@@ -39,11 +40,16 @@ public class Database {
 
     public void addCards(Card card) {
         this.cards.add(card);
+        mapCards();
     }
 
-    public void addPurchases(Purchase purchase) {
+    void addPurchase(Purchase purchase) {
         this.purchases.add(purchase);
     }
+
+    void addReceiptID(int receiptID) { this.receiptSet.add(receiptID); }
+
+    void addCardID(String cardID) { this.cardIDSet.add(cardID); }
 
     private void createCategoriesList() {
         this.categoriesList = new ArrayList<>();
@@ -60,15 +66,7 @@ public class Database {
         this.categories.put(category, value);
     }
 
-    public void addReceipt(int receiptID) {
-        this.receiptSet.add(receiptID);
-    }
-
-    public void addCardID(String cardID) {
-        this.cardIDSet.add(cardID);
-    }
-
-    /*==================== ACCESSORS ====================*/
+    /*============================== ACCESSORS  ==============================*/
     public ArrayList<Card> getCards() {
         return cards;
     }
@@ -85,11 +83,11 @@ public class Database {
         return categories;
     }
 
-    public Set<Integer> getReceiptSet() {
+    Set<Integer> getReceiptSet() {
         return receiptSet;
     }
 
-    public Set<String> getCardIDSet() {
+    Set<String> getCardIDSet() {
         return cardIDSet;
     }
 
