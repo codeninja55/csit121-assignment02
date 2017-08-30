@@ -9,16 +9,14 @@ public class Shop {
 
     private Database db;
 
-    /*#################### CONSTRUCTORS #########################*/
-
+    /*============================== CONSTRUCTORS  ==============================*/
     // default
     public Shop() {
         this.db = new Database();
         this.createBaseCatMap(db.getCategoriesList());
     }
 
-    /*######################### MUTATORS #########################*/
-
+    /*============================== MUTATORS  ==============================*/
     public int generateReceiptID() {
         Random randomObj = new Random();
 
@@ -27,7 +25,7 @@ public class Shop {
         if (db.getReceiptSet().contains(receiptID)) {
             return generateReceiptID();
         } else {
-            db.addReceipt(receiptID);
+            db.addReceiptID(receiptID);
             return receiptID;
         }
     }
@@ -45,38 +43,24 @@ public class Shop {
         }
     }
 
-    public void makePurchase(String cardID, Map<String, Double> categories) {
+    public void makePurchase(String cardID, int receiptID, Map<String, Double> categories) {
 
-        /*NOTE: If using inputs, then setCategories() would allow user to input
-        *       Total Amount for each category*/
-        //setCategories();
-
-        ArrayList<Card> cardsCopy = new ArrayList<>(db.getCards());
-
-        boolean newCard = true; // flag to see if new model required
-
-        if (cardID.equalsIgnoreCase("cash")) {
-            /* If it just a cash purchase, no updates required to model */
-            db.addPurchases(new Purchase(categories, generateReceiptID()));
+        if (cardID.equals(CardType.Cash.getName())) {
+            db.addPurchase(new Purchase(categories, receiptID));
         } else {
-            /* Loop through cards ArrayList to validate for existing cards
-             * if the model does not exist, prompt user to make one. */
-            for (Card card : cardsCopy) {
+            if (cardExists(cardID)) {
+                Card card = db.getCards().get(db.getCardMap().get(cardID));
+                String cardType = card.getCardType();
+                Purchase newPurchase = new Purchase(cardID, cardType, categories, receiptID);
+                card.calcPoints(newPurchase.getCategoriesTotal());
 
-                if (card.getID().equals(cardID)) {
-                    String cardType = card.getCardType();
-                    Purchase newPurchase = new Purchase(cardID,cardType,categories,generateReceiptID());
-                    card.calcPoints(newPurchase.getCategoriesTotal());
+                if(!cardType.equals(CardType.AnonCard.getName()))
+                    card.calcBalance(newPurchase.getCategoriesTotal());
 
-                    if (!cardType.equalsIgnoreCase("AnonCard"))
-                        card.calcBalance(newPurchase.getCategoriesTotal());
-
-                    db.addPurchases(newPurchase);
-                    break;
-                }
+                db.addPurchase(newPurchase);
             }
         }
-    } // end of makePurchase method
+    }
 
     public void makeCard(HashMap<String, String> newCard) {
 
@@ -86,15 +70,15 @@ public class Shop {
         String cardID = newCard.get("cardID");
         Card card;
 
-        if (cardType.equalsIgnoreCase("AnonCard")) {
-            card = new AnonCard(cardID);
-            db.addCards(card);
-        } else {
-            if (cardType.equalsIgnoreCase("BasicCard"))
+        if (!cardType.equals(CardType.AnonCard.getName())) {
+            if (cardType.equals(CardType.BasicCard.getName()))
                 card = new BasicCard(cardID, name, email);
             else
                 card = new PremiumCard(generateCardID(), name, email);
 
+            db.addCards(card);
+        } else {
+            card = new AnonCard(cardID);
             db.addCards(card);
         }
     }
