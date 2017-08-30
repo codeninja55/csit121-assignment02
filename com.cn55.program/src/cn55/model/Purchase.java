@@ -18,9 +18,8 @@ public class Purchase {
     private Date purchaseTime;
     private Map<String, Double> categories;
 
-    /*########## CONSTRUCTORS ##########*/
-
-    // default constructor
+    /*============================== CONSTRUCTORS ==============================*/
+    // Default constructor
     public Purchase() {
         this.receiptID = 0;
         this.cardID = "";
@@ -29,25 +28,25 @@ public class Purchase {
         this.categories = new HashMap<>();
     }
 
-    // constructor for cash purchases
+    // Constructor for cash purchases
     Purchase(Map<String, Double> categories, int receiptID) {
         this.receiptID = receiptID;
         this.cardID = null;
-        this.cardType = "Cash";
+        this.cardType = CardType.Cash.getName();
         this.categories = categories;
         this.purchaseTime = setPurchaseTime();
-    } // end of constructor for cash
+    }
 
-    // constructor for model purchases
+    // Constructor for model purchases
     Purchase(String cardID, String cardType, Map<String, Double> categories, int receiptID) {
         this.receiptID = receiptID;
         this.cardID = cardID;
         this.cardType = cardType;
         this.categories = categories;
         this.purchaseTime = setPurchaseTime();
-    } // end of constructor for model
+    }
 
-    /*########## SETTERS ##########*/
+    /*============================== MUTATORS  ==============================*/
 
     private Date setPurchaseTime() {
         // create a java calendar instance and sets that to a Date object
@@ -56,7 +55,8 @@ public class Purchase {
         return calendar.getTime();
     } // end of setPurchaseTime method
 
-    /*########## GETTERS ##########*/
+
+    /*============================== ACCESSORS  ==============================*/
     public int getReceiptID() { return receiptID; }
 
     public String getCardID() { return cardID; }
