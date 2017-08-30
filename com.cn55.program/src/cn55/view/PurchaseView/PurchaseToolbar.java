@@ -1,6 +1,7 @@
 package cn55.view.PurchaseView;
 
 import cn55.view.CustomComponents.Style;
+import cn55.view.CustomComponents.ToolbarButton;
 import cn55.view.ToolbarButtonListener;
 
 import javax.swing.*;
@@ -12,8 +13,8 @@ import java.awt.event.ActionListener;
 
 public class PurchaseToolbar extends JPanel {
 
-    private JButton addPurchaseBtn;
-    private JButton deletePurchaseBtn;
+    private ToolbarButton addPurchaseBtn;
+    private ToolbarButton deletePurchaseBtn;
     private ToolbarButtonListener createPurchaseListener;
     private ToolbarButtonListener deletePurchaseListener;
 
@@ -29,13 +30,13 @@ public class PurchaseToolbar extends JPanel {
         setBorder(BorderFactory.createCompoundBorder(outerBorder, innerBorder));
 
         Font btnFont = Style.buttonFont();
-        Color btnColor = Style.btnColor();
+        Color btnColor = Style.red500();
         Color textColor = Style.btnTextColor();
-        addPurchaseBtn = new JButton("Add Purchase");
+        addPurchaseBtn = new ToolbarButton("Add Purchase");
         addPurchaseBtn.setFont(btnFont);
         addPurchaseBtn.setForeground(textColor);
         addPurchaseBtn.setBackground(btnColor);
-        deletePurchaseBtn = new JButton("Delete Purchase");
+        deletePurchaseBtn = new ToolbarButton("Delete Purchase");
         deletePurchaseBtn.setFont(btnFont);
         deletePurchaseBtn.setForeground(textColor);
         deletePurchaseBtn.setBackground(btnColor);
@@ -64,12 +65,6 @@ public class PurchaseToolbar extends JPanel {
     class ToolbarListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == addPurchaseBtn) {
-
-                // THIS EVENT SHOULD OCCUR INSIDE THE FORM TO CAPTURE
-                // INPUTS FROM USER IN THE EVENT OBJECT TO SEND BACK
-                // TO MAINFRAME
-                //PurchaseEvent event = new PurchaseEvent(this);
-
                 if (createPurchaseListener != null) {
                     createPurchaseListener.toolbarButtonEventOccurred();
                 }
