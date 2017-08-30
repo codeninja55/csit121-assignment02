@@ -17,23 +17,29 @@ public class CardPanel extends JPanel {
 
     private CardsToolbar toolbar;
     private SearchPanel searchPanel;
-    // UNCOMMENT TO USE TEXTAREA private JTextArea cardTextArea;
+    private CardForm cardForm;
     private CardTableModel cardTableModel;
     private JTable cardTablePanel;
 
     // Constructor
     public CardPanel() {
-        this.toolbar = new CardsToolbar();
-        this.searchPanel = new SearchPanel();
         this.cardTableModel = new CardTableModel();
         this.cardTablePanel = new JTable(cardTableModel);
-        // UNCOMMENT TO USE TEXTAREA this.cardTextArea = new JTextArea(cardTablePanel);
-        // UNCOMMENT TO USE TEXTAREA cardTextArea.setFont(Style.textFieldFont());
-        // UNCOMMENT TO USE TEXTAREA cardTextArea.setEditable(false);
-        // UNCOMMENT TO USE TEXTAREA cardTextArea.setVisible(false);
+        this.toolbar = new CardsToolbar();
+        this.searchPanel = new SearchPanel();
+        //this.cardForm = new CardForm();
 
         setLayout(new BorderLayout());
+        // Formatting for Table
+        tableFormatter();
 
+        add(toolbar, BorderLayout.NORTH);
+        add(new JScrollPane(cardTablePanel), BorderLayout.CENTER);
+        // TODO - Add the different forms panels
+    }
+
+    /*============================== MUTATORS  ==============================*/
+    private void tableFormatter() {
         // FORMATTING FOR TABLE
         cardTablePanel.setRowHeight(30);
         cardTablePanel.setFont(Style.tableDataFont());
@@ -51,49 +57,37 @@ public class CardPanel extends JPanel {
         cardTablePanel.getColumnModel().getColumn(4).setPreferredWidth(5);
         cardTablePanel.getColumnModel().getColumn(5).setCellRenderer(rightRenderer);
         cardTablePanel.getColumnModel().getColumn(5).setPreferredWidth(5);
-
-        add(searchPanel, BorderLayout.WEST);
-        add(toolbar, BorderLayout.NORTH);
-        add(new JScrollPane(cardTablePanel), BorderLayout.CENTER);
-        // UNCOMMENT TO USE TEXTAREA add(new JScrollPane(cardTextArea), BorderLayout.CENTER);
     }
-
-    // UNCOMMENT TO USE TEXTAREA
-    /*oid appendCardTextArea(String text) {
-        cardTextArea.setVisible(true);
-        cardTextArea.setText(null);
-        cardTextArea.append(text);
-    }*/
-
-    /*==================== EVENT LISTENERS METHODS ====================*/
-    /* These listener methods just pass the listener event to their relevant
-     * panels with the buttons where the Event Handler is placed. */
-    public void setCreateCardListener(CardListener listener) {
-        toolbar.setCreateCardListener(listener);
-    }
-
-    public void setDeleteCardListener(CardListener listener) {
-        toolbar.setDeleteCardListener(listener);
-    }
-
-    public void setSearchListener(SearchListener listener) { searchPanel.setSearchListener(listener); }
-
-    /*void setCardData(ArrayList<Card> cards) { this.cards = cards; }*/
 
     public void setCardData(ArrayList<Card> cards) {
         cardTableModel.setData(cards);
     }
 
-    /*void refresh() {
-        cardTextArea.setText(null);
-        cardTextArea.setVisible(true);
-        for (Card card : cards) {
-            cardTextArea.append(card.toString());
-        }
-    }*/
-
-    public void refresh() {
+    public void refresh(ArrayList<Card> cards) {
+        setCardData(cards);
         cardTableModel.fireTableDataChanged();
+    }
+
+    /*============================== ACCESSORS  ==============================*/
+
+    public CardsToolbar getCardToolbar() {
+        return toolbar;
+    }
+
+    public SearchPanel getSearchPanel() {
+        return searchPanel;
+    }
+
+    public CardForm getCardForm() {
+        return cardForm;
+    }
+
+    public CardTableModel getCardTableModel() {
+        return cardTableModel;
+    }
+
+    public JTable getCardTablePanel() {
+        return cardTablePanel;
     }
 
     // INNER CLASS FOR CARD TABLE MODEL

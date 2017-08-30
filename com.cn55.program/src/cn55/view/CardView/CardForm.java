@@ -6,13 +6,18 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
 
-public class CardForm {
-
+public class CardForm extends JPanel {
     private HashMap<String,String> newCard;
-    private String cardID;
+    private String generatedCardID;
+
+    private JComboBox<String> cardTypeCombo;
+    private DefaultComboBoxModel<String> options;
+
+    private JPanel createCardForm;
+
 
     /*====================  CONSTRUCTOR for Creating Cards ====================*/
-    public CardForm(String generatedCardID) {
+    public CardForm() {
         String[] cardType = {"Anon Card", "Basic Card", "Premium Card"};
         JComboBox<String> cardTypeCombo = new JComboBox<>(cardType);
         cardTypeCombo.setFont(Style.buttonFont());
@@ -36,24 +41,18 @@ public class CardForm {
         gc.insets = new Insets(10,0,50,0);
         panel.add(cardTypeCombo, gc);
 
-        int result = JOptionPane.showConfirmDialog(null,
-                panel,
-                "Card Type",
-                JOptionPane.OK_CANCEL_OPTION,
-                JOptionPane.PLAIN_MESSAGE);
+    }
 
-        if (result == JOptionPane.OK_OPTION) {
-            if (cardTypeCombo.getSelectedItem() == "Anon Card") createAnonCard(generatedCardID);
-            else createOtherCardForm(cardTypeCombo.getSelectedItem(), generatedCardID);
-        }
+    public void createCardForm() {
+
     }
 
     /*==================== DEFAULT CONSTRUCTOR for Deleting Cards ====================*/
-    public CardForm() {
+    /*public CardForm() {
         deleteForm(false);
-    }
+    }*/
 
-    public void deleteForm(boolean complete) {
+    /*public void deleteForm(boolean complete) {
 
         if (!complete) {
             JLabel deleteLabel = new JLabel("Input Card ID to Delete Card");
@@ -94,7 +93,7 @@ public class CardForm {
                     JOptionPane.PLAIN_MESSAGE);
 
             if (result == JOptionPane.OK_OPTION)
-                this.cardID = cardIDTextField.getText();
+                generatedCardID = cardIDTextField.getText();
             else
                 System.out.println("Delete Cancelled");
         } else {
@@ -118,7 +117,7 @@ public class CardForm {
 
         if (confirm == JOptionPane.OK_OPTION) this.deleteForm(false);
         else { System.out.println("Delete Redo Cancelled"); }
-    }
+    }*/
 
     /*====================  FORMS for Creating Cards ====================*/
     private void createAnonCard(String cardID) {
@@ -242,8 +241,10 @@ public class CardForm {
         }
     }
 
-    /*====================  ACCESSORS ====================*/
+    /*============================== MUTATORS  ==============================*/
+    public void setGeneratedCardID(String cardID) { this.generatedCardID = cardID; }
 
+    /*============================== ACCESSORS  ==============================*/
     public HashMap<String, String> getCardMap() { return newCard; }
-    public String getCardID() { return cardID; }
+    public String getCardID() { return generatedCardID; }
 }

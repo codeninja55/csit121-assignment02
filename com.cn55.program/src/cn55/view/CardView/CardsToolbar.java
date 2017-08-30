@@ -1,6 +1,8 @@
 package cn55.view.CardView;
 
 import cn55.view.CustomComponents.Style;
+import cn55.view.CustomComponents.ToolbarButton;
+import cn55.view.ToolbarButtonListener;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -9,15 +11,16 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-class CardsToolbar extends JPanel {
+public class CardsToolbar extends JPanel {
 
-    private JButton addCard;
-    private JButton deleteCard;
-    private JButton sortCards;
+    private ToolbarButton createCardBtn;
+    private ToolbarButton deleteCardBtn;
+    private ToolbarButton sortCardsBtn;
     //private JTextField searchField;
-    private JButton searchButton;
-    private CardListener createCardListener;
-    private CardListener deleteCardListener;
+    private ToolbarButton searchButton;
+    private ToolbarButtonListener searchCardListener;
+    private ToolbarButtonListener createCardListener;
+    private ToolbarButtonListener deleteCardListener;
 
     // Constructor
     CardsToolbar() {
@@ -31,59 +34,52 @@ class CardsToolbar extends JPanel {
 
         Border outerBorder = BorderFactory.createEmptyBorder(20,10,20,10);
         setBorder(BorderFactory.createCompoundBorder(outerBorder, innerBorder));
-
-        Font btnFont = Style.buttonFont();
-        Color btnColor = Style.btnColor();
-        Color textColor = Style.btnTextColor();
-        addCard = new JButton("Add Card");
-        addCard.setFont(btnFont);
-        addCard.setForeground(textColor);
-        addCard.setBackground(btnColor);
-        deleteCard = new JButton("Delete Card");
-        deleteCard.setFont(btnFont);
-        deleteCard.setForeground(textColor);
-        deleteCard.setBackground(btnColor);
-        sortCards = new JButton("Sort Cards");
-        sortCards.setFont(btnFont);
-        sortCards.setForeground(textColor);
-        sortCards.setBackground(btnColor);
+        
+        searchButton = new ToolbarButton("Search");
+        createCardBtn = new ToolbarButton("Add Card");
+        deleteCardBtn = new ToolbarButton("Delete Card");
+        sortCardsBtn = new ToolbarButton("Sort Cards");
 
         setLayout(new FlowLayout(FlowLayout.LEFT));
 
-        add(addCard);
-        add(deleteCard);
+        add(searchButton);
+        add(createCardBtn);
+        add(deleteCardBtn);
 
         // TODO Add a combobox for the type of sorting required
-        add(sortCards);
+        add(sortCardsBtn);
 
         // Registration of listeners
-        ButtonListener handler = new ButtonListener();
-        addCard.addActionListener(handler);
-        deleteCard.addActionListener(handler);
-        sortCards.addActionListener(handler);
+        ToolbarListener handler = new ToolbarListener();
+        createCardBtn.addActionListener(handler);
+        deleteCardBtn.addActionListener(handler);
+        sortCardsBtn.addActionListener(handler);
     }
 
-    void setCreateCardListener(CardListener listener) {
+    public void setSearchCardListener(ToolbarButtonListener listener) { this.searchCardListener = listener; }
+
+    public void setCreateCardListener(ToolbarButtonListener listener) {
         this.createCardListener = listener;
     }
 
-    void setDeleteCardListener(CardListener listener) {
+    public void setDeleteCardListener(ToolbarButtonListener listener) {
         this.deleteCardListener = listener;
     }
 
-    public class ButtonListener implements ActionListener {
-        @Override
+    public class ToolbarListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            if (e.getSource() == addCard) {
+            if (e.getSource() == searchButton) {
+
+                // TODO - Listen on search button
+                System.out.println("Toolbar Search Button Clicked");
+            } else if (e.getSource() == createCardBtn) {
                 //new CardForm();
-                if (createCardListener != null) {
-                    createCardListener.formActionOccurred();
-                }
-            } else if (e.getSource() == deleteCard) {
-                if (deleteCardListener != null) {
-                    deleteCardListener.formActionOccurred();
-                }
-            } else if (e.getSource() == sortCards) {
+                if (createCardListener != null)
+                    createCardListener.toolbarButtonEventOccurred();
+            } else if (e.getSource() == deleteCardBtn) {
+                if (deleteCardListener != null)
+                    deleteCardListener.toolbarButtonEventOccurred();
+            } else if (e.getSource() == sortCardsBtn) {
 
                 // TODO Listen on ComboBox changes
                 JOptionPane.showMessageDialog(null,"Sorting Cards Selected");
