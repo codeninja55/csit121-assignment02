@@ -65,7 +65,7 @@ public class SearchPanel extends JPanel {
         gc.anchor = GridBagConstraints.PAGE_START;
         gc.insets = new Insets(10,10,10,10);
         searchBtn.setFont(Style.buttonFont());
-        searchBtn.setBackground(Style.btnColor());
+        searchBtn.setBackground(Style.red500());
         searchBtn.setForeground(Style.btnTextColor());
         add(searchBtn, gc);
 
