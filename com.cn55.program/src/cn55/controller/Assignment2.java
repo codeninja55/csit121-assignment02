@@ -20,8 +20,8 @@ public class Assignment2 {
             throw new RuntimeException(e);
         }*/
 
-        UIManager.put("TabbedPane.selected", Style.blueGrey500());
-        UIManager.put("TabbedPane.selectedForeground", Style.red500());
+        UIManager.put("TabbedPane.selected", Style.red500());
+        UIManager.put("TabbedPane.selectedForeground", Style.blueGrey500());
 
         /*// Looping through CardType Enum
         for (CardType item : CardType.values()) {
