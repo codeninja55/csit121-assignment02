@@ -102,7 +102,7 @@ class Program {
         shop.makePurchase("Cash", shop.generateReceiptID(), cat8);
 
         // AnonCard Test
-        db.addCards(new AnonCard("111"));
+        db.addCards(new AnonCard()); // MC10001
 
         Map<String, Double> cat2 = new HashMap<>();
         cat2.put("Deals", 0D);
@@ -112,9 +112,9 @@ class Program {
         cat2.put("Toys", 100D);
         cat2.put("Motors", 0D);
 
-        shop.makePurchase("111",shop.generateReceiptID(), cat2);
+        shop.makePurchase("MC10002",shop.generateReceiptID(), cat2);
 
-        db.addCards(new AnonCard("112"));
+        db.addCards(new AnonCard()); // MC10002
 
         Map<String, Double> cat9 = new HashMap<>();
         cat9.put("Deals", 100D);
@@ -124,10 +124,10 @@ class Program {
         cat9.put("Toys", 0D);
         cat9.put("Motors", 0D);
 
-        shop.makePurchase("112",shop.generateReceiptID(), cat9);
+        shop.makePurchase("MC10002",shop.generateReceiptID(), cat9);
 
         // BasicCard Test
-        db.addCards(new BasicCard("69", "Natasha Romanov",
+        db.addCards(new BasicCard("Natasha Romanov",
                 "blackwidow@avengers.team", 0));
 
         Map<String, Double> cat3 = new HashMap<>();
@@ -138,10 +138,10 @@ class Program {
         cat3.put("Toys", 1000D);
         cat3.put("Deals", 2000D);
 
-        shop.makePurchase("69",shop.generateReceiptID(), cat3);
+        shop.makePurchase("MC10003",shop.generateReceiptID(), cat3);
 
         // BasicCard Test 2
-        db.addCards(new BasicCard("001", "Steve Rogers",
+        db.addCards(new BasicCard("Steve Rogers",
                 "captain_a@avengers.team",0D));
 
         Map<String, Double> cat4 = new HashMap<>();
@@ -152,10 +152,10 @@ class Program {
         cat4.put("Toys", 100D);
         cat4.put("Deals", 2000D);
 
-        shop.makePurchase("001",shop.generateReceiptID(), cat4);
+        shop.makePurchase("MC10004",shop.generateReceiptID(), cat4);
 
         // PremiumCard Test
-        db.addCards(new PremiumCard("75", "Tony Stark",
+        db.addCards(new PremiumCard("Tony Stark",
                 "ironman@avengers.team",0));
 
         Map<String, Double> cat5 = new HashMap<>();
@@ -166,10 +166,10 @@ class Program {
         cat5.put("Other", 500D);
         cat5.put("Fashion", 2000D);
 
-        shop.makePurchase("75",shop.generateReceiptID(), cat5);
+        shop.makePurchase("MC10005",shop.generateReceiptID(), cat5);
 
         // PremiumCard Test 2
-        db.addCards(new PremiumCard("666", "Nick Fury",
+        db.addCards(new PremiumCard("Nick Fury",
                 "nick@shield.com",0));
 
         Map<String, Double> cat6 = new HashMap<>();
@@ -180,17 +180,17 @@ class Program {
         cat6.put("Other", 500D);
         cat6.put("Fashion", 2000D);
 
-        shop.makePurchase("666",shop.generateReceiptID(), cat6);
+        shop.makePurchase("MC10006",shop.generateReceiptID(), cat6);
 
-        db.addCards(new AnonCard("113"));
-        db.addCards(new AnonCard("114"));
+        db.addCards(new AnonCard()); //MC10007
+        db.addCards(new AnonCard()); //MC10008
         db.getCards().get(7).calcPoints(300D);
 
-        db.addCards(new BasicCard("444","Hank Pym","ants@avengers.team",0));
-        db.addCards(new BasicCard("88","Peter Parker", "spidey@avengers.team",0));
-        db.addCards(new PremiumCard("5000","Danny Rand","danny@randcorp.com",5000));
-        db.addCards(new BasicCard("33","Matthew Murdock","thedevil@hellskitchen.com", 666));
-        db.addCards(new BasicCard("9000", "Thor Odinson", "thor@asgard.com",9000));
+        db.addCards(new BasicCard("Hank Pym","ants@avengers.team",0));
+        db.addCards(new BasicCard("Peter Parker", "spidey@avengers.team",0));
+        db.addCards(new PremiumCard("Danny Rand","danny@randcorp.com",5000));
+        db.addCards(new BasicCard("Matthew Murdock","thedevil@hellskitchen.com", 666));
+        db.addCards(new BasicCard("Thor Odinson", "thor@asgard.com",9000));
 
         Map<String, Double> cat10 = new HashMap<>();
         cat10.put("Toys", 0D);
