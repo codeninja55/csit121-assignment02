@@ -13,8 +13,8 @@ import java.util.Map;
 
 public class Purchase {
     private final int receiptID;
-    private final String cardID;
-    private final String cardType;
+    private String cardID;
+    private String cardType;
     private Date purchaseTime;
     private Map<String, Double> categories;
 
@@ -53,8 +53,15 @@ public class Purchase {
         // REFERENCE: https://alvinalexander.com/java/java-timestamp-example-current-time-now
         Calendar calendar = Calendar.getInstance();
         return calendar.getTime();
-    } // end of setPurchaseTime method
+    }
 
+    void setCardID(String cardID) {
+        this.cardID = cardID;
+    }
+
+    void setCardType(String cardType) {
+        this.cardType = cardType;
+    }
 
     /*============================== ACCESSORS  ==============================*/
     public int getReceiptID() { return receiptID; }
