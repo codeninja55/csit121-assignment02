@@ -18,44 +18,39 @@ public class CardsToolbar extends JPanel {
     private ToolbarButton createCardBtn;
     private ToolbarButton deleteCardBtn;
     private JComboBox<String> sortedCombo;
-    private ToolbarButton sortCardsBtn;
     private ToolbarButton searchBtn;
 
-    // Constructor
+    /*============================== CONSTRUCTORS  ==============================*/
     CardsToolbar() {
+        JPanel leftToolbar = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 20));
+        JPanel rightToolbar = new JPanel(new FlowLayout(FlowLayout.RIGHT, 20, 20));
         searchBtn = new ToolbarButton("Search");
         searchBtn.setName("SearchButton");
         createCardBtn = new ToolbarButton("Add Card");
         createCardBtn.setName("CreateButton");
         deleteCardBtn = new ToolbarButton("Delete Card");
         deleteCardBtn.setName("DeleteButton");
-        sortCardsBtn = new ToolbarButton("Sort Cards");
-        sortCardsBtn.setName("SortButton");
 
         setName("CardToolbar");
-        setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
+        setLayout(new GridLayout(1,2));
         setBorder(Style.toolbarBorder("Actions"));
 
         String[] sortOptions = {"Sort","Sort by Created Order", "Sort by Name", "Sort by Points"};
         sortedCombo = new JComboBox<>(sortOptions);
-        sortedCombo.setFont(new Font("Verdana", Font.BOLD, 26));
+        sortedCombo.setSize(searchBtn.getPreferredSize());
+        sortedCombo.setFont(Style.toolbarButtonFont());
         sortedCombo.setBackground(Style.grey50());
-        sortedCombo.setForeground(Style.red300());
-        sortedCombo.setBorder(BorderFactory.createMatteBorder(1,1,1,1, Style.red500()));
+        sortedCombo.setForeground(Style.red500());
+        sortedCombo.setBorder(BorderFactory.createMatteBorder(2,2,2,2, Style.red900()));
         sortedCombo.setSelectedIndex(0);
 
-        add(searchBtn, FlowLayout.LEFT, 0);
-        add(createCardBtn, FlowLayout.LEFT, 1);
-        add(deleteCardBtn, FlowLayout.LEFT, 2);
-        add(sortedCombo, FlowLayout.RIGHT, 3);
-        add(sortCardsBtn, FlowLayout.RIGHT, 4);
+        leftToolbar.add(searchBtn);
+        leftToolbar.add(createCardBtn);
+        leftToolbar.add(deleteCardBtn);
+        rightToolbar.add(sortedCombo);
+        add(leftToolbar);
+        add(rightToolbar);
 
-        // TODO - LISTENER FOR SORTING
-        sortedCombo.addItemListener(new ItemListener() {
-            public void itemStateChanged(ItemEvent e) {
-                /* THINK ABOUT HOW TO DO THIS */
-            }
-        });
     }
 
     /*============================== MUTATORS ==============================*/
@@ -85,10 +80,6 @@ public class CardsToolbar extends JPanel {
 
     ToolbarButton getDeleteCardBtn() {
         return deleteCardBtn;
-    }
-
-    ToolbarButton getSortCardsBtn() {
-        return sortCardsBtn;
     }
 
     ToolbarButton getSearchBtn() {
