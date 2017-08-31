@@ -1,24 +1,33 @@
 package cn55.controller;
 
-import cn55.controller.Validator.*;
-import cn55.model.*;
+import cn55.controller.Validator.CardIDRule;
+import cn55.controller.Validator.CategoryAmountRule;
+import cn55.controller.Validator.FormRule;
+import cn55.controller.Validator.FormValidData;
 import cn55.model.CardModel.AnonCard;
 import cn55.model.CardModel.BasicCard;
 import cn55.model.CardModel.PremiumCard;
+import cn55.model.*;
 import cn55.view.ButtonListener;
-import cn55.view.CardView.*;
-import cn55.view.CustomComponents.*;
+import cn55.view.CardView.CardForm;
+import cn55.view.CardView.CardListener;
+import cn55.view.CardView.CardPanel;
+import cn55.view.CardView.CardsToolbar;
+import cn55.view.CustomComponents.FormTextField;
+import cn55.view.CustomComponents.Style;
 import cn55.view.DeleteForm.DeleteCardForm;
 import cn55.view.DeleteForm.DeleteEvent;
 import cn55.view.DeleteForm.DeleteListener;
 import cn55.view.MainFrame;
 import cn55.view.PurchaseView.*;
-import cn55.view.SearchForm.*;
+import cn55.view.SearchForm.SearchEvent;
+import cn55.view.SearchForm.SearchForm;
+import cn55.view.SearchForm.SearchListener;
 import cn55.view.ToolbarButtonListener;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -254,8 +263,8 @@ class Program {
 
                             resultsPane.setText(null);
                             resultsPane.setVisible(false);
-                            e.getSearchIDTextField().setForeground(Style.red900());
-                            e.getSearchIDLabel().setForeground(Style.red900());
+                            e.getSearchIDTextField().setForeground(Style.redA700());
+                            e.getSearchIDLabel().setForeground(Style.redA700());
                         }
                     }
                 });
@@ -355,8 +364,8 @@ class Program {
                             else
                                 e.getErrorLabel().setVisible(true);
 
-                            e.getSearchIDTextField().setForeground(Style.red900());
-                            e.getSearchIDLabel().setForeground(Style.red900());
+                            e.getSearchIDTextField().setForeground(Style.redA700());
+                            e.getSearchIDLabel().setForeground(Style.redA700());
                         }
                     }
                 });
@@ -390,96 +399,51 @@ class Program {
                 String receiptIDStr = event.getReceiptIDTextField().getText();
                 int receiptID = Integer.parseInt(receiptIDStr);
 
-                /* SETUP VALID DATA OBJECT */
-                FormValidData input = new FormValidData();
+                String cardID = getPurchaseFormCardID(event);
+                HashMap<String, Double> categories = getPurchaseFormCategories(event);
 
-                String cardType = "";
-                String name = "";
-                String email = "";
-                if (event.getAnonCardRB().isSelected()) {
-                    cardType = CardType.AnonCard.getName();
-                } else if (event.getBasicCardRB().isSelected()) {
-                    cardType = CardType.BasicCard.getName();
-                    name = event.getCardNameTextField().getText();
-                    email = event.getCardEmailTextField().getText();
-                } else if (event.getPremiumCardRB().isSelected()) {
-                    cardType = CardType.PremiumCard.getName();
-                    name = event.getCardNameTextField().getText();
-                    email = event.getCardEmailTextField().getText();
-                }
-
-                /* CATEGORIES */
-                // TODO - Validation required
-                /* SETUP VALIDATOR FOR CATEGORY AMOUNT */
-                FormRule catAmountRule = new CategoryAmountRule();
-                HashMap<String, Double> categories = new HashMap<>();
-
-                for (HashMap.Entry<FormLabel, FormTextField> item : event.getCategoriesMap().entrySet()) {
-                    String labelStr = item.getKey().getText();
-                    String catName = labelStr.substring(0, labelStr.indexOf(":"));
-
-                    Double catValue = 0D;
-                    String textFieldStr = item.getValue().getText();
-                    input.setCatValueStr(textFieldStr);
-
-                    /*if (catAmountRule.validate(input)) {
-                        if (!(textFieldStr.isEmpty())) {
-                            catValue = Double.parseDouble(textFieldStr);
-                        }
-                    } else {
-
-                    }*/
-
-
-                    categories.put(catName, catValue);
-                }
-
-
-                // TODO - Validation required if existing card used
-                // TODO - Validation required if new card created
-                String cardID;
-
-                if (type.getSelectedItem() != null) {
+                if (type.getSelectedItem() != null && cardID != null && categories != null) {
                     if (type.getSelectedItem().equals(PurchaseType.ExistingCardPurchase.getName())) {
-                        cardID = (String)event.getExistingCardCombo().getSelectedItem();
-
                         shop.makePurchase(cardID, receiptID, categories);
                         purchasePanel.refresh(db.getPurchases());
                         removeCreatePurchaseForm();
                     } else if (type.getSelectedItem().equals(PurchaseType.NewCardPurchase.getName())) {
-                        cardID = event.getCardIDTextField().getText();
+                        String cardType = "";
+                        String name = "";
+                        String email = "";
 
-                        /* VALIDATE CARD ID */
-                        FormRule cardIDRule = new CardIDRule();
-                        input.setCardID(cardID);
-
-                        if (!cardIDRule.validate(input)) {
-                            event.getCardIDTextField().setForeground(Style.red900());
-                            event.getCardIDLabel().setForeground(Style.red900());
-                            event.getCardIDErrorLabel().setVisible(true);
-                        } else {
-                            HashMap<String, String> newCard = new HashMap<>();
-                            newCard.put("name", name);
-                            newCard.put("email",email);
-                            newCard.put("cardID", cardID);
-                            newCard.put("cardType",cardType);
-
-                            shop.makeCard(newCard);
-                            cardPanel.refresh(db.getCards());
-                            shop.makePurchase(cardID, receiptID, categories);
-                            purchasePanel.refresh(db.getPurchases());
-                            removeCreatePurchaseForm();
+                        if (event.getAnonCardRB().isSelected()) {
+                            cardType = CardType.AnonCard.getName();
+                        } else if (event.getBasicCardRB().isSelected()) {
+                            cardType = CardType.BasicCard.getName();
+                            name = event.getCardNameTextField().getText();
+                            email = event.getCardEmailTextField().getText();
+                        } else if (event.getPremiumCardRB().isSelected()) {
+                            cardType = CardType.PremiumCard.getName();
+                            name = event.getCardNameTextField().getText();
+                            email = event.getCardEmailTextField().getText();
                         }
 
-                    } else if (type.getSelectedItem().equals(PurchaseType.CashPurchase.getName())) {
-                        cardID = CardType.Cash.getName();
+                        HashMap<String, String> newCard = new HashMap<>();
+                        newCard.put("name", name);
+                        newCard.put("email", email);
+                        newCard.put("cardType", cardType);
+                        newCard.put("cardID", cardID);
 
+                        shop.makeCard(newCard);
+                        cardPanel.refresh(db.getCards());
+                        shop.makePurchase(cardID, receiptID, categories);
+                        purchasePanel.refresh(db.getPurchases());
+                        removeCreatePurchaseForm();
+
+                    } else if (type.getSelectedItem().equals(PurchaseType.CashPurchase.getName())) {
                         shop.makePurchase(cardID, receiptID, categories);
                         purchasePanel.refresh(db.getPurchases());
                         removeCreatePurchaseForm();
                     }
+                } else {
+                    event.getPurchaseErrorLabel().setVisible(true);
                 }
-
             }
         });
 
@@ -505,5 +469,82 @@ class Program {
         purchaseForm.setVisible(false);
         purchaseForm.remove(purchaseForm.getCreatePurchaseForm());
         purchasePanel.getPurchaseToolbar().disableCreatePurchaseButton(false);
+    }
+
+    private boolean validateCatValueFields(HashMap<JLabel[], FormTextField> rawCategories) {
+        boolean proceed = true;
+        /* SETUP VALIDATOR FOR CATEGORY AMOUNT */
+        FormValidData input = new FormValidData();
+        FormRule catAmountRule = new CategoryAmountRule();
+
+        for (HashMap.Entry<JLabel[], FormTextField> item : rawCategories.entrySet()) {
+            input.setCatValueStr(item.getValue().getText());
+            if (!catAmountRule.validate(input)) {
+                item.getKey()[0].setForeground(Style.redA700());
+                item.getKey()[1].setVisible(true);
+                item.getValue().setForeground(Style.redA700());
+                proceed = false;
+            } else {
+                item.getKey()[0].setForeground(Color.BLACK);
+                item.getKey()[1].setVisible(false);
+                item.getValue().setForeground(Color.BLACK);
+            }
+        }
+
+        return proceed;
+    }
+
+    @Nullable
+    private HashMap<String, Double> getPurchaseFormCategories(PurchaseEvent event) {
+        HashMap<String, Double> categories = new HashMap<>();
+
+        if (validateCatValueFields(event.getCategoriesMap())) {
+            for (HashMap.Entry<JLabel[], FormTextField> item : event.getCategoriesMap().entrySet()) {
+                String labelStr = item.getKey()[0].getText();
+                String catName = labelStr.substring(0, labelStr.indexOf(":"));
+
+                Double catValue = 0D;
+                String textFieldStr = item.getValue().getText();
+
+                if (!(textFieldStr.isEmpty())) {
+                    catValue = Double.parseDouble(textFieldStr);
+                }
+
+                categories.put(catName, catValue);
+            }
+            return categories;
+        } else {
+            return null;
+        }
+    }
+
+    @Nullable
+    private String getPurchaseFormCardID(PurchaseEvent event) {
+        JComboBox<String> type = event.getPurchaseTypeCombo();
+
+        if (type.getSelectedItem() != null) {
+            if (type.getSelectedItem().equals(PurchaseType.ExistingCardPurchase.getName())) {
+                return (String)event.getExistingCardCombo().getSelectedItem();
+            } else if (type.getSelectedItem().equals(PurchaseType.NewCardPurchase.getName())) {
+                String newCardID = event.getCardIDTextField().getText();
+
+                /* SETUP VALIDATOR FOR CARD ID */
+                FormValidData input = new FormValidData();
+                FormRule cardIDRule = new CardIDRule();
+                input.setCardID(newCardID);
+
+                if (!cardIDRule.validate(input)) {
+                    event.getCardIDTextField().setForeground(Style.redA700());
+                    event.getCardIDLabel().setForeground(Style.redA700());
+                    event.getCardIDErrorLabel().setVisible(true);
+                    return null;
+                } else {
+                    return newCardID;
+                }
+            } else if (type.getSelectedItem().equals(PurchaseType.CashPurchase.getName())) {
+                return CardType.Cash.getName();
+            }
+        }
+        return null;
     }
 }
