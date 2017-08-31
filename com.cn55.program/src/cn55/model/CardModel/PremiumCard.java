@@ -11,38 +11,29 @@ public class PremiumCard extends Card {
     private static final double POINTS_RATE_LOW = 0.025;
     private static final double POINTS_RATE_HIGH = 0.03;
     private static final double SIGNUP_FEE = 25.0;
-
     private String name;
     private String email;
     private double balance;
 
-    /*########## CONSTRUCTORS ##########*/
-
-    // default constructor
-    public PremiumCard() {
-        super(null,0, CardType.PremiumCard.getName());
-        this.name = "";
-        this.email = "";
-        this.balance = 0;
-    }
-
-    public PremiumCard(String id, String name, String email) {
-        super(id,0,CardType.PremiumCard.getName());
+    /*============================== CONSTRUCTORS  ==============================*/
+    public PremiumCard(String name, String email) {
+        super();
+        super.cardType = CardType.PremiumCard.getName();
         this.name = name;
         this.email = email;
         this.balance = 0;
     }
 
     // constructor with details
-    public PremiumCard(String id, String name, String email, double totalAmount) {
-        super(id,0,CardType.PremiumCard.getName());
+    public PremiumCard(String name, String email, double totalAmount) {
+        super();
+        super.cardType = CardType.PremiumCard.getName();
         this.name = name;
         this.email = email;
         this.balance = totalAmount; //- SIGNUP_FEE; - we were told to ignore this
     }
 
-    /*########## SETTERS ##########*/
-    @Override
+    /*============================== MUTATORS  ==============================*/
     public void calcPoints(double totalAmount) {
         if (totalAmount < 40 && this.balance < 1000)
             this.points += totalAmount * POINTS_RATE_LOW;
@@ -50,11 +41,9 @@ public class PremiumCard extends Card {
             this.points += totalAmount * POINTS_RATE_HIGH;
     }
 
-    @Override
     public void calcBalance(double totalAmount) { this.balance += totalAmount; }
 
-    /*########## GETTERS ##########*/
-    @Override
+    /*============================== ACCESSORS  ==============================*/
     public String toString() {
         return String.format("%n%s: %s%n%s: %s%n%s: %.2f%n%s: $%.2f%n%s: %s%n%s: %s%n",
                 "Card Type",this.cardType,

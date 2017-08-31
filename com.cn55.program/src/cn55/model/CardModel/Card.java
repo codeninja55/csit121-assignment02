@@ -9,6 +9,8 @@ package cn55.model.CardModel;
 import cn55.model.CardType;
 
 public abstract class Card {
+
+    private static int idCounter = 10000;
     protected String id;
     double points;
     String cardType;
@@ -16,16 +18,9 @@ public abstract class Card {
     /*============================== CONSTRUCTORS  ==============================*/
     // default constructor
     public Card() {
-        this.id = null;
+        this.id = "MC" + ++idCounter;
         this.points = 0;
         this.cardType = CardType.Card.getName();
-    }
-
-    // constructor to overload
-    public Card(String id, double points, String cardType) {
-        this.id = id;
-        this.points = points;
-        this.cardType = cardType;
     }
 
     /*============================== MUTATORS  ==============================*/

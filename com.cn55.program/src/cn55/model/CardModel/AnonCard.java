@@ -11,23 +11,18 @@ import cn55.model.CardType;
 public class AnonCard extends Card {
     private static final double POINTS_RATE = 0.01;
 
-    /*########## CONSTRUCTORS ##########*/
-
-    // default constructor
+    /*============================== CONSTRUCTORS  ==============================*/
     public AnonCard() {
-        super(null,0, CardType.Card.getName()); }
+        super();
+        super.cardType = CardType.AnonCard.getName();
+    }
 
-    public AnonCard(String id) {
-        super(id,0,CardType.AnonCard.getName()); }
-
-    /*########## SETTERS ##########*/
-    @Override
+    /*============================== MUTATORS  ==============================*/
     public void calcPoints(double totalAmount) {
         this.points += POINTS_RATE * totalAmount;
     }
 
-    /*########## GETTERS ##########*/
-    @Override
+    /*============================== ACCESSORS  ==============================*/
     public String toString() {
         return String.format("%n%s: %s%n%s: %s%n%s: %.2f%n",
                 "Card Type", super.cardType,
