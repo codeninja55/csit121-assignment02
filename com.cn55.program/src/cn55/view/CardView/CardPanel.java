@@ -92,8 +92,6 @@ public class CardPanel extends JPanel {
         createCardBtn.addActionListener(handler);
         deleteCardBtn = toolbar.getDeleteCardBtn();
         deleteCardBtn.addActionListener(handler);
-        sortCardsBtn = toolbar.getSortCardsBtn();
-        sortCardsBtn.addActionListener(handler);
     }
 
     /*============================== MUTATORS  ==============================*/
