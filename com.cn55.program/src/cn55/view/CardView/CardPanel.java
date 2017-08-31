@@ -33,7 +33,6 @@ public class CardPanel extends JPanel {
 
     private ToolbarButton createCardBtn;
     private ToolbarButton deleteCardBtn;
-    private ToolbarButton sortCardsBtn;
     private ToolbarButton searchBtn;
 
     private ToolbarButtonListener searchCardListener;
@@ -66,22 +65,20 @@ public class CardPanel extends JPanel {
         resultsPane.setMinimumSize(resultsPane.getPreferredSize());
 
         Border outInnerBorder = BorderFactory.createTitledBorder(
-                BorderFactory.createMatteBorder(1,1,1,1, Style.red500()),
+                BorderFactory.createMatteBorder(2,2,2,2, Style.red500()),
                 "Results",
                 TitledBorder.LEFT,
-                TitledBorder.CENTER,
+                TitledBorder.ABOVE_TOP,
                 new Font("Verdana",Font.BOLD,24),
                 Style.red500());
         Border inInnerBorder = BorderFactory.createEmptyBorder(10,10,10,10);
         Border innerBorder = BorderFactory.createCompoundBorder(outInnerBorder, inInnerBorder);
         Border outerBorder = BorderFactory.createEmptyBorder(1,10,10,10);
         resultsPane.setBorder(BorderFactory.createCompoundBorder(outerBorder,innerBorder));
-
         resultsPane.setFont(Style.textPaneFont());
         resultsPane.setBackground(Style.blueGrey800());
         resultsPane.setForeground(Style.grey50());
         resultsPane.setVisible(false);
-        //resultsScrollPane.setVisible(false);
         add(resultsPane, BorderLayout.EAST);
 
         /* REGISTRATION OF LISTENERS */
@@ -175,9 +172,6 @@ public class CardPanel extends JPanel {
             } else if (e.getSource() == deleteCardBtn) {
                 if (deleteCardListener != null)
                     deleteCardListener.toolbarButtonEventOccurred();
-            } else if (e.getSource() == sortCardsBtn) {
-                // TODO Listen on ComboBox changes
-                System.out.println("Sort Button Pressed");
             }
         }
     }
