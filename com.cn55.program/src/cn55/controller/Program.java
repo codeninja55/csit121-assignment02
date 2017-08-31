@@ -1,16 +1,23 @@
 package cn55.controller;
 
+import cn55.controller.Validator.*;
 import cn55.model.*;
-import cn55.view.*;
-import cn55.model.CardModel.*;
+import cn55.model.CardModel.AnonCard;
+import cn55.model.CardModel.BasicCard;
+import cn55.model.CardModel.PremiumCard;
+import cn55.view.ButtonListener;
 import cn55.view.CardView.*;
-import cn55.view.CustomComponents.FormLabel;
-import cn55.view.CustomComponents.FormTextField;
-import cn55.view.CustomComponents.ToolbarButton;
+import cn55.view.CustomComponents.*;
+import cn55.view.DeleteForm.DeleteCardForm;
+import cn55.view.DeleteForm.DeleteEvent;
+import cn55.view.DeleteForm.DeleteListener;
+import cn55.view.MainFrame;
 import cn55.view.PurchaseView.*;
-import cn55.view.SearchPanel.*;
+import cn55.view.SearchForm.*;
+import cn55.view.ToolbarButtonListener;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,13 +47,11 @@ class Program {
 
         this.cardPanel = mainFrame.getCardPanel();
         this.cardToolbar = cardPanel.getCardToolbar();
-        this.cardForm = cardPanel.getCardForm();
 
         this.purchasePanel = mainFrame.getPurchasePanel();
         this.purchaseForm = purchasePanel.getPurchaseForm();
         this.purchaseToolbar = purchasePanel.getPurchaseToolbar();
 
-        System.out.println();
         eventControlling();
     }
 
@@ -163,6 +168,7 @@ class Program {
 
             /* SELECTED LISTENERS */
             if (tabPane.getSelectedComponent() == cardPanel) {
+                cardToolbar.disableToolbarButton("CreateButton",false);
                 cardPanel.refresh(db.getCards());
             } else if (tabPane.getSelectedComponent() == purchasePanel) {
                 purchaseToolbar.disableCreatePurchaseButton(false);
@@ -175,85 +181,208 @@ class Program {
                 if (purchaseForm.getCreatePurchaseForm() != null) {
                     removeCreatePurchaseForm();
                 }
+            } else if (tabPane.getSelectedComponent() != cardPanel) {
+
+                cardPanel.getResultsPane().setVisible(false);
+                // TODO - NOT WORKING FOR SOME REASON. RETURNING NullPointerException
+                /*
+                if (cardForm.getCreateCardForm() != null) {
+                    removeCardForms();
+                    reenableAllButtons(cardToolbar);
+                }*/
             }
         });
 
-        /* CARD VIEW TOOLBAR LISTENERS */
-        cardToolbar.setCreateCardListener(new ToolbarButtonListener() {
+        /* CARD VIEW TOOLBAR HANDLER - SEARCH BUTTON */
+        cardPanel.setSearchCardListener(new ToolbarButtonListener() {
             public void toolbarButtonEventOccurred() {
-                /*CardForm createCardForm = new CardForm(shop.generateCardID());
-                HashMap<String,String> newCard = createCardForm.getCardMap();
-                shop.makeCard(newCard);
-                mainFrame.getCardPanel().refresh();*/
+                removeCardForms();
+                reenableAllButtons(cardToolbar);
+                cardPanel.setSearchForm(new SearchForm());
+                cardPanel.add(cardPanel.getSearchForm(), BorderLayout.WEST);
+                cardToolbar.disableToolbarButton("SearchButton", true);
+                cardPanel.getSearchForm().setVisible(true);
 
+                /* ADD a CANCEL BUTTON LISTENER AFTER CREATING FORM */
+                cardPanel.getSearchForm().setCancelListener(new ButtonListener() {
+                    public void buttonActionOccurred() {
+                        cardPanel.getSearchForm().setVisible(false);
+                        removeCardForms();
+                        reenableAllButtons(cardToolbar);
+                        cardPanel.getResultsPane().setVisible(false);
+                    }
+                });
 
+                cardPanel.getSearchForm().setSearchListener(new SearchListener() {
+                    public void searchEventOccurred(SearchEvent e) {
+                        //JScrollPane resultsScrollPane = cardPanel.getResultsScrollPane();
+                        JTextPane resultsPane = cardPanel.getResultsPane();
+                        String cardID = e.getSearchIDTextField().getText();
+
+                        /* SETUP VALIDATOR FOR CARD ID */
+                        FormValidData input = new FormValidData();
+                        input.setCardID(cardID);
+                        FormRule cardIDRule = new CardIDRule();
+
+                        if (!cardID.isEmpty() && shop.cardExists(cardID)) {
+                            e.getErrorLabel().setVisible(false);
+                            e.getRuleErrLabel().setVisible(false);
+
+                            int cardIndex = db.getCardMap().get(cardID);
+                            String cardText = db.getCards().get(cardIndex).toString();
+                            StringBuilder purchaseText = new StringBuilder("");
+
+                            for (Purchase purchase : db.getPurchases()) {
+                                if (purchase.getCardID() != null) {
+                                    if (purchase.getCardID().equals(cardID)) {
+                                        purchaseText.append(purchase.toString());
+                                    }
+                                }
+                            }
+
+                            String results = String.format("%s%n%s%n%n%s%n%s","CARD FOUND",
+                                    cardText,"PURCHASE(S)",purchaseText);
+
+                            resultsPane.setText(results);
+                            resultsPane.setVisible(true);
+                            e.getSearchIDTextField().setText(null);
+                        } else {
+                            if (!cardIDRule.validate(input))
+                                e.getRuleErrLabel().setVisible(true);
+                            else
+                                e.getErrorLabel().setVisible(true);
+
+                            resultsPane.setText(null);
+                            resultsPane.setVisible(false);
+                            e.getSearchIDTextField().setForeground(Style.red900());
+                            e.getSearchIDLabel().setForeground(Style.red900());
+                        }
+                    }
+                });
             }
         });
 
-        /*cardToolbar.setDeleteCardListener(new ToolbarButton() {
-            public void formActionOccurred() {
-                CardForm deleteCardForm = new CardForm();
+        /* CARD VIEW TOOLBAR HANDLER - CREATE CARD BUTTON */
+        cardPanel.setCreateCardListener(new ToolbarButtonListener() {
+            public void toolbarButtonEventOccurred() {
+                removeCardForms();
+                reenableAllButtons(cardToolbar);
+                cardToolbar.disableToolbarButton("CreateButton",true);
+                cardPanel.setCardForm(new CardForm());
+                cardPanel.add(cardPanel.getCardForm(), BorderLayout.WEST);
+                cardPanel.getCardForm().createCardForm();
+                cardPanel.getCardForm().setGeneratedCardID(shop.generateCardID());
+                cardPanel.getCardForm().setVisible(true);
 
-                if (!shop.cardExists(deleteCardForm.getCardID())) {
-                    System.out.println("MainFrame");
-                    System.out.println(deleteCardForm.getCardID());
-                    deleteCardForm.deleteForm(true);
-                } else {
-                    System.out.println("MainFrame");
-                    System.out.println("Deleting Card: " + deleteCardForm.getCardID());
-                    shop.deleteCard(deleteCardForm.getCardID());
-                    cardPanel.setCardData(shop.getDatabase().getCards());
-                    cardPanel.refresh();
-                }
+                /* ADD A CANCEL BUTTON LISTENER AFTER CREATING FORM */
+                cardPanel.getCardForm().setCancelListener(new ButtonListener() {
+                    public void buttonActionOccurred() {
+                        cardPanel.getCardForm().setVisible(false);
+                        removeCardForms();
+                        reenableAllButtons(cardToolbar);
+                    }
+                });
+
+                /* ADD A CREATE BUTTON LISTENER AFTER CREATING FORM */
+                cardPanel.getCardForm().setCardListener(new CardListener() {
+                    public void formActionOccurred() {
+                        System.out.println("Create Card Pressed");
+                    }
+                });
             }
-        });*/
+        });
 
-        /*cardToolbar.setSearchListener(new SearchListener() {
-            public void searchEventOccurred(SearchEvent e) {
-                String cardID = e.getSearchID();
+        /* CARD VIEW TOOLBAR HANDLER - DELETE CARD BUTTON */
+        cardPanel.setDeleteCardListener(new ToolbarButtonListener() {
+            public void toolbarButtonEventOccurred() {
+                removeCardForms();
+                reenableAllButtons(cardToolbar);
+                cardToolbar.disableToolbarButton("DeleteButton", true);
+                cardPanel.setDeleteForm(new DeleteCardForm());
+                cardPanel.add(cardPanel.getDeleteForm(), BorderLayout.WEST);
+                cardPanel.getDeleteForm().setVisible(true);
+                cardPanel.getResultsPane().setVisible(false);
 
-                if (!cardID.isEmpty() && shop.cardExists(cardID)) {
-                    int cardIndex = db.getCardMap().get(cardID);
-                    String cardText = db.getCards().get(cardIndex).toString();
-                    //String cardText = String.format("");
+                /* REGISTER A CANCEL BUTTON LISTENER AFTER CREATING FORM */
+                cardPanel.getDeleteForm().setCancelListener(new ButtonListener() {
+                    public void buttonActionOccurred() {
+                        cardPanel.getDeleteForm().setVisible(false);
+                        removeCardForms();
+                        reenableAllButtons(cardToolbar);
+                    }
+                });
 
-                    JOptionPane.showMessageDialog(
-                            null,
-                            cardText,
-                            "Card",
-                            JOptionPane.INFORMATION_MESSAGE);
-                    // UNCOMMENT TO USE TEXTAREA  cardPanel.appendCardTextArea(cardText);
-                } else if (!shop.cardExists(cardID)) {
-                    JOptionPane.showMessageDialog(null,
-                            "Card Does Not Exist",
-                            "Error",
-                            JOptionPane.ERROR_MESSAGE);
-                }
+                /* REGISTER A CREATE BUTTON LISTENER AFTER CREATING FORM */
+                cardPanel.getDeleteForm().setDeleteListener(new DeleteListener() {
+                    public void deleteEventOccurred(DeleteEvent e) {
+                        String cardID = e.getSearchIDTextField().getText();
+
+                        /* SETUP VALIDATOR FOR CARD ID */
+                        FormValidData input = new FormValidData();
+                        input.setCardID(cardID);
+                        FormRule rule = new CardIDRule();
+
+                        if (!cardID.isEmpty() && shop.cardExists(cardID)) {
+                            e.getErrorLabel().setVisible(false);
+                            e.getRuleErrLabel().setVisible(false);
+                            String[] btnOptions = {"Yes","Cancel"};
+                            String message = "Are you sure you want to DELETE card: " + cardID +
+                                    "\nThis cannot be undone." +
+                                    "\n\nAll purchases for this card will be changed to CASH status.\n\n";
+
+                            int confirm = JOptionPane.showOptionDialog(mainFrame, // frame, can be null
+                                    message, // message
+                                    "Confirm Delete?", // title
+                                    JOptionPane.OK_CANCEL_OPTION, // button options
+                                    JOptionPane.WARNING_MESSAGE, // icon
+                                    null, // do not use custom icon
+                                    btnOptions, // title of buttons
+                                    btnOptions[1] // default button title
+                            );
+
+                            if (confirm == JOptionPane.OK_OPTION) {
+                                shop.deleteCard(cardID);
+                                cardPanel.refresh(db.getCards());
+                                /* Purchase by this card will be changed to cash */
+                                shop.convertPurchase(cardID);
+                                purchasePanel.refresh(db.getPurchases());
+                            } else {
+                                e.getSearchIDTextField().setText(null);
+                            }
+                        } else {
+                            if (!rule.validate(input))
+                                e.getRuleErrLabel().setVisible(true);
+                            else
+                                e.getErrorLabel().setVisible(true);
+
+                            e.getSearchIDTextField().setForeground(Style.red900());
+                            e.getSearchIDLabel().setForeground(Style.red900());
+                        }
+                    }
+                });
             }
-        });*/
+        });
 
-        /* PURCHASE VIEW TOOLBAR LISTENERS */
+        /* PURCHASE VIEW TOOLBAR HANDLER - CREATE PURCHASE BUTTON */
         purchaseToolbar.setCreatePurchaseListener(new ToolbarButtonListener() {
             public void toolbarButtonEventOccurred() {
                 purchaseToolbar.disableCreatePurchaseButton(true);
-
                 purchaseForm.setGeneratedReceiptID(shop.generateReceiptID());
                 purchaseForm.setCardModel(shop.getDatabase().getCardModel());
                 purchaseForm.setCategoriesList(shop.getDatabase().getCategoriesList());
-
                 purchaseForm.createPurchaseForm();
                 purchaseForm.setVisible(true);
             }
         });
 
-        /* PURCHASE FORM CANCEL LISTENER */
+        /* PURCHASE FORM CANCEL HANDLER */
         purchaseForm.setCancelPurchaseListener(new ButtonListener() {
             public void buttonActionOccurred() {
                 removeCreatePurchaseForm();
             }
         });
 
-        /* PURCHASE FORM CREATE LISTENER */
+        /* PURCHASE FORM CREATE HANDLER */
         purchaseForm.setCreatePurchaseListener(new PurchaseListener() {
             public void formActionOccurred(PurchaseEvent event) {
                 JComboBox<String> type = event.getPurchaseTypeCombo();
@@ -261,7 +390,9 @@ class Program {
                 String receiptIDStr = event.getReceiptIDTextField().getText();
                 int receiptID = Integer.parseInt(receiptIDStr);
 
-                // TODO - Validation required
+                /* SETUP VALID DATA OBJECT */
+                FormValidData input = new FormValidData();
+
                 String cardType = "";
                 String name = "";
                 String email = "";
@@ -279,51 +410,93 @@ class Program {
 
                 /* CATEGORIES */
                 // TODO - Validation required
-                Map<String, Double> categories = new HashMap<>();
+                /* SETUP VALIDATOR FOR CATEGORY AMOUNT */
+                FormRule catAmountRule = new CategoryAmountRule();
+                HashMap<String, Double> categories = new HashMap<>();
+
                 for (HashMap.Entry<FormLabel, FormTextField> item : event.getCategoriesMap().entrySet()) {
                     String labelStr = item.getKey().getText();
                     String catName = labelStr.substring(0, labelStr.indexOf(":"));
+
                     Double catValue = 0D;
                     String textFieldStr = item.getValue().getText();
-                    if (!(textFieldStr.isEmpty()))
-                        catValue = Double.parseDouble(textFieldStr);
+                    input.setCatValueStr(textFieldStr);
+
+                    /*if (catAmountRule.validate(input)) {
+                        if (!(textFieldStr.isEmpty())) {
+                            catValue = Double.parseDouble(textFieldStr);
+                        }
+                    } else {
+
+                    }*/
+
 
                     categories.put(catName, catValue);
                 }
 
+
                 // TODO - Validation required if existing card used
                 // TODO - Validation required if new card created
                 String cardID;
+
                 if (type.getSelectedItem() != null) {
                     if (type.getSelectedItem().equals(PurchaseType.ExistingCardPurchase.getName())) {
                         cardID = (String)event.getExistingCardCombo().getSelectedItem();
 
                         shop.makePurchase(cardID, receiptID, categories);
-                        purchasePanel.refresh(shop.getDatabase().getPurchases());
+                        purchasePanel.refresh(db.getPurchases());
+                        removeCreatePurchaseForm();
                     } else if (type.getSelectedItem().equals(PurchaseType.NewCardPurchase.getName())) {
                         cardID = event.getCardIDTextField().getText();
 
-                        HashMap<String, String> newCard = new HashMap<>();
-                        newCard.put("name", name);
-                        newCard.put("email",email);
-                        newCard.put("cardID", cardID);
-                        newCard.put("cardType",cardType);
+                        /* VALIDATE CARD ID */
+                        FormRule cardIDRule = new CardIDRule();
+                        input.setCardID(cardID);
 
-                        shop.makeCard(newCard);
-                        cardPanel.refresh(db.getCards());
-                        shop.makePurchase(cardID, receiptID, categories);
-                        purchasePanel.refresh(shop.getDatabase().getPurchases());
+                        if (!cardIDRule.validate(input)) {
+                            event.getCardIDTextField().setForeground(Style.red900());
+                            event.getCardIDLabel().setForeground(Style.red900());
+                            event.getCardIDErrorLabel().setVisible(true);
+                        } else {
+                            HashMap<String, String> newCard = new HashMap<>();
+                            newCard.put("name", name);
+                            newCard.put("email",email);
+                            newCard.put("cardID", cardID);
+                            newCard.put("cardType",cardType);
+
+                            shop.makeCard(newCard);
+                            cardPanel.refresh(db.getCards());
+                            shop.makePurchase(cardID, receiptID, categories);
+                            purchasePanel.refresh(db.getPurchases());
+                            removeCreatePurchaseForm();
+                        }
+
                     } else if (type.getSelectedItem().equals(PurchaseType.CashPurchase.getName())) {
                         cardID = CardType.Cash.getName();
 
                         shop.makePurchase(cardID, receiptID, categories);
-                        purchasePanel.refresh(shop.getDatabase().getPurchases());
+                        purchasePanel.refresh(db.getPurchases());
+                        removeCreatePurchaseForm();
                     }
                 }
 
-                removeCreatePurchaseForm();
             }
         });
+
+    }
+
+    private void removeCardForms() {
+        if (cardPanel.getComponents().length >= 4) {
+            cardPanel.remove(3);
+        }
+    }
+
+    private void reenableAllButtons(JPanel toolbar) {
+        for (Component btn : toolbar.getComponents()) {
+            if (!btn.isEnabled()) {
+                btn.setEnabled(true);
+            }
+        }
     }
 
     private void removeCreatePurchaseForm() {
