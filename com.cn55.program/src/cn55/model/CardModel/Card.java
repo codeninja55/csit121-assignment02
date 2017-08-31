@@ -6,8 +6,6 @@ package cn55.model.CardModel;
  * Email: dbac496@uowmail.edu.au
  */
 
-import cn55.model.CardType;
-
 public abstract class Card {
 
     private static int idCounter = 10000;
@@ -18,9 +16,9 @@ public abstract class Card {
     /*============================== CONSTRUCTORS  ==============================*/
     // default constructor
     public Card() {
-        this.id = "MC" + ++idCounter;
+        this.id = "MC" + (++idCounter);
         this.points = 0;
-        this.cardType = CardType.Card.getName();
+        this.cardType = null;
     }
 
     /*============================== MUTATORS  ==============================*/
@@ -34,4 +32,7 @@ public abstract class Card {
     public String getID() { return id; }
     public double getPoints() { return points; }
     public abstract String toString();
+    public boolean equals(Card other) {
+        return this.id.equals(other.id);
+    }
 }
