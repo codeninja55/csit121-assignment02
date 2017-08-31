@@ -8,28 +8,20 @@ package cn55.model.CardModel;
 
 import cn55.model.CardType;
 
-public class BasicCard extends Card {
+public class BasicCard extends AdvancedCard {
     private static final double POINTS_RATE = 0.015;
-    private String name;
-    private String email;
-    private double balance;
 
     /*============================== CONSTRUCTORS  ==============================*/
     public BasicCard(String name, String email) {
-        super();
+        super(name, email);
         super.cardType = CardType.BasicCard.getName();
-        this.name = name;
-        this.email = email;
-        this.balance = 0;
     }
 
     // constructor with for new cards without purchase
     public BasicCard(String name, String email, double totalAmount) {
-        super();
+        super(name, email);
         super.cardType = CardType.BasicCard.getName();
-        this.name = name;
-        this.email = email;
-        this.balance = totalAmount;
+        super.balance = totalAmount;
     }
 
     /*============================== MUTATORS  ==============================*/
@@ -51,6 +43,4 @@ public class BasicCard extends Card {
     public String getName() { return name; }
     public String getEmail() { return email; }
     public double getBalance() { return balance; }
-
-
 }

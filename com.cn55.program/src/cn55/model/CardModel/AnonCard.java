@@ -31,5 +31,4 @@ public class AnonCard extends Card {
     }
 
     public String getID() { return id; }
-
 }
