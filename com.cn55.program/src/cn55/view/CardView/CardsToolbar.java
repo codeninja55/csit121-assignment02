@@ -16,6 +16,8 @@ import java.awt.event.ItemListener;
 
 public class CardsToolbar extends JPanel {
 
+    JPanel leftToolbar;
+    JPanel rightToolbar;
     private ToolbarButton createCardBtn;
     private ToolbarButton deleteCardBtn;
     private JComboBox<String> sortedCombo;
@@ -74,6 +76,14 @@ public class CardsToolbar extends JPanel {
     }
 
     /*============================== ACCESSORS ==============================*/
+    public JPanel getLeftToolbar() {
+        return leftToolbar;
+    }
+
+    public JPanel getRightToolbar() {
+        return rightToolbar;
+    }
+
     public JComboBox<String> getSortedCombo() {
         return sortedCombo;
     }
