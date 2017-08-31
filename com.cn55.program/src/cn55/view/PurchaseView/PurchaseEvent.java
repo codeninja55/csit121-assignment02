@@ -16,7 +16,7 @@ public class PurchaseEvent extends EventObject {
     private JComboBox<String> purchaseTypeCombo;
 
     private int generatedReceiptID;
-    private HashMap<FormLabel, FormTextField> categoriesMap;
+    private HashMap<JLabel[], FormTextField> categoriesMap;
 
     private FormTextField receiptIDTextField;
     private FormLabel cardIDLabel;
@@ -38,7 +38,7 @@ public class PurchaseEvent extends EventObject {
     }
 
     public PurchaseEvent(Object source, JPanel purchaseForm, JComboBox<String> purchaseTypeCombo,
-                         int generatedReceiptID, HashMap<FormLabel, FormTextField> categoriesMap,
+                         int generatedReceiptID, HashMap<JLabel[], FormTextField> categoriesMap,
                          FormTextField receiptIDTextField, FormLabel cardIDLabel,
                          FormTextField cardIDTextField, ErrorLabel cardIDErrorLabel,
                          JComboBox<String> existingCardCombo, JRadioButton anonCardRB,
@@ -78,7 +78,7 @@ public class PurchaseEvent extends EventObject {
         return generatedReceiptID;
     }
 
-    public HashMap<FormLabel, FormTextField> getCategoriesMap() {
+    public HashMap<JLabel[], FormTextField> getCategoriesMap() {
         return categoriesMap;
     }
 

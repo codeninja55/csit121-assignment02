@@ -22,7 +22,7 @@ public class PurchaseForm extends JPanel {
 
     private DefaultComboBoxModel<String> existingCardModel;
     private ArrayList<String> categoriesList;
-    private HashMap<FormLabel, FormTextField> categoriesMap;
+    private HashMap<JLabel[], FormTextField> categoriesMap;
 
     private JComboBox<String> purchaseTypeCombo;
     private DefaultComboBoxModel<String> options;
@@ -35,7 +35,6 @@ public class PurchaseForm extends JPanel {
     private ErrorLabel cardIDErrorLabel;
     private FormLabel existingCardLabel;
     private JComboBox<String> existingCardCombo;
-    private ErrorLabel catValueErrorLabel;
 
     private ButtonGroup cardTypeRBGroup;
     private FormLabel cardTypeLabel;
@@ -66,9 +65,8 @@ public class PurchaseForm extends JPanel {
         cardIDLabel = new FormLabel("Card ID: ");
         cardIDTextField = new FormTextField(20);
         cardIDErrorLabel = new ErrorLabel("INVALID CARD ID");
-        existingCardLabel = new FormLabel("Select Existing Card ID: ");
+        existingCardLabel = new FormLabel("Select Existing: ");
         existingCardCombo = new JComboBox<>();
-        catValueErrorLabel = new ErrorLabel("INVALID AMOUNT");
 
         cardTypeLabel = new FormLabel("Card Type: ");
         cardTypeRBGroup = new ButtonGroup();
@@ -99,11 +97,12 @@ public class PurchaseForm extends JPanel {
 
         /* BORDERS - Adding 3 Borders around the form */
         Border outInnerBorder = BorderFactory.createTitledBorder(
-                BorderFactory.createMatteBorder(1,1,1,1,Color.BLACK),
+                BorderFactory.createMatteBorder(1,1,1,1,Style.red500()),
                 "New Purchase",
                 TitledBorder.LEFT,
                 TitledBorder.CENTER,
-                new Font("Verdana",Font.BOLD,22));
+                new Font("Verdana",Font.BOLD,22),
+                Style.red500());
         Border inInnerBorder = BorderFactory.createEmptyBorder(25,25,25,25);
         Border innerBorder = BorderFactory.createCompoundBorder(outInnerBorder, inInnerBorder);
         Border outerBorder = BorderFactory.createEmptyBorder(1,10,10,10);
@@ -254,10 +253,10 @@ public class PurchaseForm extends JPanel {
         createPurchaseForm.add(cardEmailTextField, gc);
 
         /*========== NEW ROW - CATEGORIES LIST ==========*/
-        for (HashMap.Entry<FormLabel, FormTextField> item : categoriesMap.entrySet()) {
+        for (HashMap.Entry<JLabel[], FormTextField> item : categoriesMap.entrySet()) {
             labelGridConstraints(gc);
             gc.insets = new Insets(10,0,0,5);
-            createPurchaseForm.add(item.getKey(), gc);
+            createPurchaseForm.add((FormLabel)item.getKey()[0], gc);
 
             item.getValue().setFont(Style.textFieldFont());
             textFieldGridConstraints(gc);
@@ -267,7 +266,7 @@ public class PurchaseForm extends JPanel {
             createPurchaseForm.add(new JLabel(""), gc);
 
             textFieldGridConstraints(gc);
-            createPurchaseForm.add(catValueErrorLabel, gc);
+            createPurchaseForm.add((ErrorLabel)item.getKey()[1], gc);
         }
 
         /*========== BUTTON ROW ==========*/
@@ -297,6 +296,13 @@ public class PurchaseForm extends JPanel {
         gc.insets = new Insets(20,10,0,0);
 
         createPurchaseForm.add(clearBtn, gc);
+
+        clearBtn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                for (Component c : createPurchaseForm.getComponents())
+                    if (c instanceof JTextField) ((JTextField) c).setText("");
+            }
+        });
 
         for (Component item : createPurchaseForm.getComponents()) {
             if (item instanceof FormTextField) ((FormTextField) item).setText("");
@@ -441,18 +447,22 @@ public class PurchaseForm extends JPanel {
     }
 
     private void createCategoriesListForm() {
-        HashMap<FormLabel, FormTextField> categoriesMap = new HashMap<>();
+        HashMap<JLabel[], FormTextField> categoriesMap = new HashMap<>();
         for (String category : categoriesList) {
+            JLabel[] labelArr = new JLabel[2];
             String categoryStr = category + ": $";
-            categoriesMap.put(new FormLabel(categoryStr),
-                    new FormTextField(20));
+            labelArr[0] = new FormLabel(categoryStr);
+            labelArr[1] = new ErrorLabel("INVALID AMOUNT");
+
+            categoriesMap.put(labelArr, new FormTextField(20));
         }
         this.categoriesMap = categoriesMap;
     }
 
     private void setCategoriesVisible(boolean isVisible) {
-        for (HashMap.Entry<FormLabel, FormTextField> item : categoriesMap.entrySet()) {
-            item.getKey().setVisible(isVisible);
+        for (HashMap.Entry<JLabel[], FormTextField> item : categoriesMap.entrySet()) {
+            item.getKey()[0].setVisible(isVisible);
+            item.getKey()[1].setVisible(!isVisible);
             item.getValue().setVisible(isVisible);
         }
     }
