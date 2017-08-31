@@ -28,6 +28,8 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -243,7 +245,7 @@ class Program {
             }
         });
 
-        /* CARD VIEW TOOLBAR HANDLER - SEARCH BUTTON */
+        /* CARD VIEW TOOLBAR REGISTRATION & HANDLER - SEARCH BUTTON */
         cardPanel.setSearchCardListener(new ToolbarButtonListener() {
             public void toolbarButtonEventOccurred() {
                 removeCardForms();
@@ -312,7 +314,7 @@ class Program {
             }
         });
 
-        /* CARD VIEW TOOLBAR HANDLER - CREATE CARD BUTTON */
+        /* CARD VIEW TOOLBAR REGISTRATION & HANDLER - CREATE CARD BUTTON */
         cardPanel.setCreateCardListener(new ToolbarButtonListener() {
             public void toolbarButtonEventOccurred() {
                 removeCardForms();
@@ -342,7 +344,7 @@ class Program {
             }
         });
 
-        /* CARD VIEW TOOLBAR HANDLER - DELETE CARD BUTTON */
+        /* CARD VIEW TOOLBAR REGISTRATION & HANDLER - DELETE CARD BUTTON */
         cardPanel.setDeleteCardListener(new ToolbarButtonListener() {
             public void toolbarButtonEventOccurred() {
                 removeCardForms();
@@ -413,7 +415,14 @@ class Program {
             }
         });
 
-        /* PURCHASE VIEW TOOLBAR HANDLER - CREATE PURCHASE BUTTON */
+        /* CARD VIEW TOOLBAR REGISTRATION & HANDLER - SORT*/
+        cardPanel.getCardToolbar().getSortedCombo().addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent e) {
+
+            }
+        });
+
+        /* PURCHASE VIEW TOOLBAR REGISTRATION & HANDLER - CREATE PURCHASE BUTTON */
         purchaseToolbar.setCreatePurchaseListener(new ToolbarButtonListener() {
             public void toolbarButtonEventOccurred() {
                 purchaseToolbar.disableCreatePurchaseButton(true);
@@ -425,14 +434,29 @@ class Program {
             }
         });
 
-        /* PURCHASE FORM CANCEL HANDLER */
+        /* PURCHASE VIEW TOOLBAR SORT REGISTRATION & HANDLER - SORT */
+        purchaseToolbar.setSortPurchaseListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    if (e.getItem().equals(SortPurchaseType.All.getName())) {
+                        purchasePanel.refresh(sortPurchases(SortPurchaseType.All));
+                    } else if (e.getItem().equals(SortPurchaseType.Card.getName())) {
+                        purchasePanel.refresh(sortPurchases(SortPurchaseType.Card));
+                    } else if (e.getItem().equals(SortPurchaseType.Cash.getName())) {
+                        purchasePanel.refresh(sortPurchases(SortPurchaseType.Cash));
+                    }
+                }
+            }
+        });
+
+        /* PURCHASE FORM CANCEL REGISTRATION & HANDLER */
         purchaseForm.setCancelPurchaseListener(new ButtonListener() {
             public void buttonActionOccurred() {
                 removeCreatePurchaseForm();
             }
         });
 
-        /* PURCHASE FORM CREATE HANDLER */
+        /* PURCHASE FORM CREATE REGISTRATION & HANDLER */
         purchaseForm.setCreatePurchaseListener(new PurchaseListener() {
             public void formActionOccurred(PurchaseEvent event) {
                 JComboBox<String> type = event.getPurchaseTypeCombo();
@@ -487,6 +511,7 @@ class Program {
                 }
             }
         });
+
 
     }
 
@@ -590,10 +615,29 @@ class Program {
         return null;
     }
 
-    private ArrayList<Purchase> sortPurchases(String sortType) {
+    private ArrayList<Purchase> sortPurchases(SortPurchaseType sortType) {
+        ArrayList<Purchase> tempPurchases = new ArrayList<>();
 
-//        if (sortType.equals())
-
-        return null;
+        if (sortType.equals(SortPurchaseType.All)) {
+            return db.getPurchases();
+        } else if (sortType.equals(SortPurchaseType.Card)) {
+            for (Purchase item : db.getPurchases()) {
+                /* NEGATIVE CASH VALIDATION */
+                if (item.getCardID() != null) {
+                    tempPurchases.add(item);
+                }
+            }
+            return tempPurchases;
+        } else if (sortType.equals(SortPurchaseType.Cash)) {
+            for (Purchase item : db.getPurchases()) {
+                /* POSITIVE CASH Validation */
+                if (item.getCardID() == null) {
+                    tempPurchases.add(item);
+                }
+            }
+            return tempPurchases;
+        } else {
+            return null;
+        }
     }
 }

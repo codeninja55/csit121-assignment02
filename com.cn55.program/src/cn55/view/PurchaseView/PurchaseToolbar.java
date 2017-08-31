@@ -1,51 +1,68 @@
 package cn55.view.PurchaseView;
 
+import cn55.model.SortPurchaseType;
 import cn55.view.CustomComponents.Style;
 import cn55.view.CustomComponents.ToolbarButton;
 import cn55.view.ToolbarButtonListener;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 public class PurchaseToolbar extends JPanel {
 
     private ToolbarButton addPurchaseBtn;
     private ToolbarButton deletePurchaseBtn;
+    private JComboBox<String> sortPurchaseCombo;
+
     private ToolbarButtonListener createPurchaseListener;
     private ToolbarButtonListener deletePurchaseListener;
+    private ItemListener sortPurchaseListener;
 
-    // Constructor
+    /*============================== CONSTRUCTORS  ==============================*/
     PurchaseToolbar() {
-        Border innerBorder = BorderFactory.createTitledBorder(
-                BorderFactory.createMatteBorder(4,4,4,4,Style.blueGrey800()),
-                "Actions",
-                TitledBorder.LEFT,
-                TitledBorder.ABOVE_TOP,
-                Style.titledBorderFont(),
-                Style.blueGrey800());
-        Border outerBorder = BorderFactory.createEmptyBorder(20,10,20,10);
-        setBorder(BorderFactory.createCompoundBorder(outerBorder, innerBorder));
-
-        Font btnFont = Style.buttonFont();
-        Color btnColor = Style.red500();
-        Color textColor = Style.btnTextColor();
+        JPanel leftToolbar = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 20));
+        JPanel rightToolbar = new JPanel(new FlowLayout(FlowLayout.RIGHT, 20, 20));
         addPurchaseBtn = new ToolbarButton("Add Purchase");
-        addPurchaseBtn.setFont(btnFont);
-        addPurchaseBtn.setForeground(textColor);
-        addPurchaseBtn.setBackground(btnColor);
+        addPurchaseBtn.setName("CreateButton");
         deletePurchaseBtn = new ToolbarButton("Delete Purchase");
-        deletePurchaseBtn.setFont(btnFont);
-        deletePurchaseBtn.setForeground(textColor);
-        deletePurchaseBtn.setBackground(btnColor);
+        deletePurchaseBtn.setName("DeleteButton");
+        sortPurchaseCombo = new JComboBox<>();
+        DefaultComboBoxModel<String> options = new DefaultComboBoxModel<>();
 
-        setLayout(new FlowLayout(FlowLayout.LEFT, 20, 20));
+        setName("PurchaseToolbar");
+        setBorder(Style.toolbarBorder("Actions"));
+        setLayout(new GridLayout(1,2));
 
-        add(addPurchaseBtn);
-        add(deletePurchaseBtn);
+        /* Sort Purchases Combo Setup */
+        options.addElement(SortPurchaseType.All.getName());
+        options.addElement(SortPurchaseType.Card.getName());
+        options.addElement(SortPurchaseType.Cash.getName());
+        sortPurchaseCombo.setModel(options);
+
+        sortPurchaseCombo.setSize(addPurchaseBtn.getPreferredSize());
+        sortPurchaseCombo.setFont(Style.toolbarButtonFont());
+        sortPurchaseCombo.setBackground(Style.grey50());
+        sortPurchaseCombo.setForeground(Style.red500());
+        sortPurchaseCombo.setBorder(BorderFactory.createMatteBorder(2,2,2,2, Style.red900()));
+        sortPurchaseCombo.setSelectedIndex(0);
+
+        sortPurchaseCombo.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent e) {
+                if (sortPurchaseListener != null) {
+                    sortPurchaseListener.itemStateChanged(e);
+                }
+            }
+        });
+
+        leftToolbar.add(addPurchaseBtn);
+        //add(deletePurchaseBtn);
+        rightToolbar.add(sortPurchaseCombo);
+        add(leftToolbar);
+        add(rightToolbar);
 
         // Registration of listeners
         ToolbarListener handler = new ToolbarListener();
@@ -53,6 +70,7 @@ public class PurchaseToolbar extends JPanel {
         deletePurchaseBtn.addActionListener(handler);
     }
 
+    /*============================== MUTATORS  ==============================*/
     public void setCreatePurchaseListener(ToolbarButtonListener listener) {
         this.createPurchaseListener = listener;
     }
@@ -61,8 +79,14 @@ public class PurchaseToolbar extends JPanel {
         this.deletePurchaseListener = listener;
     }
 
+    public void setSortPurchaseListener(ItemListener listener) { this.sortPurchaseListener = listener; }
+
     public void disableCreatePurchaseButton(boolean isDisabled) { addPurchaseBtn.setEnabled(!isDisabled); }
 
+    /*============================== ACCESSORS  ==============================*/
+
+
+    /*============================== INNER CLASS  ==============================*/
     class ToolbarListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == addPurchaseBtn) {
