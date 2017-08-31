@@ -7,30 +7,22 @@ package cn55.model.CardModel;
 
 import cn55.model.CardType;
 
-public class PremiumCard extends Card {
+public class PremiumCard extends AdvancedCard {
     private static final double POINTS_RATE_LOW = 0.025;
     private static final double POINTS_RATE_HIGH = 0.03;
     private static final double SIGNUP_FEE = 25.0;
-    private String name;
-    private String email;
-    private double balance;
 
     /*============================== CONSTRUCTORS  ==============================*/
     public PremiumCard(String name, String email) {
-        super();
+        super(name, email);
         super.cardType = CardType.PremiumCard.getName();
-        this.name = name;
-        this.email = email;
-        this.balance = 0;
     }
 
     // constructor with details
     public PremiumCard(String name, String email, double totalAmount) {
-        super();
+        super(name, email);
         super.cardType = CardType.PremiumCard.getName();
-        this.name = name;
-        this.email = email;
-        this.balance = totalAmount; //- SIGNUP_FEE; - we were told to ignore this
+        super.balance = totalAmount; //- SIGNUP_FEE; - we were told to ignore this
     }
 
     /*============================== MUTATORS  ==============================*/
