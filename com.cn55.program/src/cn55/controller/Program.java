@@ -1,29 +1,15 @@
 package cn55.controller;
 
-import cn55.controller.Validator.CardIDRule;
-import cn55.controller.Validator.CategoryAmountRule;
-import cn55.controller.Validator.FormRule;
-import cn55.controller.Validator.FormValidData;
-import cn55.model.CardModel.AnonCard;
-import cn55.model.CardModel.BasicCard;
-import cn55.model.CardModel.PremiumCard;
+import cn55.controller.Validator.*;
+import cn55.model.CardModel.*;
 import cn55.model.*;
-import cn55.view.ButtonListener;
-import cn55.view.CardView.CardForm;
-import cn55.view.CardView.CardListener;
-import cn55.view.CardView.CardPanel;
-import cn55.view.CardView.CardsToolbar;
-import cn55.view.CustomComponents.FormTextField;
-import cn55.view.CustomComponents.Style;
-import cn55.view.DeleteForm.DeleteCardForm;
-import cn55.view.DeleteForm.DeleteEvent;
-import cn55.view.DeleteForm.DeleteListener;
+import cn55.view.*;
+import cn55.view.CardView.*;
+import cn55.view.CustomComponents.*;
+import cn55.view.DeleteForm.*;
 import cn55.view.MainFrame;
 import cn55.view.PurchaseView.*;
-import cn55.view.SearchForm.SearchEvent;
-import cn55.view.SearchForm.SearchForm;
-import cn55.view.SearchForm.SearchListener;
-import cn55.view.ToolbarButtonListener;
+import cn55.view.SearchForm.*;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -31,6 +17,7 @@ import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -323,7 +310,8 @@ class Program {
                 cardPanel.setCardForm(new CardForm());
                 cardPanel.add(cardPanel.getCardForm(), BorderLayout.WEST);
                 cardPanel.getCardForm().createCardForm();
-                cardPanel.getCardForm().setGeneratedCardID(shop.generateCardID());
+                /* TODO - FIX THIS
+                cardPanel.getCardForm().setGeneratedCardID(shop.generateCardID());*/
                 cardPanel.getCardForm().setVisible(true);
 
                 /* ADD A CANCEL BUTTON LISTENER AFTER CREATING FORM */
@@ -415,10 +403,20 @@ class Program {
             }
         });
 
-        /* CARD VIEW TOOLBAR REGISTRATION & HANDLER - SORT*/
+        /* CARD VIEW TOOLBAR REGISTRATION & HANDLER - SORT */
         cardPanel.getCardToolbar().getSortedCombo().addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
-
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    if (e.getItem().equals("Sort")) {
+                        cardPanel.refresh(db.getCards());
+                    } else if (e.getItem().equals(SortCardType.CreatedOrder.getName())) {
+                        cardPanel.refresh(sortCards(SortCardType.CreatedOrder));
+                    } else if (e.getItem().equals(SortCardType.Name.getName())) {
+                        cardPanel.refresh(sortCards(SortCardType.Name));
+                    } else if (e.getItem().equals(SortCardType.Points.getName())) {
+                        cardPanel.refresh(sortCards(SortCardType.Points));
+                    }
+                }
             }
         });
 
@@ -639,5 +637,22 @@ class Program {
         } else {
             return null;
         }
+    }
+
+    private ArrayList<Card> sortCards(SortCardType sortType) {
+        ArrayList<Card> cards = new ArrayList<>(db.getCards());
+        if (sortType.equals(SortCardType.CreatedOrder)) {
+            // Compare by Card ID
+            cards.sort(new CardIDComparator());
+            return cards;
+        } else if (sortType.equals(SortCardType.Name)) {
+            // Compare by Name
+            cards.sort(new CardNameComparator());
+            return cards;
+        } else if (sortType.equals(SortCardType.Points)) {
+            cards.sort(new CardPointsComparator());
+            return cards;
+        }
+        return null;
     }
 }
