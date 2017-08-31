@@ -1,5 +1,6 @@
 package cn55.view.CardView;
 
+import cn55.model.SortCardType;
 import cn55.view.CustomComponents.Style;
 import cn55.view.CustomComponents.ToolbarButton;
 import cn55.view.ToolbarButtonListener;
@@ -35,7 +36,10 @@ public class CardsToolbar extends JPanel {
         setLayout(new GridLayout(1,2));
         setBorder(Style.toolbarBorder("Actions"));
 
-        String[] sortOptions = {"Sort","Sort by Created Order", "Sort by Name", "Sort by Points"};
+        String[] sortOptions = {"Sort..",
+                SortCardType.CreatedOrder.getName(),
+                SortCardType.Name.getName(),
+                SortCardType.Points.getName()};
         sortedCombo = new JComboBox<>(sortOptions);
         sortedCombo.setSize(searchBtn.getPreferredSize());
         sortedCombo.setFont(Style.toolbarButtonFont());
