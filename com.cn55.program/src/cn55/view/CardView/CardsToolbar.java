@@ -33,16 +33,8 @@ public class CardsToolbar extends JPanel {
         sortCardsBtn.setName("SortButton");
 
         setName("CardToolbar");
-
-        Border innerBorder = BorderFactory.createTitledBorder(
-                BorderFactory.createMatteBorder(4,4,4,3,Style.blueGrey800()),
-                "Actions",
-                TitledBorder.LEFT,
-                TitledBorder.ABOVE_TOP,
-                Style.titledBorderFont(),
-                Style.blueGrey800());
-        Border outerBorder = BorderFactory.createEmptyBorder(20,10,20,10);
-        setBorder(BorderFactory.createCompoundBorder(outerBorder, innerBorder));
+        setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
+        setBorder(Style.toolbarBorder("Actions"));
 
         String[] sortOptions = {"Sort","Sort by Created Order", "Sort by Name", "Sort by Points"};
         sortedCombo = new JComboBox<>(sortOptions);
@@ -51,8 +43,6 @@ public class CardsToolbar extends JPanel {
         sortedCombo.setForeground(Style.red300());
         sortedCombo.setBorder(BorderFactory.createMatteBorder(1,1,1,1, Style.red500()));
         sortedCombo.setSelectedIndex(0);
-
-        setLayout(new FlowLayout(FlowLayout.LEFT, 20, 20));
 
         add(searchBtn, FlowLayout.LEFT, 0);
         add(createCardBtn, FlowLayout.LEFT, 1);

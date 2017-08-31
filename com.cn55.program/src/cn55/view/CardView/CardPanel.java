@@ -25,7 +25,6 @@ public class CardPanel extends JPanel {
     private JTable cardTablePanel;
     private JScrollPane tableScrollPane;
     private JTextPane resultsPane;
-    private JScrollPane resultsScrollPane;
 
     private SearchForm searchForm;
     private CardForm cardForm;
@@ -67,12 +66,12 @@ public class CardPanel extends JPanel {
         resultsPane.setMinimumSize(resultsPane.getPreferredSize());
 
         Border outInnerBorder = BorderFactory.createTitledBorder(
-                BorderFactory.createMatteBorder(1,1,1,1, Style.red900()),
+                BorderFactory.createMatteBorder(1,1,1,1, Style.red500()),
                 "Results",
                 TitledBorder.LEFT,
                 TitledBorder.CENTER,
                 new Font("Verdana",Font.BOLD,24),
-                Style.red900());
+                Style.red500());
         Border inInnerBorder = BorderFactory.createEmptyBorder(10,10,10,10);
         Border innerBorder = BorderFactory.createCompoundBorder(outInnerBorder, inInnerBorder);
         Border outerBorder = BorderFactory.createEmptyBorder(1,10,10,10);
@@ -122,21 +121,17 @@ public class CardPanel extends JPanel {
 
     private void tableFormatter() {
         // FORMATTING FOR TABLE
-        cardTablePanel.setRowHeight(30);
+        cardTablePanel.setRowHeight(45);
         cardTablePanel.setFont(Style.tableDataFont());
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
-        cardTablePanel.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+        cardTablePanel.getColumnModel().getColumn(0).setCellRenderer(Style.centerRenderer());
         cardTablePanel.getColumnModel().getColumn(0).setPreferredWidth(1);
-        cardTablePanel.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
+        cardTablePanel.getColumnModel().getColumn(1).setCellRenderer(Style.centerRenderer());
         cardTablePanel.getColumnModel().getColumn(1).setPreferredWidth(5);
-        cardTablePanel.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
-        cardTablePanel.getColumnModel().getColumn(3).setCellRenderer(centerRenderer);
-        DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
-        rightRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
-        cardTablePanel.getColumnModel().getColumn(4).setCellRenderer(rightRenderer);
+        cardTablePanel.getColumnModel().getColumn(2).setCellRenderer(Style.centerRenderer());
+        cardTablePanel.getColumnModel().getColumn(3).setCellRenderer(Style.centerRenderer());
+        cardTablePanel.getColumnModel().getColumn(4).setCellRenderer(Style.rightRenderer());
         cardTablePanel.getColumnModel().getColumn(4).setPreferredWidth(5);
-        cardTablePanel.getColumnModel().getColumn(5).setCellRenderer(rightRenderer);
+        cardTablePanel.getColumnModel().getColumn(5).setCellRenderer(Style.rightRenderer());
         cardTablePanel.getColumnModel().getColumn(5).setPreferredWidth(5);
     }
 
@@ -165,14 +160,6 @@ public class CardPanel extends JPanel {
     public DeleteCardForm getDeleteForm() {
         return deleteForm;
     }
-
-    public JTable getCardTablePanel() {
-        return cardTablePanel;
-    }
-
-    /*public JScrollPane getResultsScrollPane() {
-        return resultsScrollPane;
-    }*/
 
     public JTextPane getResultsPane() {
         return resultsPane;
@@ -247,11 +234,11 @@ public class CardPanel extends JPanel {
 
                 case 4:
                     if (card instanceof BasicCard) {
-                        return ((BasicCard) card).getBalance();
+                        return "S" + ((BasicCard) card).getBalance();
                     } else if (card instanceof PremiumCard) {
-                        return ((PremiumCard) card).getBalance();
+                        return "S" + ((PremiumCard) card).getBalance();
                     } else {
-                        return 0;
+                        return "";
                     }
 
                 case 5:

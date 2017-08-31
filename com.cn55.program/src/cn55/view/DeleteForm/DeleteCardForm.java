@@ -43,19 +43,7 @@ public class DeleteCardForm extends JPanel {
         dim.width = 800;
         setPreferredSize(dim);
         setMinimumSize(getPreferredSize());
-
-        /* BORDERS - Adding 3 Borders around the form */
-        Border outInnerBorder = BorderFactory.createTitledBorder(
-                BorderFactory.createMatteBorder(1,1,1,1,Style.red500()),
-                "Delete Cards",
-                TitledBorder.LEFT,
-                TitledBorder.CENTER,
-                new Font("Verdana",Font.BOLD,22),
-                Style.red500());
-        Border inInnerBorder = BorderFactory.createEmptyBorder(25,25,25,25);
-        Border innerBorder = BorderFactory.createCompoundBorder(outInnerBorder, inInnerBorder);
-        Border outerBorder = BorderFactory.createEmptyBorder(1,10,10,10);
-        setBorder(BorderFactory.createCompoundBorder(outerBorder,innerBorder));
+        setBorder(Style.formBorder("Delete Card"));
 
         GridBagConstraints gc = new GridBagConstraints();
 
@@ -65,9 +53,9 @@ public class DeleteCardForm extends JPanel {
         gc.insets = new Insets(20,0,0,0);
         deleteForm.add(cardIDLabel, gc);
 
-        gc.gridy++; gc.gridx = 0; gc.weightx = 1; gc.weighty = 0.2;
+        gc.gridy++; gc.gridx = 0; gc.weightx = 1; gc.weighty = 0.1;
         gc.anchor = GridBagConstraints.PAGE_START;
-        gc.insets = new Insets(20,0,20,0);
+        gc.insets = new Insets(20,0,10,0);
         Dimension textFieldDim = getPreferredSize();
         textFieldDim.width = 350;
         textFieldDim.height = 50;
@@ -84,9 +72,10 @@ public class DeleteCardForm extends JPanel {
         gc.insets = new Insets(0,0,0,0);
         deleteForm.add(ruleErrLabel, gc);
 
-        gc.gridy++; gc.gridx = 0; gc.weightx = 1; gc.weighty = 2;
+        gc.gridy++; gc.gridx = 0; gc.weightx = 1; gc.weighty = 3;
+        gc.gridwidth = 1; gc.gridheight = 1;
         gc.anchor = GridBagConstraints.PAGE_START;
-        gc.insets = new Insets(20,0,20,0);
+        gc.insets = new Insets(10,0,10,0);
         deleteForm.add(deleteBtn, gc);
 
         deleteBtn.addActionListener(new ActionListener() {
