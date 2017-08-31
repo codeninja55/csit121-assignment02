@@ -11,7 +11,7 @@ public class ToolbarButton extends JButton {
         setFont(Style.toolbarButtonFont());
         setBackground(Style.red500());
         setForeground(Style.btnTextColor());
-        Dimension dim = new Dimension(300,45);
+        Dimension dim = new Dimension(320,50);
         setPreferredSize(dim);
         setMinimumSize(getPreferredSize());
         setVisible(true);

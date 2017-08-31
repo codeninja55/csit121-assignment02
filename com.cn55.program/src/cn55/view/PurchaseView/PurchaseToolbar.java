@@ -21,11 +21,12 @@ public class PurchaseToolbar extends JPanel {
     // Constructor
     PurchaseToolbar() {
         Border innerBorder = BorderFactory.createTitledBorder(
-                BorderFactory.createMatteBorder(1,1,1,1,Color.BLACK),
+                BorderFactory.createMatteBorder(4,4,4,4,Style.blueGrey800()),
                 "Actions",
                 TitledBorder.LEFT,
-                TitledBorder.CENTER,
-                Style.titledBorderFont());
+                TitledBorder.ABOVE_TOP,
+                Style.titledBorderFont(),
+                Style.blueGrey800());
         Border outerBorder = BorderFactory.createEmptyBorder(20,10,20,10);
         setBorder(BorderFactory.createCompoundBorder(outerBorder, innerBorder));
 
@@ -41,7 +42,7 @@ public class PurchaseToolbar extends JPanel {
         deletePurchaseBtn.setForeground(textColor);
         deletePurchaseBtn.setBackground(btnColor);
 
-        setLayout(new FlowLayout(FlowLayout.LEFT));
+        setLayout(new FlowLayout(FlowLayout.LEFT, 20, 20));
 
         add(addPurchaseBtn);
         add(deletePurchaseBtn);

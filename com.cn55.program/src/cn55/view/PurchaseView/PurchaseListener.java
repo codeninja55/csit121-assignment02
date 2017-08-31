@@ -1,5 +1,7 @@
 package cn55.view.PurchaseView;
 
-public interface PurchaseListener {
+import java.util.EventListener;
+
+public interface PurchaseListener extends EventListener{
     void formActionOccurred(PurchaseEvent event);
 }

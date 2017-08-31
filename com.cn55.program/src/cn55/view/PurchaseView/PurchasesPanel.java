@@ -5,6 +5,7 @@ import cn55.view.CustomComponents.Style;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -39,6 +40,16 @@ public class PurchasesPanel extends JPanel {
     private void tableFormatter() {
         purchaseTablePanel.setRowHeight(30);
         purchaseTablePanel.setFont(Style.tableDataFont());
+
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+        DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+        rightRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
+        purchaseTablePanel.getColumnModel().getColumn(0).setCellRenderer(rightRenderer);
+        purchaseTablePanel.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
+        purchaseTablePanel.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
+        purchaseTablePanel.getColumnModel().getColumn(3).setCellRenderer(rightRenderer);
+        purchaseTablePanel.getColumnModel().getColumn(4).setCellRenderer(centerRenderer);
     }
 
     /*============================== ACCESSORS ==============================*/

@@ -1,44 +1,125 @@
 package cn55.view.CardView;
 
+import cn55.model.CardModel.BasicCard;
 import cn55.model.CardModel.Card;
 import cn55.model.CardModel.PremiumCard;
-import cn55.model.CardModel.BasicCard;
-import cn55.view.SearchPanel.SearchListener;
-import cn55.view.SearchPanel.SearchPanel;
 import cn55.view.CustomComponents.Style;
+import cn55.view.CustomComponents.ToolbarButton;
+import cn55.view.DeleteForm.DeleteCardForm;
+import cn55.view.SearchForm.SearchForm;
+import cn55.view.ToolbarButtonListener;
 
 import javax.swing.*;
-import java.awt.*;
-import java.util.ArrayList;
+import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class CardPanel extends JPanel {
 
-    private CardsToolbar toolbar;
-    private SearchPanel searchPanel;
-    private CardForm cardForm;
     private CardTableModel cardTableModel;
     private JTable cardTablePanel;
+    private JScrollPane tableScrollPane;
+    private JTextPane resultsPane;
+    private JScrollPane resultsScrollPane;
 
-    // Constructor
+    private SearchForm searchForm;
+    private CardForm cardForm;
+    private DeleteCardForm deleteForm;
+    private CardsToolbar toolbar;
+
+    private ToolbarButton createCardBtn;
+    private ToolbarButton deleteCardBtn;
+    private ToolbarButton sortCardsBtn;
+    private ToolbarButton searchBtn;
+
+    private ToolbarButtonListener searchCardListener;
+    private ToolbarButtonListener createCardListener;
+    private ToolbarButtonListener deleteCardListener;
+
+    /*============================== CONSTRUCTORS ==============================*/
     public CardPanel() {
-        this.cardTableModel = new CardTableModel();
-        this.cardTablePanel = new JTable(cardTableModel);
-        this.toolbar = new CardsToolbar();
-        this.searchPanel = new SearchPanel();
-        //this.cardForm = new CardForm();
+        cardTableModel = new CardTableModel();
+        cardTablePanel = new JTable(cardTableModel);
+        tableScrollPane = new JScrollPane(cardTablePanel);
+        tableScrollPane.setName("TableScrollPane");
+        resultsPane = new JTextPane();
+        //resultsScrollPane = new JScrollPane(resultsPane);
+        toolbar = new CardsToolbar();
 
         setLayout(new BorderLayout());
         // Formatting for Table
         tableFormatter();
 
         add(toolbar, BorderLayout.NORTH);
-        add(new JScrollPane(cardTablePanel), BorderLayout.CENTER);
-        // TODO - Add the different forms panels
+        add(tableScrollPane, BorderLayout.CENTER);
+
+        /* RESULTS PANE CUSTOMIZING */
+        resultsPane.setName("ResultsPane");
+        Dimension resultsDim = resultsPane.getPreferredSize();
+        resultsDim.width = 700;
+        //resultsDim.height = 400;
+        resultsPane.setPreferredSize(resultsDim);
+        resultsPane.setMinimumSize(resultsPane.getPreferredSize());
+
+        Border outInnerBorder = BorderFactory.createTitledBorder(
+                BorderFactory.createMatteBorder(1,1,1,1, Style.red900()),
+                "Results",
+                TitledBorder.LEFT,
+                TitledBorder.CENTER,
+                new Font("Verdana",Font.BOLD,24),
+                Style.red900());
+        Border inInnerBorder = BorderFactory.createEmptyBorder(10,10,10,10);
+        Border innerBorder = BorderFactory.createCompoundBorder(outInnerBorder, inInnerBorder);
+        Border outerBorder = BorderFactory.createEmptyBorder(1,10,10,10);
+        resultsPane.setBorder(BorderFactory.createCompoundBorder(outerBorder,innerBorder));
+
+        resultsPane.setFont(Style.textPaneFont());
+        resultsPane.setBackground(Style.blueGrey800());
+        resultsPane.setForeground(Style.grey50());
+        resultsPane.setVisible(false);
+        //resultsScrollPane.setVisible(false);
+        add(resultsPane, BorderLayout.EAST);
+
+        /* REGISTRATION OF LISTENERS */
+        ToolbarListener handler = new ToolbarListener();
+        searchBtn = toolbar.getSearchBtn();
+        searchBtn.addActionListener(handler);
+        createCardBtn = toolbar.getCreateCardBtn();
+        createCardBtn.addActionListener(handler);
+        deleteCardBtn = toolbar.getDeleteCardBtn();
+        deleteCardBtn.addActionListener(handler);
+        sortCardsBtn = toolbar.getSortCardsBtn();
+        sortCardsBtn.addActionListener(handler);
     }
 
     /*============================== MUTATORS  ==============================*/
+    public void setSearchCardListener(ToolbarButtonListener listener) { this.searchCardListener = listener; }
+
+    public void setCreateCardListener(ToolbarButtonListener listener) {
+        this.createCardListener = listener;
+    }
+
+    public void setDeleteCardListener(ToolbarButtonListener listener) {
+        this.deleteCardListener = listener;
+    }
+
+    public void setSearchForm(SearchForm searchForm) {
+        this.searchForm = searchForm;
+    }
+
+    public void setCardForm(CardForm cardForm) {
+        this.cardForm = cardForm;
+    }
+
+    public void setDeleteForm(DeleteCardForm deleteForm) {
+        this.deleteForm = deleteForm;
+    }
+
     private void tableFormatter() {
         // FORMATTING FOR TABLE
         cardTablePanel.setRowHeight(30);
@@ -46,7 +127,7 @@ public class CardPanel extends JPanel {
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
         cardTablePanel.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
-        cardTablePanel.getColumnModel().getColumn(0).setPreferredWidth(3);
+        cardTablePanel.getColumnModel().getColumn(0).setPreferredWidth(1);
         cardTablePanel.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
         cardTablePanel.getColumnModel().getColumn(1).setPreferredWidth(5);
         cardTablePanel.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
@@ -69,28 +150,54 @@ public class CardPanel extends JPanel {
     }
 
     /*============================== ACCESSORS  ==============================*/
-
     public CardsToolbar getCardToolbar() {
         return toolbar;
     }
 
-    public SearchPanel getSearchPanel() {
-        return searchPanel;
+    public SearchForm getSearchForm() {
+        return searchForm;
     }
 
     public CardForm getCardForm() {
         return cardForm;
     }
 
-    public CardTableModel getCardTableModel() {
-        return cardTableModel;
+    public DeleteCardForm getDeleteForm() {
+        return deleteForm;
     }
 
     public JTable getCardTablePanel() {
         return cardTablePanel;
     }
 
-    // INNER CLASS FOR CARD TABLE MODEL
+    /*public JScrollPane getResultsScrollPane() {
+        return resultsScrollPane;
+    }*/
+
+    public JTextPane getResultsPane() {
+        return resultsPane;
+    }
+
+    /*============================== TOOLBAR LISTENER ==============================*/
+    public class ToolbarListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            if (e.getSource() == searchBtn) {
+                if (searchCardListener != null)
+                    searchCardListener.toolbarButtonEventOccurred();
+            } else if (e.getSource() == createCardBtn) {
+                if (createCardListener != null)
+                    createCardListener.toolbarButtonEventOccurred();
+            } else if (e.getSource() == deleteCardBtn) {
+                if (deleteCardListener != null)
+                    deleteCardListener.toolbarButtonEventOccurred();
+            } else if (e.getSource() == sortCardsBtn) {
+                // TODO Listen on ComboBox changes
+                System.out.println("Sort Button Pressed");
+            }
+        }
+    }
+
+    /*============================== CardTableModel ==============================*/
     class CardTableModel extends AbstractTableModel {
 
         private ArrayList<Card> cards;
@@ -100,22 +207,18 @@ public class CardPanel extends JPanel {
             this.cards = cards;
         }
 
-        @Override
         public String getColumnName(int column) {
             return cardHeaders[column];
         }
 
-        @Override
         public int getRowCount() {
             return cards.size();
         }
 
-        @Override
         public int getColumnCount() {
             return cardHeaders.length;
         }
 
-        @Override
         public Object getValueAt(int rowIndex, int columnIndex) {
             Card card = cards.get(rowIndex);
 

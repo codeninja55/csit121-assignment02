@@ -66,7 +66,7 @@ public class MainFrame extends JFrame {
         tabPane.addTab("Summary", summaryPanel);
 
         // DEFAULT PANE BEGIN AT
-        tabPane.setSelectedIndex(1);
+        tabPane.setSelectedIndex(2);
 
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setUndecorated(false);
