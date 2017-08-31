@@ -1,18 +1,15 @@
 package cn55.view.PurchaseView;
 
-import cn55.model.CardType;
 import cn55.view.CustomComponents.ErrorLabel;
 import cn55.view.CustomComponents.FormLabel;
 import cn55.view.CustomComponents.FormTextField;
 
 import javax.swing.*;
-import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.HashMap;
 
 public class PurchaseEvent extends EventObject {
 
-    private JPanel purchaseForm;
     private JComboBox<String> purchaseTypeCombo;
 
     private int generatedReceiptID;
@@ -33,21 +30,23 @@ public class PurchaseEvent extends EventObject {
     private FormLabel cardEmailLabel;
     private FormTextField cardEmailTextField;
 
+    private ErrorLabel purchaseErrorLabel;
+
     public PurchaseEvent(Object source) {
         super(source);
     }
 
-    public PurchaseEvent(Object source, JPanel purchaseForm, JComboBox<String> purchaseTypeCombo,
+    public PurchaseEvent(Object source, JComboBox<String> purchaseTypeCombo,
                          int generatedReceiptID, HashMap<JLabel[], FormTextField> categoriesMap,
                          FormTextField receiptIDTextField, FormLabel cardIDLabel,
                          FormTextField cardIDTextField, ErrorLabel cardIDErrorLabel,
                          JComboBox<String> existingCardCombo, JRadioButton anonCardRB,
                          JRadioButton basicCardRB, JRadioButton premiumCardRB,
                          FormLabel cardNameLabel, FormTextField cardNameTextField,
-                         FormLabel cardEmailLabel, FormTextField cardEmailTextField) {
+                         FormLabel cardEmailLabel, FormTextField cardEmailTextField,
+                         ErrorLabel purchaseErrorLabel) {
 
         super(source);
-        this.purchaseForm = purchaseForm;
         this.purchaseTypeCombo = purchaseTypeCombo;
         this.generatedReceiptID = generatedReceiptID;
         this.categoriesMap = categoriesMap;
@@ -63,19 +62,12 @@ public class PurchaseEvent extends EventObject {
         this.cardNameTextField = cardNameTextField;
         this.cardEmailLabel = cardEmailLabel;
         this.cardEmailTextField = cardEmailTextField;
+        this.purchaseErrorLabel = purchaseErrorLabel;
     }
 
     /*============================== ACCESSORS ==============================*/
-    public JPanel getPurchaseForm() {
-        return purchaseForm;
-    }
-
     public JComboBox<String> getPurchaseTypeCombo() {
         return purchaseTypeCombo;
-    }
-
-    public int getGeneratedReceiptID() {
-        return generatedReceiptID;
     }
 
     public HashMap<JLabel[], FormTextField> getCategoriesMap() {
@@ -128,5 +120,9 @@ public class PurchaseEvent extends EventObject {
 
     public FormTextField getCardEmailTextField() {
         return cardEmailTextField;
+    }
+
+    public ErrorLabel getPurchaseErrorLabel() {
+        return purchaseErrorLabel;
     }
 }
