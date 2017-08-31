@@ -28,6 +28,7 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -78,6 +79,26 @@ class Program {
 
         shop.makePurchase("Cash", shop.generateReceiptID(), cat1);
 
+        Map<String, Double> cat7 = new HashMap<>();
+        cat7.put("Toys", 300D);
+        cat7.put("Other", 100D);
+        cat7.put("Electronics", 0D);
+        cat7.put("Motors", 0D);
+        cat7.put("Fashion", 20D);
+        cat7.put("Deals", 50D);
+
+        shop.makePurchase("Cash", shop.generateReceiptID(), cat7);
+
+        Map<String, Double> cat8 = new HashMap<>();
+        cat8.put("Toys", 100D);
+        cat8.put("Other", 1000D);
+        cat8.put("Electronics", 100D);
+        cat8.put("Motors", 100D);
+        cat8.put("Fashion", 0D);
+        cat8.put("Deals", 50D);
+
+        shop.makePurchase("Cash", shop.generateReceiptID(), cat8);
+
         // AnonCard Test
         db.addCards(new AnonCard("111"));
 
@@ -93,15 +114,15 @@ class Program {
 
         db.addCards(new AnonCard("112"));
 
-        Map<String, Double> cat8 = new HashMap<>();
-        cat8.put("Deals", 100D);
-        cat8.put("Electronics", 0D);
-        cat8.put("Fashion", 80D);
-        cat8.put("Other", 0D);
-        cat8.put("Toys", 0D);
-        cat8.put("Motors", 0D);
+        Map<String, Double> cat9 = new HashMap<>();
+        cat9.put("Deals", 100D);
+        cat9.put("Electronics", 0D);
+        cat9.put("Fashion", 80D);
+        cat9.put("Other", 0D);
+        cat9.put("Toys", 0D);
+        cat9.put("Motors", 0D);
 
-        shop.makePurchase("112",shop.generateReceiptID(), cat8);
+        shop.makePurchase("112",shop.generateReceiptID(), cat9);
 
         // BasicCard Test
         db.addCards(new BasicCard("69", "Natasha Romanov",
@@ -168,9 +189,29 @@ class Program {
         db.addCards(new PremiumCard("5000","Danny Rand","danny@randcorp.com",5000));
         db.addCards(new BasicCard("33","Matthew Murdock","thedevil@hellskitchen.com", 666));
         db.addCards(new BasicCard("9000", "Thor Odinson", "thor@asgard.com",9000));
+
+        Map<String, Double> cat10 = new HashMap<>();
+        cat10.put("Toys", 0D);
+        cat10.put("Other", 0D);
+        cat10.put("Electronics", 100D);
+        cat10.put("Motors", 0D);
+        cat10.put("Fashion", 0D);
+        cat10.put("Deals", 0D);
+
+        shop.makePurchase("Cash", shop.generateReceiptID(), cat10);
+
+        Map<String, Double> cat11 = new HashMap<>();
+        cat11.put("Toys", 0D);
+        cat11.put("Other", 0D);
+        cat11.put("Electronics", 0D);
+        cat11.put("Motors", 0D);
+        cat11.put("Fashion", 0D);
+        cat11.put("Deals", 50D);
+
+        shop.makePurchase("Cash", shop.generateReceiptID(), cat11);
     }
 
-    /*==================== HANDLE EVENTS ====================*/
+    /*============================== REGISTER AND HANDLE EVENTS ==============================*/
     private void eventControlling() {
         /* TAB PANE LISTENER */
         tabPane.addChangeListener(e -> {
@@ -449,6 +490,7 @@ class Program {
 
     }
 
+    /*============================== MUTATORS  ==============================*/
     private void removeCardForms() {
         if (cardPanel.getComponents().length >= 4) {
             cardPanel.remove(3);
@@ -545,6 +587,13 @@ class Program {
                 return CardType.Cash.getName();
             }
         }
+        return null;
+    }
+
+    private ArrayList<Purchase> sortPurchases(String sortType) {
+
+//        if (sortType.equals())
+
         return null;
     }
 }
