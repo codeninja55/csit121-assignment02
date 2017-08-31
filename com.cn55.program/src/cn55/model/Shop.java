@@ -74,7 +74,7 @@ public class Shop {
             if (cardType.equals(CardType.BasicCard.getName()))
                 card = new BasicCard(cardID, name, email);
             else
-                card = new PremiumCard(generateCardID(), name, email);
+                card = new PremiumCard(cardID, name, email);
 
             db.addCards(card);
         } else {
@@ -84,23 +84,31 @@ public class Shop {
     }
 
     public boolean cardExists(String cardID) {
+        db.mapCards();
         HashMap<String, Integer> cardMap = db.getCardMap();
         return cardMap.containsKey(cardID);
     }
 
     public void deleteCard(String cardID) {
-        try {
-            if (db.getCardMap().containsKey(cardID)) {
-                db.mapCards();
-                int index = db.getCardMap().get(cardID);
+        db.mapCards();
+        int index = db.getCardMap().get(cardID);
+        if (db.getCardMap().containsKey(cardID)) {
+            try {
                 db.getCards().remove(index);
-                System.out.println(db.getCards());
+            } catch (IndexOutOfBoundsException e) {
+                e.printStackTrace();
             }
-        } catch (IndexOutOfBoundsException e) {
-            System.out.println("Exception");
-            System.out.println(db.getCards());
         }
+    }
 
+    public void convertPurchase(String cardID) {
+        db.mapPurchases();
+        for (Purchase purchase : db.getPurchases()) {
+            if (purchase.getCardID() != null && purchase.getCardID().equals(cardID)) {
+                purchase.setCardID(null);
+                purchase.setCardType(CardType.Cash.getName());
+            }
+        }
     }
 
     /*This method takes the ArrayList from the userCategories method and adds or creates
