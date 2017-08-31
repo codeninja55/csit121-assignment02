@@ -23,12 +23,32 @@ public class Assignment2 {
         UIManager.put("TabbedPane.selected", Style.red500());
         UIManager.put("TabbedPane.selectedForeground", Style.blueGrey500());
 
-        /*// Looping through CardType Enum
-        for (CardType item : CardType.values()) {
-            System.out.println(item.getId() + " : " + item.getName());
-        }*/
+        UIManager.put("ComboBox.buttonBackground", Style.red500());
 
-        new Program();
+        UIManager.put("Button.background", Style.red900());
+        UIManager.put("Button.foreground", Style.grey50());
+        UIManager.put("Button.font", Style.buttonFont());
+
+        UIManager.put("TextField.selectionBackground", Style.grey500());
+        UIManager.put("TextField.font", Style.textFieldFont());
+        UIManager.put("TextField.caretForeground", Style.red500());
+
+        UIManager.put("OptionPane.buttonFont", Style.buttonFont());
+        UIManager.put("OptionPane.messageFont", Style.textPaneFont());
+        UIManager.put("OptionPane.messageForeground", Style.red900());
+
+        UIManager.put("Table.selectionBackground", Style.red300());
+        UIManager.put("TableHeader.font", Style.buttonFont());
+        UIManager.put("TableHeader.background", Style.red500());
+        UIManager.put("TableHeader.foreground", Style.grey50());
+
+        /* Create and display the Program the safe Java way */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new Program();
+            }
+        });
+
 
     }
 
