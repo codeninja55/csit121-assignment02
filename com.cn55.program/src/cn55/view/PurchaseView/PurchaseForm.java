@@ -271,7 +271,7 @@ public class PurchaseForm extends JPanel {
         createPurchaseForm.add(purchaseErrorLabel, gc);
 
         /*========== BUTTON ROW ==========*/
-        gc.gridy++; gc.gridx = 0; gc.weightx = 1; gc.weighty = 2; gc.gridwidth = 1;
+        gc.gridy++; gc.gridx = 0; gc.weightx = 0.5; gc.weighty = 2; gc.gridwidth = 1;
         gc.fill = GridBagConstraints.HORIZONTAL;
         gc.anchor = GridBagConstraints.FIRST_LINE_END;
         gc.insets = new Insets(20,0,0,10);
@@ -293,7 +293,7 @@ public class PurchaseForm extends JPanel {
             }
         });
 
-        gc.gridx = 1;
+        gc.gridx = 1; gc.weightx = 1.5;
         gc.anchor = GridBagConstraints.FIRST_LINE_START;
         gc.insets = new Insets(20,10,0,0);
 

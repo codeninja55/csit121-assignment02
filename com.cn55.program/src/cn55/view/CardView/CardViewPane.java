@@ -56,7 +56,6 @@ public class CardViewPane extends JPanel {
         resultsPane.setName("ResultsPane");
         Dimension resultsDim = resultsPane.getPreferredSize();
         resultsDim.width = 700;
-        //resultsDim.height = 400;
         resultsPane.setPreferredSize(resultsDim);
         resultsPane.setMinimumSize(resultsPane.getPreferredSize());
         resultsPane.setBorder(Style.resultsPaneBorder());

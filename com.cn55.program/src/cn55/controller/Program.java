@@ -332,6 +332,7 @@ class Program {
         /* CARD VIEW TOOLBAR REGISTRATION & HANDLER - DELETE CARD BUTTON */
         cardViewPane.setDeleteCardListener(new ToolbarButtonListener() {
             public void toolbarButtonEventOccurred() {
+                System.out.println("DELETE BUTTON PRESSED");
                 removeCardForms();
                 cardViewPane.setDeleteForm(new DeleteCardForm());
                 cardViewPane.add(cardViewPane.getDeleteForm(), BorderLayout.WEST);
