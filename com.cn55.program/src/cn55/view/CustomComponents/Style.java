@@ -55,6 +55,20 @@ public class Style {
         return BorderFactory.createCompoundBorder(outerBorder, innerBorder);
     }
 
+    public static Border resultsPaneBorder() {
+        Border outInnerBorder = BorderFactory.createTitledBorder(
+                BorderFactory.createMatteBorder(2,2,2,2, Style.red500()),
+                "Results",
+                TitledBorder.LEFT,
+                TitledBorder.ABOVE_TOP,
+                new Font("Verdana",Font.BOLD,24),
+                Style.red500());
+        Border inInnerBorder = BorderFactory.createEmptyBorder(10,10,10,10);
+        Border innerBorder = BorderFactory.createCompoundBorder(outInnerBorder, inInnerBorder);
+        Border outerBorder = BorderFactory.createEmptyBorder(1,10,10,10);
+        return BorderFactory.createCompoundBorder(outerBorder,innerBorder);
+    }
+
     public static DefaultTableCellRenderer centerRenderer() {
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
