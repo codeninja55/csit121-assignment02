@@ -17,32 +17,6 @@ public class Shop {
     }
 
     /*============================== MUTATORS  ==============================*/
-    public int generateReceiptID() {
-        Random randomObj = new Random();
-
-        int receiptID = randomObj.ints(10000000,99999999).findFirst().getAsInt();
-
-        if (db.getReceiptSet().contains(receiptID)) {
-            return generateReceiptID();
-        } else {
-            db.addReceiptID(receiptID);
-            return receiptID;
-        }
-    }
-
-    public String generateCardID() {
-        Random randomObj = new Random();
-        int cardID = randomObj.ints(10000,99999).findFirst().getAsInt();
-
-        if (db.getCardIDSet().contains(cardID)) {
-            return generateCardID();
-        } else {
-            String cardIDStr = Integer.toString(cardID);
-            db.addCardID(cardIDStr);
-            return cardIDStr;
-        }
-    }
-
     public void makePurchase(String cardID, int receiptID, Map<String, Double> categories) {
 
         if (cardID.equals(CardType.Cash.getName())) {
