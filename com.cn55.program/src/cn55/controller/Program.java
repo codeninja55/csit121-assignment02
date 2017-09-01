@@ -15,15 +15,13 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 class Program {
 
-    private Database db;
     private MainFrame mainFrame;
     private Shop shop;
+    private Database db;
     private JTabbedPane tabPane;
     private CardViewPane cardViewPane;
     private CardsViewToolbar cardToolbar;
@@ -32,13 +30,17 @@ class Program {
     private PurchaseViewToolbar purchaseViewToolbar;
     private PurchaseForm purchaseForm;
 
+    private static Set<Double> testAmountSet = new HashSet<>();
+
     Program() {
         shop = new Shop();
         db = shop.getDatabase();
         createTestCode(shop);
         db.mapCards();
 
-        this.mainFrame = new MainFrame(shop.getDatabase().getPurchases(), shop.getDatabase().getCards());
+        this.mainFrame = new MainFrame(shop.getDatabase().getPurchases(),
+                                    shop.getDatabase().getCards(),
+                                    shop.getDatabase().getCategories());
 
         this.tabPane = mainFrame.getTabPane();
 
@@ -49,17 +51,11 @@ class Program {
         this.purchaseForm = purchaseViewPane.getPurchaseForm();
         this.purchaseViewToolbar = purchaseViewPane.getPurchaseToolbar();
 
-        for (Component c : getAllComponents(mainFrame)) {
-            if (c instanceof JButton) {
-                System.out.println(c);
-            }
-        }
-
         eventControlling();
     }
 
     private ArrayList<Component> getAllComponents(final Container container) {
-        /* REFERENCE: http://www.java2s.com/Code/Java/Swing-JFC/GetAllComponentsinacontainer.html */
+        // REFERENCE: http://www.java2s.com/Code/Java/Swing-JFC/GetAllComponentsinacontainer.html
         Component[] comps = container.getComponents();
         ArrayList<Component> compList = new ArrayList<>();
 
@@ -72,160 +68,147 @@ class Program {
         return compList;
     }
 
+    /* TODO - TEST CODE */
+    private Double generateRandomValue() {
+        Random randomValueObj = new Random();
+        int value1, value2, result;
+        Double finalVal = 0D;
+        value1 = randomValueObj.ints(0,99).findFirst().getAsInt();
+        value2 = randomValueObj.ints(0,9).findFirst().getAsInt();
+
+        result = value1 * value2;
+        if (result < 100) {
+            finalVal = result * 10D;
+        } else if (result > 100 && result < 300) {
+            finalVal = result / 5D;
+        } else if (result > 300) {
+            finalVal = result / 2D;
+        } else {
+            finalVal = result * 5D;
+        }
+
+        if (testAmountSet.contains(finalVal)) {
+            return generateRandomValue();
+        } else {
+            testAmountSet.add(finalVal);
+            return finalVal;
+        }
+    }
+
+    /* TODO - TEST CODE */
+    private HashMap<Integer, Category> generateRandomCategoriesMap() {
+        HashMap<Integer, Category> testingCategoryMap = new HashMap<>();
+
+        for (Category c : db.getCategories()) {
+            testingCategoryMap.put(c.getId(), new Category(c));
+        }
+
+        for (HashMap.Entry<Integer, Category> item : testingCategoryMap.entrySet()) {
+            item.getValue().setAmount(generateRandomValue());
+        }
+
+        return testingCategoryMap;
+    }
+
+    /* TODO - TEST CODE */
+    private void testMakePurchases(int numOfPurchases, String id) {
+        for (int i = 0; i < numOfPurchases; i++) {
+            shop.makePurchase(id, Database.generateReceiptID(), generateRandomCategoriesMap());
+        }
+    }
+
+    /* TODO - TEST CODE */
     private void createTestCode(Shop shop) {
-        /*########## TESTING CODE ##########*/
 
         // Cash purchase test
-        Map<String, Double> cat1 = new HashMap<>();
-        cat1.put("Toys", 0D);
-        cat1.put("Other", 800D);
-        cat1.put("Electronics", 0D);
-        cat1.put("Motors", 100D);
-        cat1.put("Fashion", 0D);
-        cat1.put("Deals", 500D);
-
-        shop.makePurchase("Cash", Database.generateReceiptID(), cat1);
-
-        Map<String, Double> cat7 = new HashMap<>();
-        cat7.put("Toys", 300D);
-        cat7.put("Other", 100D);
-        cat7.put("Electronics", 0D);
-        cat7.put("Motors", 0D);
-        cat7.put("Fashion", 20D);
-        cat7.put("Deals", 50D);
-
-        shop.makePurchase("Cash", Database.generateReceiptID(), cat7);
-
-        Map<String, Double> cat8 = new HashMap<>();
-        cat8.put("Toys", 100D);
-        cat8.put("Other", 1000D);
-        cat8.put("Electronics", 100D);
-        cat8.put("Motors", 100D);
-        cat8.put("Fashion", 0D);
-        cat8.put("Deals", 50D);
-
-        shop.makePurchase("Cash", Database.generateReceiptID(), cat8);
+        testMakePurchases(4, "Cash");
 
         // AnonCard Test
         db.addCards(new AnonCard()); // MC10001
-
-        Map<String, Double> cat2 = new HashMap<>();
-        cat2.put("Deals", 0D);
-        cat2.put("Electronics", 200D);
-        cat2.put("Fashion", 80D);
-        cat2.put("Other", 0D);
-        cat2.put("Toys", 100D);
-        cat2.put("Motors", 0D);
-
-        shop.makePurchase("MC10002",Database.generateReceiptID(), cat2);
-
-        Map<String, Double> cat21 = new HashMap<>();
-        cat21.put("Deals", 0D);
-        cat21.put("Electronics", 0D);
-        cat21.put("Fashion", 0D);
-        cat21.put("Other", 0D);
-        cat21.put("Toys", 1000D);
-        cat21.put("Motors", 2000D);
-
-        shop.makePurchase("MC10002",Database.generateReceiptID(), cat21);
+        testMakePurchases(3, "MC10001");
 
         db.addCards(new AnonCard()); // MC10002
-
-        Map<String, Double> cat9 = new HashMap<>();
-        cat9.put("Deals", 100D);
-        cat9.put("Electronics", 0D);
-        cat9.put("Fashion", 80D);
-        cat9.put("Other", 0D);
-        cat9.put("Toys", 0D);
-        cat9.put("Motors", 0D);
-
-        shop.makePurchase("MC10002",Database.generateReceiptID(), cat9);
+        testMakePurchases(2, "MC10002");
 
         // BasicCard Test
         db.addCards(new BasicCard("Natasha Romanov",
                 "blackwidow@avengers.team", 0));
+        testMakePurchases(3,"MC10003");
 
-        Map<String, Double> cat3 = new HashMap<>();
-        cat3.put("Electronics", 3000D);
-        cat3.put("Fashion", 5000D);
-        cat3.put("Other", 500D);
-        cat3.put("Motors", 0D);
-        cat3.put("Toys", 1000D);
-        cat3.put("Deals", 2000D);
-
-        shop.makePurchase("MC10003",Database.generateReceiptID(), cat3);
+        // More Cash purchases
+        testMakePurchases(4, "Cash");
 
         // BasicCard Test 2
         db.addCards(new BasicCard("Steve Rogers",
                 "captain_a@avengers.team",0D));
+        testMakePurchases(2, "MC10004");
 
-        Map<String, Double> cat4 = new HashMap<>();
-        cat4.put("Electronics", 100D);
-        cat4.put("Fashion", 0D);
-        cat4.put("Other", 500D);
-        cat4.put("Motors", 0D);
-        cat4.put("Toys", 100D);
-        cat4.put("Deals", 2000D);
+        // More Cash purchases
+        testMakePurchases(2, "Cash");
 
-        shop.makePurchase("MC10004",Database.generateReceiptID(), cat4);
+        // More Romanov purchases
+        testMakePurchases(5,"MC10003");
 
         // PremiumCard Test
         db.addCards(new PremiumCard("Tony Stark",
                 "ironman@avengers.team",0));
 
-        Map<String, Double> cat5 = new HashMap<>();
-        cat5.put("Electronics", 1000000D);
-        cat5.put("Deals", 500000D);
-        cat5.put("Toys", 300D);
-        cat5.put("Motors", 10000D);
-        cat5.put("Other", 500D);
-        cat5.put("Fashion", 2000D);
+        testMakePurchases(5,"MC10005");
 
-        shop.makePurchase("MC10005",Database.generateReceiptID(), cat5);
+        // More Cash purchases
+        testMakePurchases(1, "Cash");
 
         // PremiumCard Test 2
         db.addCards(new PremiumCard("Nick Fury",
                 "nick@shield.com",0));
 
-        Map<String, Double> cat6 = new HashMap<>();
-        cat6.put("Electronics", 10000D);
-        cat6.put("Deals", 0D);
-        cat6.put("Toys", 300D);
-        cat6.put("Motors", 1000000D);
-        cat6.put("Other", 500D);
-        cat6.put("Fashion", 2000D);
-
-        shop.makePurchase("MC10006",Database.generateReceiptID(), cat6);
+        testMakePurchases(3, "MC10006");
 
         db.addCards(new AnonCard()); //MC10007
+        testMakePurchases(2,"MC10007");
+
         db.addCards(new AnonCard()); //MC10008
         db.getCards().get(7).calcPoints(300D);
 
-        db.addCards(new BasicCard("Hank Pym","ants@avengers.team",0));
-        db.addCards(new BasicCard("Peter Parker", "spidey@avengers.team",0));
-        db.addCards(new PremiumCard("Danny Rand","danny@randcorp.com",5000));
+        db.addCards(new BasicCard("Hank Pym","ants@avengers.team",0)); // MC10009
+        db.addCards(new BasicCard("Peter Parker", "spidey@avengers.team",0)); // MC10010
+        db.addCards(new PremiumCard("Danny Rand","danny@randcorp.com",5000)); // MC10011
+        testMakePurchases(3, "MC10011");
+        db.addCards(new PremiumCard("Professor Charles Xavier", "x@xmen.com", 1238798)); // MC100012
+        testMakePurchases(2,"MC10012");
+
         db.addCards(new BasicCard("Matthew Murdock","thedevil@hellskitchen.com", 666));
         db.addCards(new BasicCard("Thor Odinson", "thor@asgard.com",9000));
 
-        Map<String, Double> cat10 = new HashMap<>();
-        cat10.put("Toys", 0D);
-        cat10.put("Other", 0D);
-        cat10.put("Electronics", 100D);
-        cat10.put("Motors", 0D);
-        cat10.put("Fashion", 0D);
-        cat10.put("Deals", 0D);
+        shop.makePurchase("Cash", Database.generateReceiptID(),
+                generateRandomCategoriesMap());
 
-        shop.makePurchase("Cash", Database.generateReceiptID(), cat10);
+        testMakePurchases(2,"MC10015");
+        testMakePurchases(2,"MC10018");
 
-        Map<String, Double> cat11 = new HashMap<>();
-        cat11.put("Toys", 0D);
-        cat11.put("Other", 0D);
-        cat11.put("Electronics", 0D);
-        cat11.put("Motors", 0D);
-        cat11.put("Fashion", 0D);
-        cat11.put("Deals", 50D);
+        shop.makePurchase("Cash", Database.generateReceiptID(),
+                generateRandomCategoriesMap());
 
-        shop.makePurchase("Cash", Database.generateReceiptID(), cat11);
+        db.addCards(new BasicCard("Clint Barton", "better_than_arrow@marvel.com", 500));
+        db.addCards(new AnonCard());
+        testMakePurchases(2,"MC10016");
+        db.addCards(new PremiumCard("Oliver Queen", "the_best_arrow_user@dc.comics", 1500));
+        testMakePurchases(5,"MC10017");
+        db.addCards(new BasicCard("Loki", "the-baddest-dude@asgard.com", 0));
+        testMakePurchases(2,"MC10016");
+        db.addCards(new AnonCard());
+        db.addCards(new AnonCard());
+        db.addCards(new PremiumCard("Pepper Potts", "potter@marvel.com", 1987234));
+        db.addCards(new AnonCard());
+        db.addCards(new AnonCard());
+        db.addCards(new PremiumCard("T'Challa", "tokenman@wakanda.africa", 105023));
+        db.addCards(new AnonCard());
+        db.addCards(new BasicCard("Logan", "wolverine@xmen.com", 0));
+        /* TEST CODE */
+        /*System.err.println("TESTING CODE");
+        for (Purchase p : db.getPurchases()) {
+            System.out.println(p.getCategoriesTotal());
+        }*/
     }
 
     /*============================== REGISTER AND HANDLE EVENTS ==============================*/
@@ -235,10 +218,10 @@ class Program {
 
             /* SELECTED LISTENERS */
             if (tabPane.getSelectedComponent() == cardViewPane) {
-                cardViewPane.refresh(db.getCards());
+                cardViewPane.refreshCardsTable(db.getCards());
             } else if (tabPane.getSelectedComponent() == purchaseViewPane) {
                 purchaseViewToolbar.disableCreatePurchaseButton(false);
-                purchaseViewPane.refresh(shop.getDatabase().getPurchases());
+                purchaseViewPane.refreshPurchasesTable(shop.getDatabase().getPurchases());
             }
 
             /* DESELECTED LISTENERS */
@@ -395,10 +378,10 @@ class Program {
 
                             if (confirm == JOptionPane.OK_OPTION) {
                                 shop.deleteCard(cardID);
-                                cardViewPane.refresh(db.getCards());
+                                cardViewPane.refreshCardsTable(db.getCards());
                                 /* Purchase by this card will be changed to cash */
                                 shop.convertPurchase(cardID);
-                                purchaseViewPane.refresh(db.getPurchases());
+                                purchaseViewPane.refreshPurchasesTable(db.getPurchases());
                             } else {
                                 e.getSearchIDTextField().setText(null);
                             }
@@ -421,13 +404,13 @@ class Program {
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     if (e.getItem().equals("Sort")) {
-                        cardViewPane.refresh(db.getCards());
+                        cardViewPane.refreshCardsTable(db.getCards());
                     } else if (e.getItem().equals(SortCardType.CreatedOrder.getName())) {
-                        cardViewPane.refresh(sortCards(SortCardType.CreatedOrder));
+                        cardViewPane.refreshCardsTable(sortCards(SortCardType.CreatedOrder));
                     } else if (e.getItem().equals(SortCardType.Name.getName())) {
-                        cardViewPane.refresh(sortCards(SortCardType.Name));
+                        cardViewPane.refreshCardsTable(sortCards(SortCardType.Name));
                     } else if (e.getItem().equals(SortCardType.Points.getName())) {
-                        cardViewPane.refresh(sortCards(SortCardType.Points));
+                        cardViewPane.refreshCardsTable(sortCards(SortCardType.Points));
                     }
                 }
             }
@@ -440,7 +423,7 @@ class Program {
                 purchaseViewToolbar.disableCreatePurchaseButton(true);
                 purchaseForm.setGeneratedReceiptID(db.generateReceiptID());
                 purchaseForm.setCardModel(shop.getDatabase().getCardModel());
-                purchaseForm.setCategoriesList(shop.getDatabase().getCategoriesList());
+                purchaseForm.setCategoriesList(shop.getDatabase().getCategories());
                 purchaseForm.createPurchaseForm();
                 purchaseForm.setVisible(true);
             }
@@ -449,8 +432,8 @@ class Program {
         /* TOOLBAR VIEW DETAILS BUTTON */
         purchaseViewToolbar.setViewPurchaseListener(new ToolbarButtonListener() {
             public void toolbarButtonEventOccurred() {
-                int selectedRow = purchaseViewPane.getPurchaseTablePanel().getSelectedRow();
-                Integer receiptID = (Integer) purchaseViewPane.getPurchaseTablePanel().getValueAt(selectedRow, 0);
+                int selectedRow = purchaseViewPane.getPurchaseTablePane().getSelectedRow();
+                Integer receiptID = (Integer) purchaseViewPane.getPurchaseTablePane().getValueAt(selectedRow, 0);
 
                 for (Purchase purchase : db.getPurchases()) {
                     if (purchase.getReceiptID() == receiptID) {
@@ -474,11 +457,11 @@ class Program {
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     if (e.getItem().equals(SortPurchaseType.All.getName())) {
-                        purchaseViewPane.refresh(sortPurchases(SortPurchaseType.All));
+                        purchaseViewPane.refreshPurchasesTable(sortPurchases(SortPurchaseType.All));
                     } else if (e.getItem().equals(SortPurchaseType.Card.getName())) {
-                        purchaseViewPane.refresh(sortPurchases(SortPurchaseType.Card));
+                        purchaseViewPane.refreshPurchasesTable(sortPurchases(SortPurchaseType.Card));
                     } else if (e.getItem().equals(SortPurchaseType.Cash.getName())) {
-                        purchaseViewPane.refresh(sortPurchases(SortPurchaseType.Cash));
+                        purchaseViewPane.refreshPurchasesTable(sortPurchases(SortPurchaseType.Cash));
                     }
                 }
             }
@@ -500,12 +483,12 @@ class Program {
                 int receiptID = Integer.parseInt(receiptIDStr);
 
                 String cardID = getPurchaseFormCardID(event);
-                HashMap<String, Double> categories = getPurchaseFormCategories(event);
+                HashMap<Integer, Category> categories = getPurchaseFormCategories(event);
 
                 if (type.getSelectedItem() != null && cardID != null && categories != null) {
                     if (type.getSelectedItem().equals(PurchaseType.ExistingCardPurchase.getName())) {
                         shop.makePurchase(cardID, receiptID, categories);
-                        purchaseViewPane.refresh(db.getPurchases());
+                        purchaseViewPane.refreshPurchasesTable(db.getPurchases());
                         removeCreatePurchaseForm();
                     } else if (type.getSelectedItem().equals(PurchaseType.NewCardPurchase.getName())) {
                         String cardType = "";
@@ -531,14 +514,14 @@ class Program {
                         newCard.put("cardID", cardID);
 
                         shop.makeCard(newCard);
-                        cardViewPane.refresh(db.getCards());
+                        cardViewPane.refreshCardsTable(db.getCards());
                         shop.makePurchase(cardID, receiptID, categories);
-                        purchaseViewPane.refresh(db.getPurchases());
+                        purchaseViewPane.refreshPurchasesTable(db.getPurchases());
                         removeCreatePurchaseForm();
 
                     } else if (type.getSelectedItem().equals(PurchaseType.CashPurchase.getName())) {
                         shop.makePurchase(cardID, receiptID, categories);
-                        purchaseViewPane.refresh(db.getPurchases());
+                        purchaseViewPane.refreshPurchasesTable(db.getPurchases());
                         removeCreatePurchaseForm();
                     }
                 } else {
@@ -602,8 +585,8 @@ class Program {
     }
 
     @Nullable
-    private HashMap<String, Double> getPurchaseFormCategories(PurchaseEvent event) {
-        HashMap<String, Double> categories = new HashMap<>();
+    private HashMap<Integer, Category> getPurchaseFormCategories(PurchaseEvent event) {
+        HashMap<Integer, Category> categories = new HashMap<>();
 
         if (validateCatValueFields(event.getCategoriesMap())) {
             for (HashMap.Entry<JLabel[], FormTextField> item : event.getCategoriesMap().entrySet()) {
@@ -617,7 +600,7 @@ class Program {
                     catValue = Double.parseDouble(textFieldStr);
                 }
 
-                categories.put(catName, catValue);
+//                categories.put(catName, catValue);
             }
             return categories;
         } else {
