@@ -13,9 +13,9 @@ import cn55.view.SearchForm.*;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import javax.swing.event.MouseInputListener;
 import java.awt.*;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -207,7 +207,6 @@ class Program {
 
             /* SELECTED LISTENERS */
             if (tabPane.getSelectedComponent() == cardPanel) {
-                cardToolbar.disableToolbarButton("CreateButton",false);
                 cardPanel.refresh(db.getCards());
             } else if (tabPane.getSelectedComponent() == purchasePanel) {
                 purchaseToolbar.disableCreatePurchaseButton(false);
@@ -216,19 +215,15 @@ class Program {
 
             /* DESELECTED LISTENERS */
             if (tabPane.getSelectedComponent() != purchasePanel) {
-                //IF PANEL CHANGED AWAY - REMOVE THE FORM
                 if (purchaseForm.getCreatePurchaseForm() != null) {
                     removeCreatePurchaseForm();
+                    purchasePanel.getResultsPane().setVisible(false);
                 }
             } else if (tabPane.getSelectedComponent() != cardPanel) {
-
                 cardPanel.getResultsPane().setVisible(false);
-                // TODO - NOT WORKING FOR SOME REASON. RETURNING NullPointerException
-                /*
                 if (cardForm.getCreateCardForm() != null) {
                     removeCardForms();
-                    reenableAllButtons(cardToolbar);
-                }*/
+                }
             }
         });
 
@@ -236,10 +231,8 @@ class Program {
         cardPanel.setSearchCardListener(new ToolbarButtonListener() {
             public void toolbarButtonEventOccurred() {
                 removeCardForms();
-                reenableAllButtons(cardToolbar);
                 cardPanel.setSearchForm(new SearchForm());
                 cardPanel.add(cardPanel.getSearchForm(), BorderLayout.WEST);
-                cardToolbar.disableToolbarButton("SearchButton", true);
                 cardPanel.getSearchForm().setVisible(true);
 
                 /* ADD a CANCEL BUTTON LISTENER AFTER CREATING FORM */
@@ -247,7 +240,6 @@ class Program {
                     public void buttonActionOccurred() {
                         cardPanel.getSearchForm().setVisible(false);
                         removeCardForms();
-                        reenableAllButtons(cardToolbar);
                         cardPanel.getResultsPane().setVisible(false);
                     }
                 });
@@ -316,7 +308,6 @@ class Program {
                     public void buttonActionOccurred() {
                         cardPanel.getCardForm().setVisible(false);
                         removeCardForms();
-                        reenableAllButtons(cardToolbar);
                     }
                 });
 
@@ -333,8 +324,6 @@ class Program {
         cardPanel.setDeleteCardListener(new ToolbarButtonListener() {
             public void toolbarButtonEventOccurred() {
                 removeCardForms();
-                reenableAllButtons(cardToolbar);
-                cardToolbar.disableToolbarButton("DeleteButton", true);
                 cardPanel.setDeleteForm(new DeleteCardForm());
                 cardPanel.add(cardPanel.getDeleteForm(), BorderLayout.WEST);
                 cardPanel.getDeleteForm().setVisible(true);
@@ -345,7 +334,6 @@ class Program {
                     public void buttonActionOccurred() {
                         cardPanel.getDeleteForm().setVisible(false);
                         removeCardForms();
-                        reenableAllButtons(cardToolbar);
                     }
                 });
 
@@ -468,14 +456,14 @@ class Program {
             }
         });
 
-        /* PURCHASE FORM CANCEL REGISTRATION & HANDLER */
+        /* FORM CANCEL BUTTON */
         purchaseForm.setCancelPurchaseListener(new ButtonListener() {
             public void buttonActionOccurred() {
                 removeCreatePurchaseForm();
             }
         });
 
-        /* PURCHASE FORM CREATE REGISTRATION & HANDLER */
+        /* FORM CREATE BUTTON */
         purchaseForm.setCreatePurchaseListener(new PurchaseListener() {
             public void formActionOccurred(PurchaseEvent event) {
                 JComboBox<String> type = event.getPurchaseTypeCombo();
@@ -531,7 +519,6 @@ class Program {
             }
         });
 
-
     }
 
     /*============================== MUTATORS  ==============================*/
@@ -542,10 +529,16 @@ class Program {
     }
 
     private void reenableAllButtons(JPanel toolbar) {
-        for (Component btn : toolbar.getComponents()) {
+        /*for (Component btn : toolbar.getComponents()) {
             if (!btn.isEnabled()) {
                 btn.setEnabled(true);
             }
+        }*/
+
+        if (toolbar instanceof CardsToolbar) {
+
+        } else if (toolbar instanceof PurchaseToolbar) {
+
         }
     }
 
@@ -663,11 +656,9 @@ class Program {
     private ArrayList<Card> sortCards(SortCardType sortType) {
         ArrayList<Card> cards = new ArrayList<>(db.getCards());
         if (sortType.equals(SortCardType.CreatedOrder)) {
-            // Compare by Card ID
             cards.sort(new CardIDComparator());
             return cards;
         } else if (sortType.equals(SortCardType.Name)) {
-            // Compare by Name
             cards.sort(new CardNameComparator());
             return cards;
         } else if (sortType.equals(SortCardType.Points)) {
