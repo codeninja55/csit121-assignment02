@@ -1,6 +1,7 @@
 package cn55.view;
 
 import cn55.model.CardModel.Card;
+import cn55.model.Category;
 import cn55.model.Purchase;
 import cn55.view.CardView.*;
 import cn55.view.CategoriesView.*;
@@ -25,7 +26,7 @@ public class MainFrame extends JFrame {
     private CategoriesViewPane categoriesViewPane;
     //private SummaryPanel summaryPanel;
 
-    public MainFrame(ArrayList<Purchase> purchases, ArrayList<Card> cards) {
+    public MainFrame(ArrayList<Purchase> purchases, ArrayList<Card> cards, ArrayList<Category> categories) {
         super("Marvel Card Rewards");
 
         setLayout(new BorderLayout());
