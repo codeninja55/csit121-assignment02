@@ -20,7 +20,6 @@ public class CardViewPane extends JPanel {
 
     private CardTableModel cardTableModel;
     private JTable cardTablePanel;
-    private JScrollPane tableScrollPane;
     private JTextPane resultsPane;
 
     private SearchForm searchForm;
@@ -40,8 +39,8 @@ public class CardViewPane extends JPanel {
     public CardViewPane() {
         cardTableModel = new CardTableModel();
         cardTablePanel = new JTable(cardTableModel);
-        tableScrollPane = new JScrollPane(cardTablePanel);
-        tableScrollPane.setName("TableScrollPane");
+        JScrollPane tableScrollPane = new JScrollPane(cardTablePanel);
+        tableScrollPane.setName("CardsViewTableScrollPane");
         resultsPane = new JTextPane();
         //resultsScrollPane = new JScrollPane(resultsPane);
         toolbar = new CardsViewToolbar();
@@ -116,7 +115,7 @@ public class CardViewPane extends JPanel {
         cardTablePanel.getColumnModel().getColumn(5).setPreferredWidth(5);
     }
 
-    public void refresh(ArrayList<Card> cards) {
+    public void refreshCardsTable(ArrayList<Card> cards) {
         cardTableModel.setData(cards);
         cardTableModel.fireTableDataChanged();
     }

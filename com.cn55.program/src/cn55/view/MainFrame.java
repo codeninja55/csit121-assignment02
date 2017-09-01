@@ -46,8 +46,9 @@ public class MainFrame extends JFrame {
         //this.summaryPanel = new SummaryPanel();
 
         /* Pass in copies of the ArrayList instead of hte db data */
-        cardViewPane.refresh(cards);
-        purchaseViewPane.refresh(purchases);
+        cardViewPane.refreshCardsTable(cards);
+        purchaseViewPane.refreshPurchasesTable(purchases);
+        categoriesViewPane.refreshCategoriesTable(categories, 0D);
 
         // Add panels, toolbars, and panes to main Frame
         tabPane.setBackground(Style.blueGrey500());

@@ -1,29 +1,28 @@
 package cn55.view.PurchaseView;
 
-import cn55.model.CardModel.CategoriesComparator;
+import cn55.model.CategoriesComparator;
+import cn55.model.Category;
 import cn55.model.PurchaseType;
 import cn55.view.ButtonListener;
 import cn55.model.CardType;
 import cn55.view.CustomComponents.*;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.Map;
 
 public class PurchaseForm extends JPanel {
     private int generatedReceiptID;
+    // TODO - Implement this back into Purchase with New Card form
+    private String generatedCardID;
 
     private DefaultComboBoxModel<String> existingCardModel;
-    private ArrayList<String> categoriesList;
+    private ArrayList<Category> categoriesList;
     private HashMap<JLabel[], FormTextField> categoriesMap;
 
     private JComboBox<String> purchaseTypeCombo;
@@ -454,16 +453,12 @@ public class PurchaseForm extends JPanel {
 
     public void setCardModel(DefaultComboBoxModel<String> cardModel) { this.existingCardModel = cardModel; }
 
-    public void setCategoriesList(ArrayList<String> categoriesList) {
+    public void setCategoriesList(ArrayList<Category> categoriesList) {
         this.categoriesList = categoriesList;
     }
 
     private void createCategoriesListForm() {
         HashMap<JLabel[], FormTextField> categoriesMap = new HashMap<>();
-        categoriesList.sort(new CategoriesComparator());
-        /* TESTING */
-        System.err.println("Purchase Form");
-        System.out.println(categoriesList);
         for (int i = 0; i < categoriesList.size(); i++) {
             JLabel[] labelArr = new JLabel[2];
             String categoryStr = categoriesList.get(i) + ": $";

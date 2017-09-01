@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class PurchaseViewPane extends JPanel {
     private PurchaseTableModel purchaseTableModel;
-    private JTable purchaseTablePanel;
+    private JTable purchaseTablePane;
     private PurchaseForm purchaseForm;
     private PurchaseViewToolbar toolbar;
     private JTextPane resultsPane;
@@ -19,7 +19,7 @@ public class PurchaseViewPane extends JPanel {
     /*============================== CONSTRUCTORS ==============================*/
     public PurchaseViewPane() {
         purchaseTableModel = new PurchaseTableModel();
-        purchaseTablePanel = new JTable(purchaseTableModel);
+        purchaseTablePane = new JTable(purchaseTableModel);
         toolbar = new PurchaseViewToolbar();
         purchaseForm = new PurchaseForm();
         resultsPane = new JTextPane();
@@ -32,9 +32,9 @@ public class PurchaseViewPane extends JPanel {
 
         add(toolbar, BorderLayout.NORTH);
 
-        purchaseTablePanel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        purchaseTablePane.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tableFormatter();
-        add(new JScrollPane(purchaseTablePanel), BorderLayout.CENTER);
+        add(new JScrollPane(purchaseTablePane), BorderLayout.CENTER);
 
         add(purchaseForm, BorderLayout.WEST);
         //add(deletePurchaseForm, BorderLayout.WEST);
@@ -55,19 +55,19 @@ public class PurchaseViewPane extends JPanel {
     }
 
     /*============================== MUTATORS ==============================*/
-    public void refresh(ArrayList<Purchase> purchases) {
+    public void refreshPurchasesTable(ArrayList<Purchase> purchases) {
         purchaseTableModel.setData(purchases);
         purchaseTableModel.fireTableDataChanged();
     }
 
     private void tableFormatter() {
-        purchaseTablePanel.setRowHeight(45);
-        purchaseTablePanel.setFont(Style.tableDataFont());
-        purchaseTablePanel.getColumnModel().getColumn(0).setCellRenderer(Style.leftRenderer());
-        purchaseTablePanel.getColumnModel().getColumn(1).setCellRenderer(Style.centerRenderer());
-        purchaseTablePanel.getColumnModel().getColumn(2).setCellRenderer(Style.centerRenderer());
-        purchaseTablePanel.getColumnModel().getColumn(3).setCellRenderer(Style.rightRenderer());
-        purchaseTablePanel.getColumnModel().getColumn(4).setCellRenderer(Style.centerRenderer());
+        purchaseTablePane.setRowHeight(45);
+        purchaseTablePane.setFont(Style.tableDataFont());
+        purchaseTablePane.getColumnModel().getColumn(0).setCellRenderer(Style.leftRenderer());
+        purchaseTablePane.getColumnModel().getColumn(1).setCellRenderer(Style.centerRenderer());
+        purchaseTablePane.getColumnModel().getColumn(2).setCellRenderer(Style.centerRenderer());
+        purchaseTablePane.getColumnModel().getColumn(3).setCellRenderer(Style.rightRenderer());
+        purchaseTablePane.getColumnModel().getColumn(4).setCellRenderer(Style.centerRenderer());
     }
 
     /*============================== ACCESSORS ==============================*/
@@ -75,22 +75,24 @@ public class PurchaseViewPane extends JPanel {
 
     public PurchaseViewToolbar getPurchaseToolbar() { return toolbar; }
 
-    public JTable getPurchaseTablePanel() {
-        return purchaseTablePanel;
+    public JTable getPurchaseTablePane() {
+        return purchaseTablePane;
     }
 
     public JTextPane getResultsPane() {
         return resultsPane;
     }
 
+    /*=========================================================================*/
     /*============================== INNER CLASS ==============================*/
+    /*=========================================================================*/
     public class PurchaseTableModel extends AbstractTableModel {
 
         private ArrayList<Purchase> purchases;
         private String[] tableHeaders = {"Receipt ID","Card ID", "Card Type",
                 "Total Amount","Purchase Time"};
 
-        public void setData (ArrayList<Purchase> purchases) { this.purchases = purchases; }
+        void setData (ArrayList<Purchase> purchases) { this.purchases = purchases; }
 
         public String getColumnName(int column) {
             return tableHeaders[column];
