@@ -5,6 +5,8 @@ import cn55.model.CardModel.*;
 import cn55.model.*;
 import cn55.view.*;
 import cn55.view.CardView.*;
+import cn55.view.CategoriesView.CategoriesForm;
+import cn55.view.CategoriesView.CategoriesViewPane;
 import cn55.view.CustomComponents.*;
 import cn55.view.DeleteForm.*;
 import cn55.view.MainFrame;
@@ -29,6 +31,8 @@ class Program {
     private PurchaseViewPane purchaseViewPane;
     private PurchaseViewToolbar purchaseViewToolbar;
     private PurchaseForm purchaseForm;
+    private CategoriesViewPane categoriesViewPane;
+    private CategoriesForm categoriesForm;
 
     private static Set<Double> testAmountSet = new HashSet<>();
 
@@ -50,6 +54,9 @@ class Program {
         this.purchaseViewPane = mainFrame.getPurchaseViewPane();
         this.purchaseForm = purchaseViewPane.getPurchaseForm();
         this.purchaseViewToolbar = purchaseViewPane.getPurchaseToolbar();
+
+        this.categoriesViewPane = mainFrame.getCategoriesViewPane();
+        this.categoriesForm = categoriesViewPane.getCreateCategoryForm();
 
         eventControlling();
     }
@@ -233,7 +240,7 @@ class Program {
             } else if (tabPane.getSelectedComponent() != cardViewPane) {
                 cardViewPane.getResultsPane().setVisible(false);
                 removeCardForms();
-            }
+            } else if (tabPane.getSelectedComponent() != )
         });
 
         /* CARD VIEW TOOLBAR REGISTRATION & HANDLER - SEARCH BUTTON */
@@ -540,6 +547,22 @@ class Program {
         }
     }
 
+    private void removeCreatePurchaseForm() {
+        /* REMOVE THE FORM FROM PURCHASE */
+        purchaseForm.getPurchaseTypeCombo().setSelectedIndex(0);
+        purchaseForm.setVisible(false);
+        purchaseForm.remove(purchaseForm.getCreatePurchaseForm());
+        //purchaseViewPane.getPurchaseToolbar().disableCreatePurchaseButton(false);
+    }
+
+    private void removeCategoryForms() {
+        for (Component comp : cardViewPane.getComponents()) {
+            if (comp instanceof CategoriesForm) {
+                categoriesViewPane.remove(comp);
+            }
+        }
+    }
+
     private void reenableAllButtons(JPanel toolbar) {
         /*for (Component btn : toolbar.getComponents()) {
             if (!btn.isEnabled()) {
@@ -552,14 +575,6 @@ class Program {
         } else if (toolbar instanceof PurchaseViewToolbar) {
 
         }
-    }
-
-    private void removeCreatePurchaseForm() {
-        /* REMOVE THE FORM FROM PURCHASE */
-        purchaseForm.getPurchaseTypeCombo().setSelectedIndex(0);
-        purchaseForm.setVisible(false);
-        purchaseForm.remove(purchaseForm.getCreatePurchaseForm());
-        purchaseViewPane.getPurchaseToolbar().disableCreatePurchaseButton(false);
     }
 
     private boolean validateCatValueFields(HashMap<JLabel[], FormTextField> rawCategories) {
