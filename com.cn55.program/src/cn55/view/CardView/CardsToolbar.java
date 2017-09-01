@@ -61,20 +61,6 @@ public class CardsToolbar extends JPanel {
 
     /*============================== MUTATORS ==============================*/
 
-    public void disableToolbarButton(String button, boolean isDisabled) {
-        switch (button) {
-            case "SearchButton":
-                searchBtn.setEnabled(!isDisabled);
-                break;
-            case "CreateButton":
-                createCardBtn.setEnabled(!isDisabled);
-                break;
-            case "DeleteButton":
-                deleteCardBtn.setEnabled(!isDisabled);
-                break;
-        }
-    }
-
     /*============================== ACCESSORS ==============================*/
     public JPanel getLeftToolbar() {
         return leftToolbar;
