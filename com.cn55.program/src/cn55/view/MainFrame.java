@@ -49,7 +49,7 @@ public class MainFrame extends JFrame {
         /* Pass in copies of the ArrayList instead of hte db data */
         cardViewPane.refreshCardsTable(cards);
         purchaseViewPane.refreshPurchasesTable(purchases);
-        categoriesViewPane.refreshCategoriesTable(categories, 0D);
+        categoriesViewPane.refreshCategoriesTable(categories);
 
         // Add panels, toolbars, and panes to main Frame
         tabPane.setBackground(Style.blueGrey500());
