@@ -225,17 +225,15 @@ class Program {
             }
 
             /* DESELECTED LISTENERS */
-            /*if (tabPane.getSelectedComponent() != purchaseViewPane) {
+            if (tabPane.getSelectedComponent() != purchaseViewPane) {
+                purchaseViewPane.getResultsPane().setVisible(false);
                 if (purchaseForm.getCreatePurchaseForm() != null) {
                     removeCreatePurchaseForm();
-                    purchaseViewPane.getResultsPane().setVisible(false);
                 }
             } else if (tabPane.getSelectedComponent() != cardViewPane) {
                 cardViewPane.getResultsPane().setVisible(false);
-                if (cardForm.getCreateCardForm() != null) {
-                    removeCardForms();
-                }
-            }*/
+                removeCardForms();
+            }
         });
 
         /* CARD VIEW TOOLBAR REGISTRATION & HANDLER - SEARCH BUTTON */
@@ -250,8 +248,8 @@ class Program {
                 cardViewPane.getSearchForm().setCancelListener(new ButtonListener() {
                     public void buttonActionOccurred() {
                         cardViewPane.getSearchForm().setVisible(false);
-                        removeCardForms();
                         cardViewPane.getResultsPane().setVisible(false);
+                        removeCardForms();
                     }
                 });
 
@@ -534,8 +532,10 @@ class Program {
 
     /*============================== MUTATORS  ==============================*/
     private void removeCardForms() {
-        if (cardViewPane.getComponents().length >= 4) {
-            cardViewPane.remove(3);
+        for (Component comp : cardViewPane.getComponents()) {
+            if (comp instanceof CardForm || comp instanceof DeleteCardForm || comp instanceof SearchForm) {
+                cardViewPane.remove(comp);
+            }
         }
     }
 
