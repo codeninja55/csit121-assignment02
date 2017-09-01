@@ -19,7 +19,7 @@ public class CategoriesViewPane extends JPanel {
     private Toolbar toolbar;
     private JTable categoriesTablePane;
 
-    //private CreateCategoryForm createCategoryForm;
+    private CategoriesForm createCategoryForm;
     //private DeleteCategoryForm deleteCategoryForm;
 
     private ToolbarButton createCategoryBtn;
@@ -54,6 +54,10 @@ public class CategoriesViewPane extends JPanel {
         tableFormatter();
         add(tableScrollPane, BorderLayout.CENTER);
 
+
+        /* TESTING PURCHASE FORM VIEW */
+        add(new CategoriesForm(), BorderLayout.WEST);
+
     }
 
     /*============================== MUTATORS  ==============================*/
@@ -74,6 +78,10 @@ public class CategoriesViewPane extends JPanel {
         categoriesTablePane.getColumnModel().getColumn(3).setCellRenderer(Style.rightRenderer());
     }
 
+    public void setCreateCategoryForm(CategoriesForm createCategoryForm) {
+        this.createCategoryForm = createCategoryForm;
+    }
+
     public void refreshCategoriesTable(ArrayList<Category> categories) {
 
         categoriesTableModel.setData(categories);
@@ -87,6 +95,10 @@ public class CategoriesViewPane extends JPanel {
 
     public ToolbarButton getDeleteCategoryBtn() {
         return deleteCategoryBtn;
+    }
+
+    public CategoriesForm getCreateCategoryForm() {
+        return createCategoryForm;
     }
 
     /*=========================================================================*/
