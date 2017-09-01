@@ -4,8 +4,6 @@ import cn55.view.ButtonListener;
 import cn55.view.CustomComponents.*;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,6 +16,7 @@ public class DeleteCardForm extends JPanel {
     private ErrorLabel errorLabel;
     private ErrorLabel ruleErrLabel;
     private FormButton deleteBtn;
+    private JButton cancelBtn;
 
     private ButtonListener cancelListener;
     private DeleteListener deleteListener;
@@ -26,18 +25,13 @@ public class DeleteCardForm extends JPanel {
     public DeleteCardForm() {
 
         deleteForm = new JPanel(new GridBagLayout());
-        //deleteLabel = new JLabel("Enter CARD ID to Delete Card");
-        JButton cancelBtn = new JButton("Cancel Delete");
+        cancelBtn = new JButton("Cancel Delete");
         cardIDLabel = new FormLabel("Delete by Card ID");
-        cardIDLabel.setVisible(true);
         cardIDTextField = new FormTextField(20);
-        cardIDTextField.setVisible(true);
         errorLabel = new ErrorLabel("CARD DOES NOT EXIST");
         ruleErrLabel = new ErrorLabel("INVALID CARD ID NUMBER");
         deleteBtn = new FormButton("Delete Card");
-        deleteBtn.setVisible(true);
 
-        setName("DeleteForm");
         setLayout(new BorderLayout());
         Dimension dim = getPreferredSize();
         dim.width = 800;
@@ -47,12 +41,14 @@ public class DeleteCardForm extends JPanel {
 
         GridBagConstraints gc = new GridBagConstraints();
 
+        /*========== FIRST ROW ==========*/
         gc.fill = GridBagConstraints.NONE;
         gc.gridx = 0; gc.gridy = 0; gc.weightx = 1; gc.weighty = 0.2;
         gc.anchor = GridBagConstraints.PAGE_END;
         gc.insets = new Insets(20,0,0,0);
         deleteForm.add(cardIDLabel, gc);
 
+        /*========== NEW ROW ==========*/
         gc.gridy++; gc.gridx = 0; gc.weightx = 1; gc.weighty = 0.1;
         gc.anchor = GridBagConstraints.PAGE_START;
         gc.insets = new Insets(20,0,10,0);
@@ -62,16 +58,19 @@ public class DeleteCardForm extends JPanel {
         cardIDTextField.setPreferredSize(textFieldDim);
         deleteForm.add(cardIDTextField, gc);
 
+        /*========== NEW ROW - ERROR LABEL ==========*/
         gc.gridy++; gc.gridx = 0; gc.weightx = 1; gc.weighty = 0.1;
         gc.anchor = GridBagConstraints.PAGE_START;
         gc.insets = new Insets(0,0,0,0);
         deleteForm.add(errorLabel, gc);
 
+        /*========== NEW ROW - ERROR LABEL ==========*/
         gc.gridy++; gc.gridx = 0; gc.weightx = 1; gc.weighty = 0.1;
         gc.anchor = GridBagConstraints.PAGE_START;
         gc.insets = new Insets(0,0,0,0);
         deleteForm.add(ruleErrLabel, gc);
 
+        /*========== BUTTON ROW ==========*/
         gc.gridy++; gc.gridx = 0; gc.weightx = 1; gc.weighty = 3;
         gc.gridwidth = 1; gc.gridheight = 1;
         gc.anchor = GridBagConstraints.PAGE_START;
@@ -101,6 +100,13 @@ public class DeleteCardForm extends JPanel {
                 cancelListener.buttonActionOccurred();
         });
 
+        /* SET FORM CUSTOM COMPONENTS VISIBLE */
+        for (Component c : deleteForm.getComponents()) {
+            if (c instanceof FormLabel || c instanceof FormTextField || c instanceof FormButton) {
+                c.setVisible(true);
+            }
+        }
+        //Can be visible because only created when Toolbar button is pressed
         setVisible(false);
     }
 
