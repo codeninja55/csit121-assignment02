@@ -13,11 +13,9 @@ import cn55.view.SearchForm.*;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -86,7 +84,7 @@ class Program {
         cat1.put("Fashion", 0D);
         cat1.put("Deals", 500D);
 
-        shop.makePurchase("Cash", db.generateReceiptID(), cat1);
+        shop.makePurchase("Cash", Database.generateReceiptID(), cat1);
 
         Map<String, Double> cat7 = new HashMap<>();
         cat7.put("Toys", 300D);
@@ -96,7 +94,7 @@ class Program {
         cat7.put("Fashion", 20D);
         cat7.put("Deals", 50D);
 
-        shop.makePurchase("Cash", db.generateReceiptID(), cat7);
+        shop.makePurchase("Cash", Database.generateReceiptID(), cat7);
 
         Map<String, Double> cat8 = new HashMap<>();
         cat8.put("Toys", 100D);
@@ -106,7 +104,7 @@ class Program {
         cat8.put("Fashion", 0D);
         cat8.put("Deals", 50D);
 
-        shop.makePurchase("Cash", db.generateReceiptID(), cat8);
+        shop.makePurchase("Cash", Database.generateReceiptID(), cat8);
 
         // AnonCard Test
         db.addCards(new AnonCard()); // MC10001
@@ -119,7 +117,17 @@ class Program {
         cat2.put("Toys", 100D);
         cat2.put("Motors", 0D);
 
-        shop.makePurchase("MC10002",db.generateReceiptID(), cat2);
+        shop.makePurchase("MC10002",Database.generateReceiptID(), cat2);
+
+        Map<String, Double> cat21 = new HashMap<>();
+        cat21.put("Deals", 0D);
+        cat21.put("Electronics", 0D);
+        cat21.put("Fashion", 0D);
+        cat21.put("Other", 0D);
+        cat21.put("Toys", 1000D);
+        cat21.put("Motors", 2000D);
+
+        shop.makePurchase("MC10002",Database.generateReceiptID(), cat21);
 
         db.addCards(new AnonCard()); // MC10002
 
@@ -131,7 +139,7 @@ class Program {
         cat9.put("Toys", 0D);
         cat9.put("Motors", 0D);
 
-        shop.makePurchase("MC10002",db.generateReceiptID(), cat9);
+        shop.makePurchase("MC10002",Database.generateReceiptID(), cat9);
 
         // BasicCard Test
         db.addCards(new BasicCard("Natasha Romanov",
@@ -145,7 +153,7 @@ class Program {
         cat3.put("Toys", 1000D);
         cat3.put("Deals", 2000D);
 
-        shop.makePurchase("MC10003",db.generateReceiptID(), cat3);
+        shop.makePurchase("MC10003",Database.generateReceiptID(), cat3);
 
         // BasicCard Test 2
         db.addCards(new BasicCard("Steve Rogers",
@@ -159,7 +167,7 @@ class Program {
         cat4.put("Toys", 100D);
         cat4.put("Deals", 2000D);
 
-        shop.makePurchase("MC10004",db.generateReceiptID(), cat4);
+        shop.makePurchase("MC10004",Database.generateReceiptID(), cat4);
 
         // PremiumCard Test
         db.addCards(new PremiumCard("Tony Stark",
@@ -173,7 +181,7 @@ class Program {
         cat5.put("Other", 500D);
         cat5.put("Fashion", 2000D);
 
-        shop.makePurchase("MC10005",db.generateReceiptID(), cat5);
+        shop.makePurchase("MC10005",Database.generateReceiptID(), cat5);
 
         // PremiumCard Test 2
         db.addCards(new PremiumCard("Nick Fury",
@@ -187,7 +195,7 @@ class Program {
         cat6.put("Other", 500D);
         cat6.put("Fashion", 2000D);
 
-        shop.makePurchase("MC10006",db.generateReceiptID(), cat6);
+        shop.makePurchase("MC10006",Database.generateReceiptID(), cat6);
 
         db.addCards(new AnonCard()); //MC10007
         db.addCards(new AnonCard()); //MC10008
@@ -207,7 +215,7 @@ class Program {
         cat10.put("Fashion", 0D);
         cat10.put("Deals", 0D);
 
-        shop.makePurchase("Cash", db.generateReceiptID(), cat10);
+        shop.makePurchase("Cash", Database.generateReceiptID(), cat10);
 
         Map<String, Double> cat11 = new HashMap<>();
         cat11.put("Toys", 0D);
@@ -217,7 +225,7 @@ class Program {
         cat11.put("Fashion", 0D);
         cat11.put("Deals", 50D);
 
-        shop.makePurchase("Cash", db.generateReceiptID(), cat11);
+        shop.makePurchase("Cash", Database.generateReceiptID(), cat11);
     }
 
     /*============================== REGISTER AND HANDLE EVENTS ==============================*/
