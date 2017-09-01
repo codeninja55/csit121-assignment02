@@ -6,7 +6,6 @@ import cn55.view.CardView.*;
 import cn55.view.CategoriesView.*;
 import cn55.view.CustomComponents.Style;
 import cn55.view.PurchaseView.*;
-import cn55.view.SummaryView.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,8 +21,8 @@ public class MainFrame extends JFrame {
 
     private JTabbedPane tabPane;
     private JPanel welcomePanel;
-    private CardViewPanel cardViewPanel;
-    private PurchaseViewPanel purchasePanel;
+    private CardViewPane cardViewPane;
+    private PurchaseViewPane purchasePanel;
     private CategoriesPanel categoriesPanel;
     //private SummaryPanel summaryPanel;
 
@@ -42,13 +41,13 @@ public class MainFrame extends JFrame {
         welcomeLabel.setFont(new Font("Verdana", Font.BOLD,56));
         welcomePanel.add(welcomeLabel);
 
-        this.cardViewPanel = new CardViewPanel();
-        this.purchasePanel = new PurchaseViewPanel();
+        this.cardViewPane = new CardViewPane();
+        this.purchasePanel = new PurchaseViewPane();
         this.categoriesPanel = new CategoriesPanel();
         //this.summaryPanel = new SummaryPanel();
 
         /* Pass in copies of the ArrayList instead of hte db data */
-        cardViewPanel.refresh(cards);
+        cardViewPane.refresh(cards);
         purchasePanel.refresh(purchases);
 
         // Add panels, toolbars, and panes to main Frame
@@ -60,7 +59,7 @@ public class MainFrame extends JFrame {
 
         // Add tabs to tabPane group
         tabPane.addTab("Welcome", welcomePanel);
-        tabPane.addTab("Cards", cardViewPanel);
+        tabPane.addTab("Cards", cardViewPane);
         tabPane.addTab("Purchases", purchasePanel);
         tabPane.addTab("Categories", categoriesPanel);
         //tabPane.addTab("Summary", summaryPanel);
@@ -77,7 +76,7 @@ public class MainFrame extends JFrame {
     /*============================== ACCESSORS  ==============================*/
     public JTabbedPane getTabPane() { return tabPane; }
 
-    public CardViewPanel getCardViewPanel() { return cardViewPanel; }
+    public CardViewPane getCardViewPane() { return cardViewPane; }
 
-    public PurchaseViewPanel getPurchasePanel() { return purchasePanel; }
+    public PurchaseViewPane getPurchasePanel() { return purchasePanel; }
 }

@@ -26,7 +26,7 @@ public class Assignment2 {
         UIManager.put("ComboBox.buttonBackground", Style.red500());
         UIManager.put("ComboBox.buttonHighlight", Style.grey50());
         UIManager.put("ComboBox.selectionBackground", Style.red300());
-        UIManager.put("ComboBox.selectionForeground", Style.redA700());
+        UIManager.put("ComboBox.selectionForeground", Style.grey50());
 
         UIManager.put("Button.background", Style.red900());
         UIManager.put("Button.foreground", Style.grey50());

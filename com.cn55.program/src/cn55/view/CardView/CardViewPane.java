@@ -10,16 +10,13 @@ import cn55.view.SearchForm.SearchForm;
 import cn55.view.ToolbarButtonListener;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.TitledBorder;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class CardViewPanel extends JPanel {
+public class CardViewPane extends JPanel {
 
     private CardTableModel cardTableModel;
     private JTable cardTablePanel;
@@ -29,7 +26,7 @@ public class CardViewPanel extends JPanel {
     private SearchForm searchForm;
     private CardForm cardForm;
     private DeleteCardForm deleteForm;
-    private CardsToolbar toolbar;
+    private CardsViewToolbar toolbar;
 
     private ToolbarButton createCardBtn;
     private ToolbarButton deleteCardBtn;
@@ -40,14 +37,14 @@ public class CardViewPanel extends JPanel {
     private ToolbarButtonListener deleteCardListener;
 
     /*============================== CONSTRUCTORS ==============================*/
-    public CardViewPanel() {
+    public CardViewPane() {
         cardTableModel = new CardTableModel();
         cardTablePanel = new JTable(cardTableModel);
         tableScrollPane = new JScrollPane(cardTablePanel);
         tableScrollPane.setName("TableScrollPane");
         resultsPane = new JTextPane();
         //resultsScrollPane = new JScrollPane(resultsPane);
-        toolbar = new CardsToolbar();
+        toolbar = new CardsViewToolbar();
 
         setLayout(new BorderLayout());
         // Formatting for Table
@@ -125,7 +122,7 @@ public class CardViewPanel extends JPanel {
     }
 
     /*============================== ACCESSORS  ==============================*/
-    public CardsToolbar getCardToolbar() {
+    public CardsViewToolbar getCardToolbar() {
         return toolbar;
     }
 

@@ -4,26 +4,23 @@ import cn55.model.Purchase;
 import cn55.view.CustomComponents.Style;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.TitledBorder;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class PurchaseViewPanel extends JPanel {
+public class PurchaseViewPane extends JPanel {
     private PurchaseTableModel purchaseTableModel;
     private JTable purchaseTablePanel;
     private PurchaseForm purchaseForm;
-    private PurchaseToolbar toolbar;
+    private PurchaseViewToolbar toolbar;
     private JTextPane resultsPane;
-    JPopupMenu tablePopup;
+    private JPopupMenu tablePopup;
 
     /*============================== CONSTRUCTORS ==============================*/
-    public PurchaseViewPanel() {
+    public PurchaseViewPane() {
         purchaseTableModel = new PurchaseTableModel();
         purchaseTablePanel = new JTable(purchaseTableModel);
-        toolbar = new PurchaseToolbar();
+        toolbar = new PurchaseViewToolbar();
         purchaseForm = new PurchaseForm();
         resultsPane = new JTextPane();
         tablePopup = new JPopupMenu();
@@ -76,7 +73,7 @@ public class PurchaseViewPanel extends JPanel {
     /*============================== ACCESSORS ==============================*/
     public PurchaseForm getPurchaseForm() { return purchaseForm; }
 
-    public PurchaseToolbar getPurchaseToolbar() { return toolbar; }
+    public PurchaseViewToolbar getPurchaseToolbar() { return toolbar; }
 
     public JTable getPurchaseTablePanel() {
         return purchaseTablePanel;
