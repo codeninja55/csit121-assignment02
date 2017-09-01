@@ -45,7 +45,7 @@ class Program {
         this.cardViewPane = mainFrame.getCardViewPane();
         this.cardToolbar = cardViewPane.getCardToolbar();
 
-        this.purchaseViewPane = mainFrame.getPurchasePanel();
+        this.purchaseViewPane = mainFrame.getPurchaseViewPane();
         this.purchaseForm = purchaseViewPane.getPurchaseForm();
         this.purchaseViewToolbar = purchaseViewPane.getPurchaseToolbar();
 

@@ -20,10 +20,9 @@ import java.util.ArrayList;
 public class MainFrame extends JFrame {
 
     private JTabbedPane tabPane;
-    private JPanel welcomePanel;
     private CardViewPane cardViewPane;
-    private PurchaseViewPane purchasePanel;
-    private CategoriesPanel categoriesPanel;
+    private PurchaseViewPane purchaseViewPane;
+    private CategoriesViewPane categoriesViewPane;
     //private SummaryPanel summaryPanel;
 
     public MainFrame(ArrayList<Purchase> purchases, ArrayList<Card> cards) {
@@ -34,21 +33,21 @@ public class MainFrame extends JFrame {
         this.tabPane = new JTabbedPane();
 
         // Initialize panels for tabs
-        this.welcomePanel = new JPanel();
+        JPanel welcomePane = new JPanel();
         // Without configuring, GridBagLayout automatically puts in middle
-        welcomePanel.setLayout(new GridBagLayout());
+        welcomePane.setLayout(new GridBagLayout());
         JLabel welcomeLabel = new JLabel("Welcome to Marvel Rewards");
         welcomeLabel.setFont(new Font("Verdana", Font.BOLD,56));
-        welcomePanel.add(welcomeLabel);
+        welcomePane.add(welcomeLabel);
 
         this.cardViewPane = new CardViewPane();
-        this.purchasePanel = new PurchaseViewPane();
-        this.categoriesPanel = new CategoriesPanel();
+        this.purchaseViewPane = new PurchaseViewPane();
+        this.categoriesViewPane = new CategoriesViewPane();
         //this.summaryPanel = new SummaryPanel();
 
         /* Pass in copies of the ArrayList instead of hte db data */
         cardViewPane.refresh(cards);
-        purchasePanel.refresh(purchases);
+        purchaseViewPane.refresh(purchases);
 
         // Add panels, toolbars, and panes to main Frame
         tabPane.setBackground(Style.blueGrey500());
@@ -58,14 +57,14 @@ public class MainFrame extends JFrame {
         add(tabPane, BorderLayout.CENTER);
 
         // Add tabs to tabPane group
-        tabPane.addTab("Welcome", welcomePanel);
+        tabPane.addTab("Welcome", welcomePane);
         tabPane.addTab("Cards", cardViewPane);
-        tabPane.addTab("Purchases", purchasePanel);
-        tabPane.addTab("Categories", categoriesPanel);
+        tabPane.addTab("Purchases", purchaseViewPane);
+        tabPane.addTab("Categories", categoriesViewPane);
         //tabPane.addTab("Summary", summaryPanel);
 
         // DEFAULT PANE BEGIN AT
-        tabPane.setSelectedIndex(2);
+        tabPane.setSelectedIndex(3);
 
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setUndecorated(false);
@@ -78,5 +77,9 @@ public class MainFrame extends JFrame {
 
     public CardViewPane getCardViewPane() { return cardViewPane; }
 
-    public PurchaseViewPane getPurchasePanel() { return purchasePanel; }
+    public PurchaseViewPane getPurchaseViewPane() { return purchaseViewPane; }
+
+    public CategoriesViewPane getCategoriesViewPane() {
+        return categoriesViewPane;
+    }
 }
