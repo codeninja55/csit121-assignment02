@@ -13,16 +13,41 @@ public class Shop {
     // default
     public Shop() {
         this.db = new Database();
-        this.createBaseCatMap(db.getCategoriesList());
+        generateDefaultCategories();
+        Database.mapCategoriesTotalMap(db.getCategories());
     }
 
     /*============================== MUTATORS  ==============================*/
-    public void makePurchase(String cardID, int receiptID, Map<String, Double> categories) {
+    private void generateDefaultCategories() {
+        ArrayList<Category> categories = db.getCategories();
+        categories.add(new Category("Motors", "#Description", 0D));
+        categories.add(new Category("Electronics", "#Description", 0D));
+        categories.add(new Category("Fashion", "#Description", 0D));
+        categories.add(new Category("Toys", "#Description", 0D));
+        categories.add(new Category("Deals", "#Description", 0D));
+        categories.add(new Category("Other", "#Description", 0D));
+
+        for (Category item : categories) {
+            if (item.getName().equals("Other")) {
+                item.setId(199);
+            }
+        }
+
+        categories.sort(new CategoriesComparator());
+    }
+
+    public void makeCategory(Category category) {
+        db.addCategory(category);
+    }
+
+    public void makePurchase(String cardID, int receiptID, HashMap<Integer, Category> categories) {
 
         if (cardID.equals(CardType.Cash.getName())) {
+            updateCategoriesTotalMap(categories);
             db.addPurchase(new Purchase(categories, receiptID));
         } else {
             if (cardExists(cardID)) {
+                updateCategoriesTotalMap(categories);
                 Card card = db.getCards().get(db.getCardMap().get(cardID));
                 String cardType = card.getCardType();
                 Purchase newPurchase = new Purchase(cardID, cardType, categories, receiptID);
@@ -84,109 +109,13 @@ public class Shop {
         }
     }
 
-    /*This method takes the ArrayList from the userCategories method and adds or creates
-    * them to store in the HashMap instance variable categories*/
-    private void createBaseCatMap(ArrayList<String> categoriesList) {
-        for (String item : categoriesList)
-            db.addCategory(item, 0D);
+    private void updateCategoriesTotalMap(HashMap<Integer, Category> categories) {
+
+        for (HashMap.Entry<Integer, Category> item : categories.entrySet()) {
+            Double newTotal = Database.categoriesTotalMap.get(item.getKey()) + item.getValue().getAmount();
+            Database.categoriesTotalMap.put(item.getKey(), newTotal);
+        }
     }
-
-    /*This method allows users to create a whole new set of categories
-    * or add to the currently stored categories after putting the ArrayList
-    * through the createCategories method to store them as a HashMap.*/
-    /*private ArrayList<String> userCategories(boolean auto) {
-        ArrayList<String> categoriesList = new ArrayList<>();
-        String option;
-
-        if (auto) {
-            *//*If the auto flag is true, the categories list will automatically
-            * populate with the default*//*
-            categoriesList.add("Motors");
-            categoriesList.add("Electronics");
-            categoriesList.add("Fashion");
-            categoriesList.add("Toys");
-            categoriesList.add("Sporting Goods");
-            categoriesList.add("Deals");
-            categoriesList.add("Other");
-
-            return categoriesList;
-        } else {
-            System.out.printf("%s%n%s%n%s%n%s%n%n",
-                    "Please type the names for a category to add to the list.",
-                    "Type [ default ] to use a template list.",
-                    "Template: Deals, Electronics, Toys, Sporting Goods, Fashion, Motors",
-                    "***** Type [ finished ] or [ x ] to save and quit *****");
-            System.out.print(">  ");
-
-            while (input.hasNextLine()) {
-                System.out.print(">  ");
-                option = input.nextLine();
-
-                if (option.equalsIgnoreCase("x") ||
-                        option.equalsIgnoreCase("finished")) {
-                    break;
-                } else if (option.equalsIgnoreCase("default") || option.equals("")) {
-                    userCategories(true);
-                } else {
-                    categoriesList.add(option);
-                }
-            }
-
-            System.out.println("\nYou have typed the following list:");
-
-            for (String item : categoriesList)
-                System.out.println(item);
-
-            return categoriesList; }
-    } // end of userCategories method*/
-
-    /*This method allows user to input the total amount for each category*/
-    /*private void setCategories() {
-
-        *//*Creates a new HashMap for the Menu
-        * Loop through the categories HashMap, retrieve the keys and place them in
-        * a new HashMap with an int as the key. This way the menu option has an int
-        * to print to the screen. *//*
-        Map<Integer, String> categoriesMenu = new HashMap<>();
-        int counter = 1;
-
-        for (Map.Entry<String, Double> item : db.getCategories().entrySet()) {
-            categoriesMenu.put(counter,item.getKey());
-            counter++;
-        }
-
-        *//*Displays the menu to the screen and through options of categories for user
-        * to select with an int input. It will then remove than item fromm the menu
-        * HashMap so the user cannot input a value twice. Exits loop when user enters 0
-        * or presses enter on a blank newline character *//*
-        while (true) {
-            System.out.printf("%nPlease select cn55.model.Purchase Category from below to add amount:%n");
-            System.out.printf("[ 0 ] %s%n", "Finished");
-
-            for (Map.Entry<Integer, String> item : categoriesMenu.entrySet())
-                System.out.printf("[ %d ] %s%n", item.getKey(), item.getValue());
-
-            String selection = "";
-            boolean sentinel = true;
-
-            for (Map.Entry<Integer, String> item : categoriesMenu.entrySet()) {
-                selection = item.getValue();
-                sentinel = false;
-            }
-
-            if (sentinel)
-                selection = "";
-
-            if (selection.isEmpty()) {
-                break;
-            } else {
-                System.out.printf("Enter Total Amount for %s Category:  ", selection);
-                double categoryAmount = input.nextDouble();
-                db.addCategory(selection, categoryAmount);
-                categoriesMenu.remove(choice);
-            }
-        }
-    } // end of setCategories method*/
 
     /*This method creates a container to store the number of thresholds with
      *each being a String for the key and an 2 int Array for min and max values*/
@@ -248,8 +177,7 @@ public class Shop {
         return thresholdResults;
     }*/
 
-    /*######################### GETTERS #########################*/
-
+    /*============================== ACCESSORS  ==============================*/
     public Database getDatabase() { return db; }
 
     /*######################### HELPERS #########################*/
@@ -266,7 +194,7 @@ public class Shop {
         * and the value being an array. *//*
         Map<String, ArrayList<Double>> categoryTotal = new HashMap<>();
 
-        for (Map.Entry<String, Double> item : db.getCategories().entrySet())
+        for (Map.Entry<String, Double> item : db.getCategoriesMap().entrySet())
             categoryTotal.put(item.getKey(), new ArrayList<>());
 
         // Loop through purchase ArrayList and get the categories from each purchase
