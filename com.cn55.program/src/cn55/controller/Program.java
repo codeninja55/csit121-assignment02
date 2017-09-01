@@ -432,7 +432,30 @@ class Program {
             }
         });
 
-        /* PURCHASE VIEW TOOLBAR SORT REGISTRATION & HANDLER - SORT */
+        /* TOOLBAR VIEW DETAILS BUTTON */
+        purchaseToolbar.getViewPurchaseBtn().addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int selectedRow = purchasePanel.getPurchaseTablePanel().getSelectedRow();
+                Integer receiptID = (Integer)purchasePanel.getPurchaseTablePanel().getValueAt(selectedRow, 0);
+
+                for (Purchase purchase : db.getPurchases()) {
+                    if (purchase.getReceiptID() == receiptID) {
+                        purchasePanel.getResultsPane().setText(purchase.toString());
+                        purchasePanel.getResultsPane().setVisible(true);
+                    }
+                }
+            }
+        });
+
+        /* RESULTS PANE MOUSE LISTENER */
+        purchasePanel.getResultsPane().addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                purchasePanel.getResultsPane().setVisible(false);
+            }
+        });
+
+        /* SORT COMBOBOX */
         purchaseToolbar.setSortPurchaseListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
