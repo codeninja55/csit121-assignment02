@@ -16,7 +16,7 @@ public class Purchase {
     private String cardID;
     private String cardType;
     private Date purchaseTime;
-    private Map<String, Double> categories;
+    private HashMap<Integer, Category> categories;
 
     /*============================== CONSTRUCTORS ==============================*/
     // Default constructor
@@ -29,7 +29,7 @@ public class Purchase {
     }
 
     // Constructor for cash purchases
-    Purchase(Map<String, Double> categories, int receiptID) {
+    Purchase(HashMap<Integer, Category> categories, int receiptID) {
         this.receiptID = receiptID;
         this.cardID = null;
         this.cardType = CardType.Cash.getName();
@@ -37,8 +37,8 @@ public class Purchase {
         this.purchaseTime = setPurchaseTime();
     }
 
-    // Constructor for model purchases
-    Purchase(String cardID, String cardType, Map<String, Double> categories, int receiptID) {
+    // Constructor for Card purchases
+    Purchase(String cardID, String cardType, HashMap<Integer, Category> categories, int receiptID) {
         this.receiptID = receiptID;
         this.cardID = cardID;
         this.cardType = cardType;
@@ -72,8 +72,6 @@ public class Purchase {
 
     public Date getPurchaseTime() { return purchaseTime; }
 
-    public Map<String, Double> getCategories() { return categories; }
-
     public String toString() {
 
         String firstOutput = String.format(
@@ -88,15 +86,18 @@ public class Purchase {
 
         String secondOutput = "";
 
-        for (Map.Entry<String, Double> item : this.categories.entrySet())
-            secondOutput += String.format("%n%-20s $%.2f", (item.getKey() + ":"), item.getValue());
+        for (HashMap.Entry<Integer, Category> item : this.categories.entrySet())
+            secondOutput += String.format("%n%-20s $%.2f", (item.getValue().getName() + ":"),
+                    item.getValue().getAmount());
 
         return firstOutput + secondOutput;
     }
 
     public double getCategoriesTotal() {
         double total = 0;
-        for (Map.Entry<String, Double> item : this.categories.entrySet()) total += item.getValue();
+        for (HashMap.Entry<Integer, Category> item : this.categories.entrySet())
+            total = total + item.getValue().getAmount();
+
         return total;
     }
 }
