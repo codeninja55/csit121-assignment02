@@ -4,6 +4,8 @@ import cn55.model.Purchase;
 import cn55.view.CustomComponents.Style;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
@@ -14,6 +16,8 @@ public class PurchasesPanel extends JPanel {
     private JTable purchaseTablePanel;
     private PurchaseForm purchaseForm;
     private PurchaseToolbar toolbar;
+    private JTextPane resultsPane;
+    JPopupMenu tablePopup;
 
     /*============================== CONSTRUCTORS ==============================*/
     public PurchasesPanel() {
@@ -21,14 +25,36 @@ public class PurchasesPanel extends JPanel {
         purchaseTablePanel = new JTable(purchaseTableModel);
         toolbar = new PurchaseToolbar();
         purchaseForm = new PurchaseForm();
+        resultsPane = new JTextPane();
+        tablePopup = new JPopupMenu();
+        JMenuItem removePurchase = new JMenuItem("Delete Purchase");
+
+        tablePopup.add(removePurchase);
 
         setLayout(new BorderLayout());
-        tableFormatter();
 
         add(toolbar, BorderLayout.NORTH);
+
+        purchaseTablePanel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        tableFormatter();
         add(new JScrollPane(purchaseTablePanel), BorderLayout.CENTER);
+
         add(purchaseForm, BorderLayout.WEST);
         //add(deletePurchaseForm, BorderLayout.WEST);
+
+        /* RESULTS PANE CUSTOMIZING */
+        resultsPane.setName("ResultsPane");
+        Dimension resultsDim = resultsPane.getPreferredSize();
+        resultsDim.width = 700;
+        //resultsDim.height = 400;
+        resultsPane.setPreferredSize(resultsDim);
+        resultsPane.setMinimumSize(resultsPane.getPreferredSize());
+        resultsPane.setBorder(Style.resultsPaneBorder());
+        resultsPane.setFont(Style.textPaneFont());
+        resultsPane.setBackground(Style.blueGrey800());
+        resultsPane.setForeground(Style.grey50());
+        resultsPane.setVisible(false);
+        add(resultsPane, BorderLayout.EAST);
     }
 
     /*============================== MUTATORS ==============================*/
@@ -52,8 +78,23 @@ public class PurchasesPanel extends JPanel {
 
     public PurchaseToolbar getPurchaseToolbar() { return toolbar; }
 
-    public PurchaseTableModel getPurchaseTableModel() { return purchaseTableModel; }
+    public PurchaseTableModel getPurchaseTableModel() {
+        return purchaseTableModel;
+    }
 
+    public JTable getPurchaseTablePanel() {
+        return purchaseTablePanel;
+    }
+
+    public JTextPane getResultsPane() {
+        return resultsPane;
+    }
+
+    public JPopupMenu getTablePopup() {
+        return tablePopup;
+    }
+
+    /*============================== INNER CLASS ==============================*/
     public class PurchaseTableModel extends AbstractTableModel {
 
         private ArrayList<Purchase> purchases;
