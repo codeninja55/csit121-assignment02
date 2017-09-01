@@ -1,38 +1,75 @@
 package cn55.model;
 
-public class Category {
+import org.jetbrains.annotations.NotNull;
+
+public class Category implements Comparable<Category> {
 
     private int id;
     private String name;
+    private String description;
     private double amount;
+    private static int idCounter = 100;
 
+    /*============================== CONSTRUCTORS  ==============================*/
     public Category(String name) {
         this.id = generateCatID();
         this.name = name;
+        this.description = "";
         this.amount = 0;
     }
 
-    public Category(String name, double amount) {
+    public Category(String name, String description, double amount) {
         this.id = generateCatID();
         this.name = name;
+        this.description = description;
         this.amount = amount;
     }
 
+    public Category(int id, String name, String description, double amount) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.amount = amount;
+    }
+
+    /*============================== COPY CONSTRUCTOR ==============================*/
+    public Category(Category other) {
+        this(other.getId(), other.getName(), other.getDescription(), other.getAmount());
+    }
+
+    /*============================== MUTATORS  ==============================*/
     private int generateCatID() {
-        int idCounter = 10000;
         idCounter++;
         return idCounter;
     }
 
-    public void setId(int id) { this.id = id; }
+    void setId(int id) { this.id = id; }
 
-    public void setName(String name) { this.name = name; }
+    void setName(String name) { this.name = name; }
+
+    void setDescription(String description) {
+        this.description = description;
+    }
 
     public void setAmount(double amount) { this.amount = amount; }
 
+    /*============================== ACCESSORS  ==============================*/
     public int getId() { return id; }
 
     public String getName() { return name; }
 
+    public String getDescription() {
+        return description;
+    }
+
     public double getAmount() { return amount; }
+
+    public String toString() {
+        return String.format("%n%s : $%.2f", name, amount);
+    }
+
+    @Override
+    public int compareTo(@NotNull Category o) {
+        return Integer.compare(this.id, o.id);
+    }
 }
