@@ -15,8 +15,9 @@ public class Database {
     private HashMap<String, Integer> purchaseMap;
     private Map<String, Double> categories;
     private ArrayList<String> categoriesList;
-    private Set<Integer> receiptSet;
-    private Set<String> cardIDSet;
+    private static int idCounter = 10000;
+    private static Set<Integer> receiptSet = new HashSet<>();
+    private static Set<String> cardIDSet = new HashSet<>();
 
     /*============================== CONSTRUCTORS  ==============================*/
     Database() {
@@ -25,8 +26,6 @@ public class Database {
         this.purchases = new ArrayList<>();
         this.categories = new HashMap<>();
         createCategoriesList();
-        this.receiptSet = new HashSet<>();
-        this.cardIDSet = new HashSet<>();
     }
 
     /*============================== MUTATORS  ==============================*/
@@ -37,12 +36,36 @@ public class Database {
         this.cardMap = cardMap;
     }
 
-    public void mapPurchases() {
+    void mapPurchases() {
         HashMap<String, Integer> purchaseMap = new HashMap<>();
         for (int index = 0 ; index < purchases.size() ; index++)
             purchaseMap.put(purchases.get(index).getCardID(), index);
 
         this.purchaseMap = purchaseMap;
+    }
+
+    public static int generateReceiptID() {
+        Random randomObj = new Random();
+
+        int receiptID;
+        receiptID = randomObj.ints(10000000,99999999).findFirst().getAsInt();
+
+        if (receiptSet.contains(receiptID)) {
+            return generateReceiptID();
+        } else {
+            receiptSet.add(receiptID);
+            return receiptID;
+        }
+    }
+
+    public static String generateCardID() {
+        String cardID = "MC" + (++idCounter);
+
+        if (cardIDSet.contains(cardID)) {
+            return generateCardID();
+        } else {
+            return cardID;
+        }
     }
 
     public void addCards(Card card) {
@@ -52,11 +75,12 @@ public class Database {
 
     void addPurchase(Purchase purchase) {
         this.purchases.add(purchase);
+        mapPurchases();
     }
 
-    void addReceiptID(int receiptID) { this.receiptSet.add(receiptID); }
+    public static void addReceiptID(int receiptID) { Database.receiptSet.add(receiptID); }
 
-    void addCardID(String cardID) { this.cardIDSet.add(cardID); }
+    public static void addCardIDSet(String cardID) { Database.cardIDSet.add(cardID); }
 
     private void createCategoriesList() {
         this.categoriesList = new ArrayList<>();
