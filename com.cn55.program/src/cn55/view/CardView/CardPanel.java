@@ -63,18 +63,7 @@ public class CardPanel extends JPanel {
         //resultsDim.height = 400;
         resultsPane.setPreferredSize(resultsDim);
         resultsPane.setMinimumSize(resultsPane.getPreferredSize());
-
-        Border outInnerBorder = BorderFactory.createTitledBorder(
-                BorderFactory.createMatteBorder(2,2,2,2, Style.red500()),
-                "Results",
-                TitledBorder.LEFT,
-                TitledBorder.ABOVE_TOP,
-                new Font("Verdana",Font.BOLD,24),
-                Style.red500());
-        Border inInnerBorder = BorderFactory.createEmptyBorder(10,10,10,10);
-        Border innerBorder = BorderFactory.createCompoundBorder(outInnerBorder, inInnerBorder);
-        Border outerBorder = BorderFactory.createEmptyBorder(1,10,10,10);
-        resultsPane.setBorder(BorderFactory.createCompoundBorder(outerBorder,innerBorder));
+        resultsPane.setBorder(Style.resultsPaneBorder());
         resultsPane.setFont(Style.textPaneFont());
         resultsPane.setBackground(Style.blueGrey800());
         resultsPane.setForeground(Style.grey50());
