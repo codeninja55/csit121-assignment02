@@ -14,11 +14,12 @@ import java.awt.event.ItemListener;
 
 public class PurchaseToolbar extends JPanel {
 
-    JPanel leftToolbar;
-    JPanel rightToolbar;
+    private JPanel leftToolbar;
+    private JPanel rightToolbar;
     private ToolbarButton addPurchaseBtn;
     private ToolbarButton deletePurchaseBtn;
     private JComboBox<String> sortPurchaseCombo;
+    private ToolbarButton viewPurchaseBtn;
 
     private ToolbarButtonListener createPurchaseListener;
     private ToolbarButtonListener deletePurchaseListener;
@@ -32,6 +33,8 @@ public class PurchaseToolbar extends JPanel {
         addPurchaseBtn.setName("CreateButton");
         deletePurchaseBtn = new ToolbarButton("Delete Purchase");
         deletePurchaseBtn.setName("DeleteButton");
+        viewPurchaseBtn = new ToolbarButton("View Details");
+        viewPurchaseBtn.setName("ViewButton");
         sortPurchaseCombo = new JComboBox<>();
         DefaultComboBoxModel<String> options = new DefaultComboBoxModel<>();
 
@@ -62,6 +65,7 @@ public class PurchaseToolbar extends JPanel {
 
         leftToolbar.add(addPurchaseBtn);
         //add(deletePurchaseBtn);
+        rightToolbar.add(viewPurchaseBtn);
         rightToolbar.add(sortPurchaseCombo);
         add(leftToolbar);
         add(rightToolbar);
@@ -93,6 +97,8 @@ public class PurchaseToolbar extends JPanel {
     public JPanel getRightToolbar() {
         return rightToolbar;
     }
+
+    public ToolbarButton getViewPurchaseBtn() { return viewPurchaseBtn; }
 
     /*============================== INNER CLASS  ==============================*/
     class ToolbarListener implements ActionListener {
