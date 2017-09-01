@@ -22,13 +22,13 @@ public class MainFrame extends JFrame {
 
     private JTabbedPane tabPane;
     private JPanel welcomePanel;
-    private CardPanel cardPanel;
-    private PurchasesPanel purchasePanel;
+    private CardViewPanel cardViewPanel;
+    private PurchaseViewPanel purchasePanel;
     private CategoriesPanel categoriesPanel;
-    private SummaryPanel summaryPanel;
+    //private SummaryPanel summaryPanel;
 
     public MainFrame(ArrayList<Purchase> purchases, ArrayList<Card> cards) {
-        super("Marvel Rewards");
+        super("Marvel Card Rewards");
 
         setLayout(new BorderLayout());
 
@@ -42,14 +42,14 @@ public class MainFrame extends JFrame {
         welcomeLabel.setFont(new Font("Verdana", Font.BOLD,56));
         welcomePanel.add(welcomeLabel);
 
-        this.cardPanel = new CardPanel();
-        this.purchasePanel = new PurchasesPanel();
+        this.cardViewPanel = new CardViewPanel();
+        this.purchasePanel = new PurchaseViewPanel();
         this.categoriesPanel = new CategoriesPanel();
-        this.summaryPanel = new SummaryPanel();
+        //this.summaryPanel = new SummaryPanel();
 
         /* Pass in copies of the ArrayList instead of hte db data */
-        cardPanel.setCardData(cards);
-        purchasePanel.getPurchaseTableModel().setData(purchases);
+        cardViewPanel.refresh(cards);
+        purchasePanel.refresh(purchases);
 
         // Add panels, toolbars, and panes to main Frame
         tabPane.setBackground(Style.blueGrey500());
@@ -60,10 +60,10 @@ public class MainFrame extends JFrame {
 
         // Add tabs to tabPane group
         tabPane.addTab("Welcome", welcomePanel);
-        tabPane.addTab("Cards", cardPanel);
+        tabPane.addTab("Cards", cardViewPanel);
         tabPane.addTab("Purchases", purchasePanel);
         tabPane.addTab("Categories", categoriesPanel);
-        tabPane.addTab("Summary", summaryPanel);
+        //tabPane.addTab("Summary", summaryPanel);
 
         // DEFAULT PANE BEGIN AT
         tabPane.setSelectedIndex(2);
@@ -77,19 +77,7 @@ public class MainFrame extends JFrame {
     /*============================== ACCESSORS  ==============================*/
     public JTabbedPane getTabPane() { return tabPane; }
 
-    public CardPanel getCardPanel() { return cardPanel; }
+    public CardViewPanel getCardViewPanel() { return cardViewPanel; }
 
-    public PurchasesPanel getPurchasePanel() { return purchasePanel; }
-
-    public CategoriesPanel getCategoriesPanel() {
-        return categoriesPanel;
-    }
-
-    public SummaryPanel getSummaryPanel() {
-        return summaryPanel;
-    }
-
-    public JPanel getWelcomePanel() {
-        return welcomePanel;
-    }
+    public PurchaseViewPanel getPurchasePanel() { return purchasePanel; }
 }
