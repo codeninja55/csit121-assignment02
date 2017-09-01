@@ -13,9 +13,11 @@ public class Database {
     private HashMap<String, Integer> cardMap;
     private ArrayList<Purchase> purchases;
     private HashMap<String, Integer> purchaseMap;
-    private Map<String, Double> categories;
-    private ArrayList<String> categoriesList;
+    private ArrayList<Category> categories;
+
     private static int idCounter = 10000;
+
+    static HashMap<Integer, Double> categoriesTotalMap = new HashMap<>();
     private static Set<Integer> receiptSet = new HashSet<>();
     private static Set<String> cardIDSet = new HashSet<>();
 
@@ -24,8 +26,8 @@ public class Database {
         this.cards = new ArrayList<>();
         this.cardMap = new HashMap<>();
         this.purchases = new ArrayList<>();
-        this.categories = new HashMap<>();
-        createCategoriesList();
+        this.purchaseMap = new HashMap<>();
+        this.categories = new ArrayList<>();
     }
 
     /*============================== MUTATORS  ==============================*/
@@ -44,6 +46,14 @@ public class Database {
         this.purchaseMap = purchaseMap;
     }
 
+    static void mapCategoriesTotalMap(ArrayList<Category> categories) {
+        if (categoriesTotalMap.size() == 0) {
+            for (Category item : categories) {
+                categoriesTotalMap.put(item.getId(), 0D);
+            }
+        }
+    }
+
     public static int generateReceiptID() {
         Random randomObj = new Random();
 
@@ -53,7 +63,7 @@ public class Database {
         if (receiptSet.contains(receiptID)) {
             return generateReceiptID();
         } else {
-            receiptSet.add(receiptID);
+            addReceiptID(receiptID);
             return receiptID;
         }
     }
@@ -68,6 +78,10 @@ public class Database {
         }
     }
 
+    public void addCategory(Category category) {
+        categories.add(category);
+    }
+
     public void addCards(Card card) {
         this.cards.add(card);
         mapCards();
@@ -78,24 +92,9 @@ public class Database {
         mapPurchases();
     }
 
-    public static void addReceiptID(int receiptID) { Database.receiptSet.add(receiptID); }
+    private static void addReceiptID(int receiptID) { Database.receiptSet.add(receiptID); }
 
     public static void addCardIDSet(String cardID) { Database.cardIDSet.add(cardID); }
-
-    private void createCategoriesList() {
-        this.categoriesList = new ArrayList<>();
-
-        categoriesList.add("Motors");
-        categoriesList.add("Electronics");
-        categoriesList.add("Fashion");
-        categoriesList.add("Toys");
-        categoriesList.add("Deals");
-        categoriesList.add("Other");
-    }
-
-    public void addCategory(String category, Double value) {
-        this.categories.put(category, value);
-    }
 
     /*============================== ACCESSORS  ==============================*/
     public ArrayList<Card> getCards() {
@@ -108,22 +107,10 @@ public class Database {
         return purchases;
     }
 
-    public HashMap<String, Integer> getPurchaseMap() {
-        return purchaseMap;
-    }
+    public ArrayList<Category> getCategories() { return categories; }
 
-    public ArrayList<String> getCategoriesList() { return categoriesList; }
-
-    public Map<String, Double> getCategories() {
-        return categories;
-    }
-
-    Set<Integer> getReceiptSet() {
-        return receiptSet;
-    }
-
-    Set<String> getCardIDSet() {
-        return cardIDSet;
+    public static HashMap<Integer, Double> getCategoriesTotalMap() {
+        return categoriesTotalMap;
     }
 
     public DefaultComboBoxModel<String> getCardModel() {
