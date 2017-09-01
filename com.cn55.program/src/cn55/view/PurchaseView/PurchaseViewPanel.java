@@ -11,7 +11,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class PurchasesPanel extends JPanel {
+public class PurchaseViewPanel extends JPanel {
     private PurchaseTableModel purchaseTableModel;
     private JTable purchaseTablePanel;
     private PurchaseForm purchaseForm;
@@ -20,7 +20,7 @@ public class PurchasesPanel extends JPanel {
     JPopupMenu tablePopup;
 
     /*============================== CONSTRUCTORS ==============================*/
-    public PurchasesPanel() {
+    public PurchaseViewPanel() {
         purchaseTableModel = new PurchaseTableModel();
         purchaseTablePanel = new JTable(purchaseTableModel);
         toolbar = new PurchaseToolbar();
@@ -78,20 +78,12 @@ public class PurchasesPanel extends JPanel {
 
     public PurchaseToolbar getPurchaseToolbar() { return toolbar; }
 
-    public PurchaseTableModel getPurchaseTableModel() {
-        return purchaseTableModel;
-    }
-
     public JTable getPurchaseTablePanel() {
         return purchaseTablePanel;
     }
 
     public JTextPane getResultsPane() {
         return resultsPane;
-    }
-
-    public JPopupMenu getTablePopup() {
-        return tablePopup;
     }
 
     /*============================== INNER CLASS ==============================*/
