@@ -23,12 +23,12 @@ public class AnonCard extends Card {
     }
 
     /*============================== ACCESSORS  ==============================*/
+    public String getID() { return id; }
+
     public String toString() {
         return String.format("%n%s: %s%n%s: %s%n%s: %.2f%n",
                 "Card Type", super.cardType,
                 "Card ID", super.id,
                 "Points", super.points);
     }
-
-    public String getID() { return id; }
 }
