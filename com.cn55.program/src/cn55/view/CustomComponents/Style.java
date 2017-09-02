@@ -23,8 +23,12 @@ public class Style {
     public static Color red900() { return new Color(183,28,28); }
     public static Color red500() { return new Color(244,67,54); }
     public static Color red300() { return new Color(229,115,115); }
+    public static Color orange500() { return new Color(255,152,0); }
+    public static Color blue500() { return new Color(33,150,243); }
+    public static Color blueGrey400() { return new Color(120,144,156); }
     public static Color blueGrey500() { return new Color(96,125,139); }
     public static Color blueGrey800() { return new Color(55,71,89); }
+    public static Color grey700() { return new Color(97,97,97); }
     public static Color grey500 () { return new Color(158,158,158); }
     public static Color grey50() { return new Color(245,245,245); }
     public static Color btnTextColor() { return new Color(245,245,245); }
@@ -46,7 +50,7 @@ public class Style {
 
     public static Border toolbarBorder(String title) {
         Border innerBorder = BorderFactory.createTitledBorder(
-                BorderFactory.createMatteBorder(4,4,4,3,Style.blueGrey800()),
+                BorderFactory.createMatteBorder(4,4,4,4,Style.blueGrey800()),
                 title,
                 TitledBorder.LEFT,
                 TitledBorder.ABOVE_TOP,
@@ -58,13 +62,13 @@ public class Style {
 
     public static Border resultsPaneBorder() {
         Border outInnerBorder = BorderFactory.createTitledBorder(
-                BorderFactory.createMatteBorder(2,2,2,2, Style.red500()),
-                "Results",
-                TitledBorder.LEFT,
+                BorderFactory.createMatteBorder(4,4,4,4, Style.blueGrey800()),
+                "RESULTS",
+                TitledBorder.CENTER,
                 TitledBorder.ABOVE_TOP,
-                new Font("Verdana",Font.BOLD,24),
-                Style.red500());
-        Border inInnerBorder = BorderFactory.createEmptyBorder(10,10,10,10);
+                new Font("Verdana",Font.BOLD,26),
+                Style.grey50());
+        Border inInnerBorder = BorderFactory.createEmptyBorder(15,15,15,15);
         Border innerBorder = BorderFactory.createCompoundBorder(outInnerBorder, inInnerBorder);
         Border outerBorder = BorderFactory.createEmptyBorder(1,10,10,10);
         return BorderFactory.createCompoundBorder(outerBorder,innerBorder);
