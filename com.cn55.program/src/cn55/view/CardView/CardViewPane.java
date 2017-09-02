@@ -48,7 +48,7 @@ public class CardViewPane extends JPanel {
         setLayout(new BorderLayout());
         // Formatting for Table
         tableFormatter();
-
+        cardTablePanel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         add(toolbar, BorderLayout.NORTH);
         add(tableScrollPane, BorderLayout.CENTER);
 
