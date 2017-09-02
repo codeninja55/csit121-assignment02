@@ -45,6 +45,10 @@ public class Assignment2 {
         UIManager.put("TableHeader.background", Style.red500());
         UIManager.put("TableHeader.foreground", Style.grey50());
 
+        UIManager.put("ScrollBar.background", Style.red500());
+        UIManager.put("ScrollBar.foreground", Style.red500());
+        UIManager.put("ScrollBar.track", Style.red500());
+
         /* Create and display the Program the safe Java way */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
