@@ -51,6 +51,7 @@ public class CategoriesViewPane extends JPanel {
         createCategoryBtn.addActionListener(handler);
         deleteCategoryBtn.addActionListener(handler);
 
+        categoriesTablePane.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tableFormatter();
         add(tableScrollPane, BorderLayout.CENTER);
 
@@ -109,7 +110,8 @@ public class CategoriesViewPane extends JPanel {
     class ToolbarListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == createCategoryBtn) {
-                System.out.println("Create Category Button Pressed");
+                if (createCategoryListener != null)
+                    createCategoryListener.toolbarButtonEventOccurred();
             } else if (e.getSource() == deleteCategoryBtn) {
                 System.out.println("Delete Category Button Pressed");
             }

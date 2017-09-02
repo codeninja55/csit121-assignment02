@@ -4,5 +4,5 @@ import java.util.EventListener;
 
 
 public interface CategoryListener extends EventListener {
-    void createCategoryEventOccured(CategoryEvent e);
+    void createCategoryEventOccurred(CategoryEvent e);
 }

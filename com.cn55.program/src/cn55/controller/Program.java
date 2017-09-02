@@ -1,22 +1,38 @@
 package cn55.controller;
 
-import cn55.controller.Validator.*;
+import cn55.controller.Validator.CardIDRule;
+import cn55.controller.Validator.CategoryAmountRule;
+import cn55.controller.Validator.FormRule;
+import cn55.controller.Validator.FormValidData;
 import cn55.model.CardModel.*;
 import cn55.model.*;
-import cn55.view.*;
-import cn55.view.CardView.*;
+import cn55.view.ButtonListener;
+import cn55.view.CardView.CardForm;
+import cn55.view.CardView.CardListener;
+import cn55.view.CardView.CardViewPane;
+import cn55.view.CardView.CardsViewToolbar;
 import cn55.view.CategoriesView.CategoriesForm;
 import cn55.view.CategoriesView.CategoriesViewPane;
-import cn55.view.CustomComponents.*;
-import cn55.view.DeleteForm.*;
+import cn55.view.CategoriesView.CategoryEvent;
+import cn55.view.CategoriesView.CategoryListener;
+import cn55.view.CustomComponents.FormTextField;
+import cn55.view.CustomComponents.Style;
+import cn55.view.DeleteForm.DeleteCardForm;
+import cn55.view.DeleteForm.DeleteEvent;
+import cn55.view.DeleteForm.DeleteListener;
 import cn55.view.MainFrame;
 import cn55.view.PurchaseView.*;
-import cn55.view.SearchForm.*;
-import org.jetbrains.annotations.Nullable;
+import cn55.view.SearchForm.SearchEvent;
+import cn55.view.SearchForm.SearchForm;
+import cn55.view.SearchForm.SearchListener;
+import cn55.view.ToolbarButtonListener;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.*;
 
 class Program {
@@ -32,7 +48,6 @@ class Program {
     private PurchaseViewToolbar purchaseViewToolbar;
     private PurchaseForm purchaseForm;
     private CategoriesViewPane categoriesViewPane;
-    private CategoriesForm categoriesForm;
 
     private static Set<Double> testAmountSet = new HashSet<>();
 
@@ -56,7 +71,6 @@ class Program {
         this.purchaseViewToolbar = purchaseViewPane.getPurchaseToolbar();
 
         this.categoriesViewPane = mainFrame.getCategoriesViewPane();
-        this.categoriesForm = categoriesViewPane.getCreateCategoryForm();
 
         eventControlling();
     }
@@ -229,6 +243,8 @@ class Program {
             } else if (tabPane.getSelectedComponent() == purchaseViewPane) {
                 purchaseViewToolbar.disableCreatePurchaseButton(false);
                 purchaseViewPane.refreshPurchasesTable(shop.getDatabase().getPurchases());
+            } if (tabPane.getSelectedComponent() == categoriesViewPane) {
+                categoriesViewPane.refreshCategoriesTable(shop.getDatabase().getCategories());
             }
 
             /* DESELECTED LISTENERS */
@@ -240,10 +256,13 @@ class Program {
             } else if (tabPane.getSelectedComponent() != cardViewPane) {
                 cardViewPane.getResultsPane().setVisible(false);
                 removeCardForms();
-            } else if (tabPane.getSelectedComponent() != )
+            } else if (tabPane.getSelectedComponent() != categoriesViewPane) {
+                removeCategoryForms();
+            }
         });
 
-        /* CARD VIEW TOOLBAR REGISTRATION & HANDLER - SEARCH BUTTON */
+        /*============================== CARD VIEW ==============================*/
+        /* TOOLBAR REGISTRATION & HANDLER - SEARCH BUTTON */
         cardViewPane.setSearchCardListener(new ToolbarButtonListener() {
             public void toolbarButtonEventOccurred() {
                 removeCardForms();
@@ -309,7 +328,7 @@ class Program {
             }
         });
 
-        /* CARD VIEW TOOLBAR REGISTRATION & HANDLER - CREATE CARD BUTTON */
+        /* TOOLBAR REGISTRATION & HANDLER - CREATE CARD BUTTON */
         cardViewPane.setCreateCardListener(new ToolbarButtonListener() {
             public void toolbarButtonEventOccurred() {
                 removeCardForms();
@@ -336,7 +355,7 @@ class Program {
             }
         });
 
-        /* CARD VIEW TOOLBAR REGISTRATION & HANDLER - DELETE CARD BUTTON */
+        /* TOOLBAR REGISTRATION & HANDLER - DELETE CARD BUTTON */
         cardViewPane.setDeleteCardListener(new ToolbarButtonListener() {
             public void toolbarButtonEventOccurred() {
                 System.out.println("DELETE BUTTON PRESSED");
@@ -405,7 +424,7 @@ class Program {
             }
         });
 
-        /* CARD VIEW TOOLBAR REGISTRATION & HANDLER - SORT */
+        /* TOOLBAR REGISTRATION & HANDLER - SORT */
         cardViewPane.getCardToolbar().getSortedCombo().addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -426,8 +445,8 @@ class Program {
         /* TOOLBAR CREATE PURCHASE BUTTON */
         purchaseViewToolbar.setCreatePurchaseListener(new ToolbarButtonListener() {
             public void toolbarButtonEventOccurred() {
-                purchaseViewToolbar.disableCreatePurchaseButton(true);
-                purchaseForm.setGeneratedReceiptID(db.generateReceiptID());
+                //purchaseViewToolbar.disableCreatePurchaseButton(true);
+                purchaseForm.setGeneratedReceiptID(Database.generateReceiptID());
                 purchaseForm.setCardModel(shop.getDatabase().getCardModel());
                 purchaseForm.setCategoriesList(shop.getDatabase().getCategories());
                 purchaseForm.createPurchaseForm();
@@ -536,6 +555,35 @@ class Program {
             }
         });
 
+        /*============================== CATEGORIES VIEW ==============================*/
+        /* TOOLBAR REGISTRATION & HANDLER - CREATE CARD BUTTON */
+        categoriesViewPane.setCreateCategoryListener(new ToolbarButtonListener() {
+            public void toolbarButtonEventOccurred() {
+                categoriesViewPane.setCreateCategoryForm(new CategoriesForm());
+                categoriesViewPane.add(categoriesViewPane.getCreateCategoryForm(), BorderLayout.WEST);
+                categoriesViewPane.getCreateCategoryForm().setVisible(true);
+
+                /* ADD A CANCEL BUTTON LISTENER AFTER CREATING FORM */
+                categoriesViewPane.getCreateCategoryForm().setCancelListener(new ButtonListener() {
+                    public void buttonActionOccurred() {
+                        categoriesViewPane.getCreateCategoryForm().setVisible(false);
+                        removeCategoryForms();
+                    }
+                });
+
+                /* ADD A CREATE BUTTON LISTENER AFTER CREATING FORM */
+                categoriesViewPane.getCreateCategoryForm().setCreateCategoryListener(new CategoryListener() {
+                    public void createCategoryEventOccurred(CategoryEvent e) {
+                        shop.makeCategory(new Category(e.getCategoryNameTextField().getText(),
+                                e.getCategoryDescTextField().getText()));
+                        categoriesViewPane.refreshCategoriesTable(shop.getDatabase().getCategories());
+                        removeCategoryForms();
+                    }
+                });
+
+            }
+        });
+
     }
 
     /*============================== MUTATORS  ==============================*/
@@ -600,7 +648,6 @@ class Program {
         return proceed;
     }
 
-    @Nullable
     private HashMap<Integer, Category> getPurchaseFormCategories(PurchaseEvent event) {
         HashMap<Integer, Category> categories = new HashMap<>();
 
@@ -624,7 +671,6 @@ class Program {
         }
     }
 
-    @Nullable
     private String getPurchaseFormCardID(PurchaseEvent event) {
         JComboBox<String> type = event.getPurchaseTypeCombo();
 

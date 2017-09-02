@@ -1,5 +1,6 @@
 package cn55.view.CategoriesView;
 
+import cn55.model.Database;
 import cn55.view.ButtonListener;
 import cn55.view.CustomComponents.*;
 
@@ -23,7 +24,7 @@ public class CategoriesForm extends JPanel {
     private CategoryListener createCategoryListener;
     private ButtonListener cancelListener;
 
-    CategoriesForm() {
+    public CategoriesForm() {
         /* INITIALIZE ALL COMPONENTS */
         createCategoriesForm = new JPanel(new GridBagLayout());
         categoryNameLabel = new FormLabel("Category Name");
@@ -85,7 +86,6 @@ public class CategoriesForm extends JPanel {
         createCategoriesForm.add(createBtn, gc);
 
         gc.gridx = 1; gc.gridwidth = 1; gc.weightx = 1.5;
-        gc.fill = GridBagConstraints.HORIZONTAL;
         gc.anchor = GridBagConstraints.FIRST_LINE_START;
         gc.insets = new Insets(20,10,0,0);
         createCategoriesForm.add(clearBtn, gc);
@@ -114,6 +114,17 @@ public class CategoriesForm extends JPanel {
         cancelBtn.addActionListener(handler);
     }
 
+    /*============================== MUTATORS  ==============================*/
+    public void setCreateCategoryListener(CategoryListener listener) {
+        this.createCategoryListener = listener;
+    }
+
+    public void setCancelListener(ButtonListener listener) {
+        this.cancelListener = listener;
+    }
+
+    /*============================== ACCESSORS  ==============================*/
+
 
     /*=========================================================================*/
     /*============================== INNER CLASS ==============================*/
@@ -121,10 +132,12 @@ public class CategoriesForm extends JPanel {
     class FormListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == createBtn) {
-                CategoryEvent event = new CategoryEvent(this);
+                CategoryEvent event = new CategoryEvent(this,
+                                                    categoryNameTextField,
+                                                    categoryDescTextField);
 
                 if (createCategoryListener != null) {
-                    createCategoryListener.createCategoryEventOccured(event);
+                    createCategoryListener.createCategoryEventOccurred(event);
                 }
 
             } else if (e.getSource() == clearBtn) {
