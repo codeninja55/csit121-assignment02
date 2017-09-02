@@ -13,6 +13,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class CategoriesViewPane extends JPanel {
     private CategoriesTableModel categoriesTableModel;
@@ -129,6 +130,7 @@ public class CategoriesViewPane extends JPanel {
         private String[] tableHeaders = {"ID", "Name", "Description", "Total Amount"};
 
         void setData(ArrayList<Category> categories) {
+            Collections.sort(categories);
             this.categories = categories;
         }
 
