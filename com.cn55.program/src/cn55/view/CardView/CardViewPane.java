@@ -3,6 +3,7 @@ package cn55.view.CardView;
 import cn55.model.CardModel.BasicCard;
 import cn55.model.CardModel.Card;
 import cn55.model.CardModel.PremiumCard;
+import cn55.view.CustomComponents.ResultsPane;
 import cn55.view.CustomComponents.Style;
 import cn55.view.CustomComponents.ToolbarButton;
 import cn55.view.DeleteForm.DeleteCardForm;
@@ -20,7 +21,7 @@ public class CardViewPane extends JPanel {
 
     private CardTableModel cardTableModel;
     private JTable cardTablePanel;
-    private JTextPane resultsPane;
+    private ResultsPane resultsPane;
 
     private SearchForm searchForm;
     private CardForm cardForm;
@@ -41,7 +42,7 @@ public class CardViewPane extends JPanel {
         cardTablePanel = new JTable(cardTableModel);
         JScrollPane tableScrollPane = new JScrollPane(cardTablePanel);
         tableScrollPane.setName("CardsViewTableScrollPane");
-        resultsPane = new JTextPane();
+        resultsPane = new ResultsPane("CardViewResultsPane");
         //resultsScrollPane = new JScrollPane(resultsPane);
         toolbar = new CardsViewToolbar();
 
@@ -51,18 +52,6 @@ public class CardViewPane extends JPanel {
         cardTablePanel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         add(toolbar, BorderLayout.NORTH);
         add(tableScrollPane, BorderLayout.CENTER);
-
-        /* RESULTS PANE CUSTOMIZING */
-        resultsPane.setName("ResultsPane");
-        Dimension resultsDim = resultsPane.getPreferredSize();
-        resultsDim.width = 700;
-        resultsPane.setPreferredSize(resultsDim);
-        resultsPane.setMinimumSize(resultsPane.getPreferredSize());
-        resultsPane.setBorder(Style.resultsPaneBorder());
-        resultsPane.setFont(Style.textPaneFont());
-        resultsPane.setBackground(Style.blueGrey800());
-        resultsPane.setForeground(Style.grey50());
-        resultsPane.setVisible(false);
         add(resultsPane, BorderLayout.EAST);
 
         /* REGISTRATION OF LISTENERS */
@@ -136,7 +125,7 @@ public class CardViewPane extends JPanel {
         return deleteForm;
     }
 
-    public JTextPane getResultsPane() {
+    public ResultsPane getResultsPane() {
         return resultsPane;
     }
 

@@ -1,6 +1,7 @@
 package cn55.view.PurchaseView;
 
 import cn55.model.Purchase;
+import cn55.view.CustomComponents.ResultsPane;
 import cn55.view.CustomComponents.Style;
 
 import javax.swing.*;
@@ -13,7 +14,7 @@ public class PurchaseViewPane extends JPanel {
     private JTable purchaseTablePane;
     private PurchaseForm purchaseForm;
     private PurchaseViewToolbar toolbar;
-    private JTextPane resultsPane;
+    private ResultsPane resultsPane;
     private JPopupMenu tablePopup;
 
     /*============================== CONSTRUCTORS ==============================*/
@@ -22,7 +23,7 @@ public class PurchaseViewPane extends JPanel {
         purchaseTablePane = new JTable(purchaseTableModel);
         toolbar = new PurchaseViewToolbar();
         purchaseForm = new PurchaseForm();
-        resultsPane = new JTextPane();
+        resultsPane = new ResultsPane("PurchaseViewResultsPane");
         tablePopup = new JPopupMenu();
         JMenuItem removePurchase = new JMenuItem("Delete Purchase");
 
@@ -38,19 +39,6 @@ public class PurchaseViewPane extends JPanel {
 
         add(purchaseForm, BorderLayout.WEST);
         //add(deletePurchaseForm, BorderLayout.WEST);
-
-        /* RESULTS PANE CUSTOMIZING */
-        resultsPane.setName("ResultsPane");
-        Dimension resultsDim = resultsPane.getPreferredSize();
-        resultsDim.width = 700;
-        //resultsDim.height = 400;
-        resultsPane.setPreferredSize(resultsDim);
-        resultsPane.setMinimumSize(resultsPane.getPreferredSize());
-        resultsPane.setBorder(Style.resultsPaneBorder());
-        resultsPane.setFont(Style.textPaneFont());
-        resultsPane.setBackground(Style.blueGrey800());
-        resultsPane.setForeground(Style.grey50());
-        resultsPane.setVisible(false);
         add(resultsPane, BorderLayout.EAST);
     }
 
@@ -79,7 +67,7 @@ public class PurchaseViewPane extends JPanel {
         return purchaseTablePane;
     }
 
-    public JTextPane getResultsPane() {
+    public ResultsPane getResultsPane() {
         return resultsPane;
     }
 
