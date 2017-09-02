@@ -8,14 +8,16 @@ package cn55.model.CardModel;
 
 import cn55.model.Database;
 
-public abstract class Card {
+import java.util.Comparator;
+
+public abstract class Card implements Comparable<Card> {
 
     protected String id;
     double points;
     String cardType;
 
     /*============================== CONSTRUCTORS  ==============================*/
-    // default constructor
+    // Default constructor
     public Card() {
         this.id = Database.generateCardID();
         Database.addCardIDSet(id);
@@ -36,5 +38,12 @@ public abstract class Card {
     public abstract String toString();
     public boolean equals(Card other) {
         return this.id.equals(other.id);
+    }
+
+    @Override
+    public int compareTo(Card o) {
+        int id = Integer.parseInt(this.getID().substring(2, this.getID().length()));
+        int oid = Integer.parseInt(o.getID().substring(2, o.getID().length()));
+        return Integer.compare(id, oid);
     }
 }
