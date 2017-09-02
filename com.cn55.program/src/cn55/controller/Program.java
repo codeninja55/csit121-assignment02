@@ -16,6 +16,7 @@ import cn55.view.CategoriesView.CategoriesViewPane;
 import cn55.view.CategoriesView.CategoryEvent;
 import cn55.view.CategoriesView.CategoryListener;
 import cn55.view.CustomComponents.FormTextField;
+import cn55.view.CustomComponents.ResultsPane;
 import cn55.view.CustomComponents.Style;
 import cn55.view.DeleteForm.DeleteCardForm;
 import cn55.view.DeleteForm.DeleteEvent;
@@ -262,72 +263,6 @@ class Program {
         });
 
         /*============================== CARD VIEW ==============================*/
-        /* TOOLBAR REGISTRATION & HANDLER - SEARCH BUTTON */
-        cardViewPane.setSearchCardListener(new ToolbarButtonListener() {
-            public void toolbarButtonEventOccurred() {
-                removeCardForms();
-                cardViewPane.setSearchForm(new SearchForm());
-                cardViewPane.add(cardViewPane.getSearchForm(), BorderLayout.WEST);
-                cardViewPane.getSearchForm().setVisible(true);
-
-                /* ADD a CANCEL BUTTON LISTENER AFTER CREATING FORM */
-                cardViewPane.getSearchForm().setCancelListener(new ButtonListener() {
-                    public void buttonActionOccurred() {
-                        cardViewPane.getSearchForm().setVisible(false);
-                        cardViewPane.getResultsPane().setVisible(false);
-                        removeCardForms();
-                    }
-                });
-
-                cardViewPane.getSearchForm().setSearchListener(new SearchListener() {
-                    public void searchEventOccurred(SearchEvent e) {
-                        //JScrollPane resultsScrollPane = cardViewPane.getResultsScrollPane();
-                        JTextPane resultsPane = cardViewPane.getResultsPane();
-                        String cardID = e.getSearchIDTextField().getText();
-
-                        /* SETUP VALIDATOR FOR CARD ID */
-                        FormValidData input = new FormValidData();
-                        input.setCardID(cardID);
-                        FormRule cardIDRule = new CardIDRule();
-
-                        if (!cardID.isEmpty() && shop.cardExists(cardID)) {
-                            e.getErrorLabel().setVisible(false);
-                            e.getRuleErrLabel().setVisible(false);
-
-                            int cardIndex = db.getCardMap().get(cardID);
-                            String cardText = db.getCards().get(cardIndex).toString();
-                            StringBuilder purchaseText = new StringBuilder("");
-
-                            for (Purchase purchase : db.getPurchases()) {
-                                if (purchase.getCardID() != null) {
-                                    if (purchase.getCardID().equals(cardID)) {
-                                        purchaseText.append(purchase.toString());
-                                    }
-                                }
-                            }
-
-                            String results = String.format("%s%n%s%n%n%s%n%s","CARD FOUND",
-                                    cardText,"PURCHASE(S)",purchaseText);
-
-                            resultsPane.setText(results);
-                            resultsPane.setVisible(true);
-                            e.getSearchIDTextField().setText(null);
-                        } else {
-                            if (!cardIDRule.validate(input))
-                                e.getRuleErrLabel().setVisible(true);
-                            else
-                                e.getErrorLabel().setVisible(true);
-
-                            resultsPane.setText(null);
-                            resultsPane.setVisible(false);
-                            e.getSearchIDTextField().setForeground(Style.redA700());
-                            e.getSearchIDLabel().setForeground(Style.redA700());
-                        }
-                    }
-                });
-            }
-        });
-
         /* TOOLBAR REGISTRATION & HANDLER - CREATE CARD BUTTON */
         cardViewPane.setCreateCardListener(new ToolbarButtonListener() {
             public void toolbarButtonEventOccurred() {
@@ -423,6 +358,82 @@ class Program {
             }
         });
 
+        /* TOOLBAR REGISTRATION & HANDLER - SEARCH BUTTON */
+        cardViewPane.setSearchCardListener(new ToolbarButtonListener() {
+            public void toolbarButtonEventOccurred() {
+                removeCardForms();
+                cardViewPane.setSearchForm(new SearchForm());
+                cardViewPane.add(cardViewPane.getSearchForm(), BorderLayout.WEST);
+                cardViewPane.getSearchForm().setVisible(true);
+
+                /* ADD A CANCEL BUTTON LISTENER AFTER CREATING FORM */
+                cardViewPane.getSearchForm().setCancelListener(new ButtonListener() {
+                    public void buttonActionOccurred() {
+                        cardViewPane.getSearchForm().setVisible(false);
+                        cardViewPane.getResultsPane().setVisible(false);
+                        removeCardForms();
+                    }
+                });
+
+                /* ADD A CANCEL BUTTON LISTENER AFTER CREATING FORM */
+                cardViewPane.getSearchForm().setSearchListener(new SearchListener() {
+                    public void searchEventOccurred(SearchEvent e) {
+                        //JScrollPane resultsScrollPane = cardViewPane.getResultsScrollPane();
+
+                        /* Setup a text pane to put all the necessary data into */
+                        ResultsPane resultsPane = cardViewPane.getResultsPane();
+                        resultsPane.setResultsTextPane();
+                        ResultsPane.ResultsTextPane resultsTextPane = resultsPane.getResultsTextPane();
+
+                        String cardID = e.getSearchIDTextField().getText();
+
+                        /* SETUP VALIDATOR FOR CARD ID */
+                        FormValidData input = new FormValidData();
+                        input.setCardID(cardID);
+                        FormRule cardIDRule = new CardIDRule();
+
+                        if (!cardID.isEmpty() && shop.cardExists(cardID)) {
+                            e.getErrorLabel().setVisible(false);
+                            e.getRuleErrLabel().setVisible(false);
+
+                            int cardIndex = db.getCardMap().get(cardID);
+                            String cardText = db.getCards().get(cardIndex).toString();
+                            StringBuilder purchaseText = new StringBuilder("");
+
+                            for (Purchase purchase : db.getPurchases()) {
+                                if (purchase.getCardID() != null) {
+                                    if (purchase.getCardID().equals(cardID)) {
+                                        purchaseText.append("\n");
+                                        purchaseText.append(purchaseText.append(purchase.toString()));
+                                    }
+                                }
+                            }
+
+                            String results = String.format("%s%n%s%n%n%s%n%s","CARD FOUND",
+                                    cardText,"PURCHASE(S)",purchaseText);
+
+                            /* Create the inner class ResultsTextPane and popular first.
+                            * Then set the ResultsPane to visible and add the new ScrollPane
+                            * Achieved in method below - showResultsPane() */
+                            showResultsPane(results, resultsPane, resultsTextPane);
+
+                            e.getSearchIDTextField().setText(null);
+                        } else {
+                            if (!cardIDRule.validate(input))
+                                e.getRuleErrLabel().setVisible(true);
+                            else
+                                e.getErrorLabel().setVisible(true);
+
+                            removeResultsPane(resultsPane);
+                            resultsPane.setVisible(false);
+                            e.getSearchIDTextField().setForeground(Style.redA700());
+                            e.getSearchIDLabel().setForeground(Style.redA700());
+                        }
+                    }
+                });
+            }
+        });
+
         /* TOOLBAR REGISTRATION & HANDLER - SORT */
         cardViewPane.getCardToolbar().getSortedCombo().addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
@@ -461,20 +472,35 @@ class Program {
                 int selectedRow = purchaseViewPane.getPurchaseTablePane().getSelectedRow();
                 Integer receiptID = (Integer) purchaseViewPane.getPurchaseTablePane().getValueAt(selectedRow, 0);
 
+                ResultsPane resultsPane = purchaseViewPane.getResultsPane();
+                resultsPane.setResultsTextPane();
+                ResultsPane.ResultsTextPane resultsTextPane = resultsPane.getResultsTextPane();
+
+                String resultsText = "";
                 for (Purchase purchase : db.getPurchases()) {
                     if (purchase.getReceiptID() == receiptID) {
-                        purchaseViewPane.getResultsPane().setText(purchase.toString());
-                        purchaseViewPane.getResultsPane().setVisible(true);
+                        resultsText = purchase.toString();
                     }
                 }
-            }
-        });
 
-        /* RESULTS PANE MOUSE LISTENER */
-        purchaseViewPane.getResultsPane().addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                purchaseViewPane.getResultsPane().setVisible(false);
+                showResultsPane(resultsText, resultsPane, resultsTextPane);
+
+                /* SET UP A MOUSE LISTENER TO CLOSE PANEL WHEN CLICKING ON TABLE OR OUTER PANEL*/
+                purchaseViewPane.addMouseListener(new MouseAdapter() {
+                    public void mouseClicked(MouseEvent e) {
+                        super.mouseClicked(e);
+                        removeResultsPane(purchaseViewPane.getResultsPane());
+                        purchaseViewPane.getResultsPane().setVisible(false);
+                    }
+                });
+
+                purchaseViewPane.getPurchaseTablePane().addMouseListener(new MouseAdapter() {
+                    public void mouseClicked(MouseEvent e) {
+                        super.mouseClicked(e);
+                        removeResultsPane(purchaseViewPane.getResultsPane());
+                        purchaseViewPane.getResultsPane().setVisible(false);
+                    }
+                });
             }
         });
 
@@ -588,6 +614,16 @@ class Program {
     }
 
     /*============================== MUTATORS  ==============================*/
+    private void showResultsPane(String text, ResultsPane resultsPane,
+                                   ResultsPane.ResultsTextPane resultsTextPane) {
+        resultsTextPane.setText(text);
+        resultsPane.setVisible(true);
+        resultsPane.setScrollPane(resultsTextPane);
+        resultsPane.add(resultsPane.getResultsTextPane());
+        resultsPane.getResultsTextPane().grabFocus();
+        resultsPane.getResultsTextPane().setCaretPosition(0);
+    }
+
     private void removeCardForms() {
         for (Component comp : cardViewPane.getComponents()) {
             if (comp instanceof CardForm || comp instanceof DeleteCardForm || comp instanceof SearchForm) {
@@ -602,6 +638,11 @@ class Program {
         purchaseForm.setVisible(false);
         purchaseForm.remove(purchaseForm.getCreatePurchaseForm());
         //purchaseViewPane.getPurchaseToolbar().disableCreatePurchaseButton(false);
+    }
+
+    private void removeResultsPane(ResultsPane resultsPane) {
+        resultsPane.remove(resultsPane.getResultsTextPane());
+        resultsPane.remove(resultsPane.getScrollPane());
     }
 
     private void removeCategoryForms() {
