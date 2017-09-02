@@ -50,9 +50,9 @@ public class CardsViewToolbar extends JPanel {
         sortedCombo.setBorder(BorderFactory.createMatteBorder(2,2,2,2, Style.red900()));
         sortedCombo.setSelectedIndex(0);
 
-        leftToolbar.add(searchBtn, 2);
-        leftToolbar.add(createCardBtn, 0);
-        leftToolbar.add(deleteCardBtn, 1);
+        leftToolbar.add(createCardBtn);
+        leftToolbar.add(deleteCardBtn);
+        leftToolbar.add(searchBtn);
         rightToolbar.add(sortedCombo);
         add(leftToolbar);
         add(rightToolbar);
