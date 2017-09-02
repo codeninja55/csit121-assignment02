@@ -20,18 +20,12 @@ public class Shop {
     /*============================== MUTATORS  ==============================*/
     private void generateDefaultCategories() {
         ArrayList<Category> categories = db.getCategories();
-        categories.add(new Category("Motors", "#Description", 0D));
-        categories.add(new Category("Electronics", "#Description", 0D));
-        categories.add(new Category("Fashion", "#Description", 0D));
-        categories.add(new Category("Toys", "#Description", 0D));
-        categories.add(new Category("Deals", "#Description", 0D));
-        categories.add(new Category("Other", "#Description", 0D));
-
-        for (Category item : categories) {
-            if (item.getName().equals("Other")) {
-                item.setId(199);
-            }
-        }
+        categories.add(new Category("Other", "#Description"));
+        categories.add(new Category("Motors", "#Description"));
+        categories.add(new Category("Electronics", "#Description"));
+        categories.add(new Category("Fashion", "#Description"));
+        categories.add(new Category("Toys", "#Description"));
+        categories.add(new Category("Deals", "#Description"));
 
         categories.sort(new CategoriesComparator());
     }
