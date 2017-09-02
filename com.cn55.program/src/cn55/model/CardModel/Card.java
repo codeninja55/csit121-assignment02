@@ -12,6 +12,7 @@ import java.util.Comparator;
 
 public abstract class Card implements Comparable<Card> {
 
+    private static int idCounter = 10000;
     protected String id;
     double points;
     String cardType;
@@ -19,13 +20,14 @@ public abstract class Card implements Comparable<Card> {
     /*============================== CONSTRUCTORS  ==============================*/
     // Default constructor
     public Card() {
-        this.id = Database.generateCardID();
+        this.id = generatedCardID();
         Database.addCardIDSet(id);
         this.points = 0;
         this.cardType = null;
     }
 
     /*============================== MUTATORS  ==============================*/
+    private String generatedCardID () { return "MC" + ++idCounter; }
     /*Abstract method to force implementation in all subclasses*/
     public abstract void calcPoints(double totalAmount);
 

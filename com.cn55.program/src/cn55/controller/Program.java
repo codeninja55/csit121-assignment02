@@ -335,7 +335,6 @@ class Program {
                 cardViewPane.setCardForm(new CardForm());
                 cardViewPane.add(cardViewPane.getCardForm(), BorderLayout.WEST);
                 cardViewPane.getCardForm().createCardForm();
-                cardViewPane.getCardForm().setGeneratedCardID(Database.generateCardID());
                 cardViewPane.getCardForm().setVisible(true);
 
                 /* ADD A CANCEL BUTTON LISTENER AFTER CREATING FORM */

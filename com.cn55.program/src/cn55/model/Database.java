@@ -13,9 +13,12 @@ public class Database {
     private HashMap<String, Integer> cardMap;
     private ArrayList<Purchase> purchases;
     private HashMap<String, Integer> purchaseMap;
+
+    // TODO - Can store these in a HashSet / TreeSet because no two can be same
     private ArrayList<Category> categories;
 
-    private static int idCounter = 10000;
+    // TODO - Fix this problem... if u use a static method for form, this counter will go up
+    //private static int cardIDCounter = 10000;
 
     static HashMap<Integer, Double> categoriesTotalMap = new HashMap<>();
     private static Set<Integer> receiptSet = new HashSet<>();
@@ -29,6 +32,40 @@ public class Database {
         this.purchaseMap = new HashMap<>();
         this.categories = new ArrayList<>();
     }
+
+    /*============================== STATIC METHODS ==============================*/
+    public static int generateReceiptID() {
+        Random randomObj = new Random();
+
+        int receiptID;
+        receiptID = randomObj.ints(10000000,99999999).findFirst().getAsInt();
+
+        if (receiptSet.contains(receiptID)) {
+            return generateReceiptID();
+        } else {
+            addReceiptID(receiptID);
+            return receiptID;
+        }
+    }
+
+    /* SEE ABOVE FOR COMMENT ABOUT cardIDCounter */
+   /* public static String generateCardID() {
+        String cardID = "MC" + (++cardIDCounter);
+
+        if (cardIDSet.contains(cardID)) {
+            return generateCardID();
+        } else {
+            return cardID;
+        }
+    }*/
+
+    /*public static int generateCategoryIDCounter() {
+        if (getCategoriesTotalMap().size() > 0 && )
+    }*/
+
+    private static void addReceiptID(int receiptID) { Database.receiptSet.add(receiptID); }
+
+    public static void addCardIDSet(String cardID) { Database.cardIDSet.add(cardID); }
 
     /*============================== MUTATORS  ==============================*/
     public void mapCards() {
@@ -51,30 +88,6 @@ public class Database {
             for (Category item : categories) {
                 categoriesTotalMap.put(item.getId(), 0D);
             }
-        }
-    }
-
-    public static int generateReceiptID() {
-        Random randomObj = new Random();
-
-        int receiptID;
-        receiptID = randomObj.ints(10000000,99999999).findFirst().getAsInt();
-
-        if (receiptSet.contains(receiptID)) {
-            return generateReceiptID();
-        } else {
-            addReceiptID(receiptID);
-            return receiptID;
-        }
-    }
-
-    public static String generateCardID() {
-        String cardID = "MC" + (++idCounter);
-
-        if (cardIDSet.contains(cardID)) {
-            return generateCardID();
-        } else {
-            return cardID;
         }
     }
 
