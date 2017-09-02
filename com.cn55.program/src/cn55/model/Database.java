@@ -105,10 +105,6 @@ public class Database {
         mapPurchases();
     }
 
-    private static void addReceiptID(int receiptID) { Database.receiptSet.add(receiptID); }
-
-    public static void addCardIDSet(String cardID) { Database.cardIDSet.add(cardID); }
-
     /*============================== ACCESSORS  ==============================*/
     public ArrayList<Card> getCards() {
         return cards;
