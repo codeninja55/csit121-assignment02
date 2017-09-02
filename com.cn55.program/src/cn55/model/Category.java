@@ -1,6 +1,6 @@
 package cn55.model;
 
-import org.jetbrains.annotations.NotNull;
+import java.util.Comparator;
 
 public class Category implements Comparable<Category> {
 
@@ -68,7 +68,10 @@ public class Category implements Comparable<Category> {
     }
 
     @Override
-    public int compareTo(@NotNull Category o) {
-        return Integer.compare(this.id, o.id);
+    public int compareTo(Category o) {
+        /* ASCENDING ORDER */
+        return this.getName().compareTo(o.getName());
+        /* DESCENDING ORDER */
+        //return o.getName().compareTo(this.getName());
     }
 }
