@@ -40,6 +40,7 @@ public class CardsViewToolbar extends JPanel {
 
         String[] sortOptions = {"Sort..",
                 SortCardType.CreatedOrder.getName(),
+                SortCardType.ReverseCreatedOrder.getName(),
                 SortCardType.Name.getName(),
                 SortCardType.Points.getName()};
         sortedCombo = new JComboBox<>(sortOptions);

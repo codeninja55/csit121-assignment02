@@ -428,8 +428,10 @@ class Program {
         cardViewPane.getCardToolbar().getSortedCombo().addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
-                    if (e.getItem().equals("Sort")) {
+                    if (e.getItem().equals("Sort..")) {
                         cardViewPane.refreshCardsTable(db.getCards());
+                    } else if (e.getItem().equals(SortCardType.ReverseCreatedOrder.getName())) {
+                        cardViewPane.refreshCardsTable(sortCards(SortCardType.ReverseCreatedOrder));
                     } else if (e.getItem().equals(SortCardType.CreatedOrder.getName())) {
                         cardViewPane.refreshCardsTable(sortCards(SortCardType.CreatedOrder));
                     } else if (e.getItem().equals(SortCardType.Name.getName())) {
@@ -729,7 +731,10 @@ class Program {
     private ArrayList<Card> sortCards(SortCardType sortType) {
         ArrayList<Card> cards = new ArrayList<>(db.getCards());
         if (sortType.equals(SortCardType.CreatedOrder)) {
-            cards.sort(new CardIDComparator());
+            Collections.sort(cards);
+            return cards;
+        } else if (sortType.equals(SortCardType.ReverseCreatedOrder)) {
+            cards.sort(new CardReverseIDComparator());
             return cards;
         } else if (sortType.equals(SortCardType.Name)) {
             cards.sort(new CardNameComparator());
