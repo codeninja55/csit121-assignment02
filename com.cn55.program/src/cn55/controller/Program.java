@@ -586,12 +586,14 @@ class Program {
         /* TOOLBAR REGISTRATION & HANDLER - CREATE CARD BUTTON */
         categoriesViewPane.setCreateCategoryListener(new ToolbarButtonListener() {
             public void toolbarButtonEventOccurred() {
+                removeCategoryForms();
                 categoriesViewPane.setCreateCategoryForm(new CategoriesForm());
-                categoriesViewPane.add(categoriesViewPane.getCreateCategoryForm(), BorderLayout.WEST);
-                categoriesViewPane.getCreateCategoryForm().setVisible(true);
+                CategoriesForm form = categoriesViewPane.getCreateCategoryForm();
+                categoriesViewPane.add(form, BorderLayout.WEST);
+                form.setVisible(true);
 
                 /* ADD A CANCEL BUTTON LISTENER AFTER CREATING FORM */
-                categoriesViewPane.getCreateCategoryForm().setCancelListener(new ButtonListener() {
+                form.setCancelListener(new ButtonListener() {
                     public void buttonActionOccurred() {
                         categoriesViewPane.getCreateCategoryForm().setVisible(false);
                         removeCategoryForms();
@@ -599,7 +601,7 @@ class Program {
                 });
 
                 /* ADD A CREATE BUTTON LISTENER AFTER CREATING FORM */
-                categoriesViewPane.getCreateCategoryForm().setCreateCategoryListener(new CategoryListener() {
+                form.setCreateCategoryListener(new CategoryListener() {
                     public void createCategoryEventOccurred(CategoryEvent e) {
                         shop.makeCategory(new Category(e.getCategoryNameTextField().getText(),
                                 e.getCategoryDescTextField().getText()));
