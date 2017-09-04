@@ -136,6 +136,11 @@ public class Database {
         mapPurchases();
     }
 
+    public void removeCard(int index) {
+        cards.remove(index);
+        mapCards();
+    }
+
     public void removeCategory(int index) {
         categories.remove(index);
         mapCategories();
