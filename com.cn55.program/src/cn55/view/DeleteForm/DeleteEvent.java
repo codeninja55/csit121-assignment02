@@ -1,5 +1,6 @@
 package cn55.view.DeleteForm;
 
+import cn55.view.CustomComponents.ErrorLabel;
 import cn55.view.CustomComponents.FormLabel;
 import cn55.view.CustomComponents.FormTextField;
 
@@ -11,27 +12,31 @@ public class DeleteEvent extends EventObject {
     private FormTextField idTextField;
     private FormLabel nameLabel;
     private FormTextField nameTextField;
-    private JLabel errorLabel;
-    private JLabel ruleErrLabel;
+    private ErrorLabel errorLabel;
+    private ErrorLabel ruleErrLabel;
+    private ErrorLabel othersDeleteErrLabel;
+    private ErrorLabel deleteErrorLabel;
 
     /*============================== CONSTRUCTORS ==============================*/
-    public DeleteEvent(Object source) {
+    DeleteEvent(Object source) {
         super(source);
     }
 
     /* DELETE CONSTRUCTOR FOR DELETING CARDS */
-    public DeleteEvent(Object source, FormLabel searchIDLabel, FormTextField searchIDTextField,
-                       JLabel errorLabel, JLabel ruleErrLabel) {
+    DeleteEvent(Object source, FormLabel searchIDLabel, FormTextField searchIDTextField,
+                       ErrorLabel errorLabel, ErrorLabel ruleErrLabel, ErrorLabel deleteErrorLabel) {
         super(source);
         this.idLabel = searchIDLabel;
         this.idTextField = searchIDTextField;
         this.errorLabel = errorLabel;
         this.ruleErrLabel = ruleErrLabel;
+        this.deleteErrorLabel = deleteErrorLabel;
     }
 
-    public DeleteEvent(Object source, FormLabel categoryIDLabel, FormTextField categoryIDTextField,
-                       FormLabel nameLabel, FormTextField nameTextField,
-                       JLabel errorLabel, JLabel ruleErrLabel) {
+    /* DELETE CONSTRUCTOR FOR DELETING CATEGORY */
+    DeleteEvent(Object source, FormLabel categoryIDLabel, FormTextField categoryIDTextField,
+                    FormLabel nameLabel, FormTextField nameTextField, ErrorLabel errorLabel,
+                ErrorLabel ruleErrLabel, ErrorLabel othersDeleteErrLabel, ErrorLabel deleteErrorLabel) {
         super(source);
         this.idLabel = categoryIDLabel;
         this.idTextField = categoryIDTextField;
@@ -39,33 +44,11 @@ public class DeleteEvent extends EventObject {
         this.nameTextField = nameTextField;
         this.errorLabel = errorLabel;
         this.ruleErrLabel = ruleErrLabel;
+        this.othersDeleteErrLabel = othersDeleteErrLabel;
+        this.deleteErrorLabel = deleteErrorLabel;
     }
 
     /*============================== MUTATORS ==============================*/
-
-    public void setIdLabel(FormLabel idLabel) {
-        this.idLabel = idLabel;
-    }
-
-    public void setIdTextField(FormTextField idTextField) {
-        this.idTextField = idTextField;
-    }
-
-    public void setNameLabel(FormLabel nameLabel) {
-        this.nameLabel = nameLabel;
-    }
-
-    public void setNameTextField(FormTextField nameTextField) {
-        this.nameTextField = nameTextField;
-    }
-
-    public void setErrorLabel(JLabel errorLabel) {
-        this.errorLabel = errorLabel;
-    }
-
-    public void setRuleErrLabel(JLabel ruleErrLabel) {
-        this.ruleErrLabel = ruleErrLabel;
-    }
 
     /*============================== ACCESSORS ==============================*/
 
@@ -91,5 +74,13 @@ public class DeleteEvent extends EventObject {
 
     public JLabel getRuleErrLabel() {
         return ruleErrLabel;
+    }
+
+    public ErrorLabel getOthersDeleteErrLabel() {
+        return othersDeleteErrLabel;
+    }
+
+    public ErrorLabel getDeleteErrorLabel() {
+        return deleteErrorLabel;
     }
 }
