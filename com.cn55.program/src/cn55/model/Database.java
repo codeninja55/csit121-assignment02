@@ -16,6 +16,7 @@ public class Database {
 
     // TODO - Can store these in a HashSet / TreeSet because no two can be same
     private ArrayList<Category> categories;
+    private HashMap<Integer, Integer> categoriesMap;
 
     // TODO - Fix this problem... if u use a static method for form, this counter will go up
     //private static int cardIDCounter = 10000;
@@ -83,6 +84,14 @@ public class Database {
         this.purchaseMap = purchaseMap;
     }
 
+    void mapCategories() {
+        HashMap<Integer, Integer> categoriesMap = new HashMap<>();
+        for (int index = 0 ; index < categories.size() ; index++)
+            categoriesMap.put(categories.get(index).getId(), index);
+
+        this.categoriesMap = categoriesMap;
+    }
+
     static void mapCategoriesTotalMap(ArrayList<Category> categories) {
         if (categoriesTotalMap.size() == 0) {
             for (Category item : categories) {
@@ -105,6 +114,11 @@ public class Database {
         mapPurchases();
     }
 
+    public void removeCategory(int index) {
+        categories.remove(index);
+        mapCategories();
+    }
+
     /*============================== ACCESSORS  ==============================*/
     public ArrayList<Card> getCards() {
         return cards;
@@ -117,6 +131,10 @@ public class Database {
     }
 
     public ArrayList<Category> getCategories() { return categories; }
+
+    public HashMap<Integer, Integer> getCategoriesMap() {
+        return categoriesMap;
+    }
 
     public static HashMap<Integer, Double> getCategoriesTotalMap() {
         return categoriesTotalMap;
