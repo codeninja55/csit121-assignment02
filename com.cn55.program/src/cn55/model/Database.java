@@ -9,19 +9,18 @@ import java.util.*;
 
 /* SINGLETON DESIGN PATTERN */
 
-public class Database {
+public class Database implements Subject {
 
     private static Database db;
+    private ArrayList<Observer> observers;
     private ArrayList<Card> cards;
     private HashMap<String, Integer> cardMap;
     private ArrayList<Purchase> purchases;
     private HashMap<String, Integer> purchaseMap;
 
-    // TODO - Can store these in a HashSet / TreeSet because no two can be same
     private ArrayList<Category> categories;
     private HashMap<Integer, Integer> categoriesMap;
 
-    // TODO - Fix this problem... if u use a static method for form, this counter will go up
     private static int cardIDCounter = 10000;
     private static int categoryIDCounter = 100;
 
@@ -31,6 +30,7 @@ public class Database {
     /*============================== CONSTRUCTORS  ==============================*/
     // Private modifier prevents any other class from instantiating
     private Database() {
+        this.observers = new ArrayList<>();
         this.cards = new ArrayList<>();
         this.cardMap = new HashMap<>();
         this.purchases = new ArrayList<>();
@@ -63,7 +63,6 @@ public class Database {
         }
     }
 
-    /* SEE ABOVE FOR COMMENT ABOUT cardIDCounter */
     public static String generateCardID() {
         return "MC" + (++cardIDCounter);
     }
@@ -116,26 +115,31 @@ public class Database {
     void addCategory(Category category) {
         categories.add(category);
         mapCategories();
+        notifyObservers();
     }
 
     public void addCards(Card card) {
         this.cards.add(card);
         mapCards();
+        notifyObservers();
     }
 
     void addPurchase(Purchase purchase) {
         this.purchases.add(purchase);
         mapPurchases();
+        notifyObservers();
     }
 
     public void removeCard(int index) {
         cards.remove(index);
         mapCards();
+        notifyObservers();
     }
 
     public void removeCategory(int index) {
         categories.remove(index);
         mapCategories();
+        notifyObservers();
     }
 
     /*============================== ACCESSORS  ==============================*/
@@ -172,5 +176,39 @@ public class Database {
         cardModel.addElement("Please Select");
         for (Card card : cards) cardModel.addElement(card.getID());
         return cardModel;
+    }
+
+    /*============================== OBSERVER DESIGN PATTERN ==============================*/
+    /* Implement Subject interface making this object instance a Subject */
+    @Override
+    public void register(Observer obj) {
+        observers.add(obj);
+    }
+
+    @Override
+    public void unregister(Observer obj) {
+        observers.remove(obj);
+    }
+
+    @Override
+    public void notifyObservers() {
+        for (Observer obs : observers) {
+            obs.update();
+        }
+    }
+
+    @Override
+    public ArrayList<Card> getCardsUpdate(Observer who) {
+        return cards;
+    }
+
+    @Override
+    public ArrayList<Purchase> getPurchaseUpdate(Observer who) {
+        return purchases;
+    }
+
+    @Override
+    public ArrayList<Category> getCategoriesUpdate(Observer who) {
+        return categories;
     }
 }
