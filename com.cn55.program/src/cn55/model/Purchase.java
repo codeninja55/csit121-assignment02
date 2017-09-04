@@ -70,15 +70,27 @@ public class Purchase {
 
     public String getCardType() { return cardType; }
 
+    public HashMap<Integer, Category> getCategories() {
+        return categories;
+    }
+
     public Date getPurchaseTime() { return purchaseTime; }
+
+    public double getCategoriesTotal() {
+        double total = 0;
+        for (HashMap.Entry<Integer, Category> item : this.categories.entrySet())
+            total = total + item.getValue().getAmount();
+
+        return total;
+    }
 
     public String toString() {
 
         String firstOutput = String.format(
                 "%n%-20s %s" +
-                "%n%-20s %s" +
-                "%n%-20s %s" +
-                "%n%-20s %-20tc",
+                        "%n%-20s %s" +
+                        "%n%-20s %s" +
+                        "%n%-20s %-20tc",
                 "Receipt ID", this.receiptID,
                 "Card ID:",this.cardID,
                 "Card Type:",this.cardType,
@@ -91,13 +103,5 @@ public class Purchase {
                     item.getValue().getAmount());
 
         return firstOutput + secondOutput;
-    }
-
-    public double getCategoriesTotal() {
-        double total = 0;
-        for (HashMap.Entry<Integer, Category> item : this.categories.entrySet())
-            total = total + item.getValue().getAmount();
-
-        return total;
     }
 }
