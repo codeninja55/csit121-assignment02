@@ -2,19 +2,25 @@ package cn55.controller.Validator;
 
 public class FormValidData {
     private String cardID;
+    private String categoryIDStr;
     private String catValueStr;
     private String email;
 
     /*============================== CONSTRUCTORS ==============================*/
     public FormValidData() {
-        this.cardID = "";
-        this.catValueStr = "";
-        this.email = "";
+        this.cardID = null;
+        this.categoryIDStr = null;
+        this.catValueStr = null;
+        this.email = null;
     }
 
     /*============================== MUTATORS ==============================*/
     public void setCardID(String cardID) {
         this.cardID = cardID;
+    }
+
+    public void setCategoryID(String categoryIDStr) {
+        this.categoryIDStr = categoryIDStr;
     }
 
     public void setCatValueStr(String catValueStr) {
@@ -28,6 +34,10 @@ public class FormValidData {
     /*============================== ACCESSORS ==============================*/
     public String getCardID() {
         return cardID;
+    }
+
+    public String getCategoryID() {
+        return categoryIDStr;
     }
 
     public String getCatValueStr() {
