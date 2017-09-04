@@ -58,8 +58,8 @@ public class Program {
         db.mapCards();
 
         this.mainFrame = new MainFrame(shop.getDatabase().getPurchases(),
-                                    shop.getDatabase().getCards(),
-                                    shop.getDatabase().getCategories());
+                                    shop.getDatabase().getCards(), db);
+
 
         this.tabPane = mainFrame.getTabPane();
 
@@ -71,6 +71,10 @@ public class Program {
         this.purchaseViewToolbar = purchaseViewPane.getPurchaseToolbar();
 
         this.categoriesViewPane = mainFrame.getCategoriesViewPane();
+        db.register(categoriesViewPane);
+        categoriesViewPane.setSubject(db);
+        categoriesViewPane.update();
+        categoriesViewPane.setCategoriesTableModel();
 
         eventControlling();
     }
@@ -241,10 +245,7 @@ public class Program {
             if (tabPane.getSelectedComponent() == cardViewPane) {
                 cardViewPane.refreshCardsTable(db.getCards());
             } else if (tabPane.getSelectedComponent() == purchaseViewPane) {
-                purchaseViewToolbar.disableCreatePurchaseButton(false);
                 purchaseViewPane.refreshPurchasesTable(shop.getDatabase().getPurchases());
-            } if (tabPane.getSelectedComponent() == categoriesViewPane) {
-                categoriesViewPane.refreshCategoriesTable(shop.getDatabase().getCategories());
             }
 
             /* DESELECTED LISTENERS */
@@ -624,7 +625,7 @@ public class Program {
                     public void createCategoryEventOccurred(CategoryEvent e) {
                         shop.makeCategory(new Category(e.getCategoryNameTextField().getText(),
                                 e.getCategoryDescTextField().getText()));
-                        categoriesViewPane.refreshCategoriesTable(db.getCategories());
+                        //categoriesViewPane.refreshCategoriesTable(db.getCategories());
                         removeCategoryForms();
                     }
                 });
@@ -700,7 +701,6 @@ public class Program {
 
                                 if (confirm == JOptionPane.OK_OPTION) {
                                     shop.deleteCategory(categoryID);
-                                    categoriesViewPane.refreshCategoriesTable(db.getCategories());
                                     form.setVisible(false);
                                     removeCategoryForms();
                                 } else {

@@ -1,7 +1,5 @@
 package cn55.view.CategoriesView;
-import cn55.model.Category;
-import cn55.model.Database;
-import cn55.model.Purchase;
+import cn55.model.*;
 import cn55.view.CustomComponents.Style;
 import cn55.view.CustomComponents.Toolbar;
 import cn55.view.CustomComponents.ToolbarButton;
@@ -16,7 +14,8 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class CategoriesViewPane extends JPanel {
+public class CategoriesViewPane extends JPanel implements Observer {
+    private Subject database;
     private CategoriesTableModel categoriesTableModel;
     private Toolbar toolbar;
     private JTable categoriesTablePane;
@@ -35,8 +34,9 @@ public class CategoriesViewPane extends JPanel {
         toolbar = new Toolbar();
         createCategoryBtn = new ToolbarButton("Create Category");
         deleteCategoryBtn = new ToolbarButton("Delete Category");
+
         categoriesTableModel = new CategoriesTableModel();
-        categoriesTablePane = new JTable(categoriesTableModel);
+        categoriesTablePane = new JTable();
         JScrollPane tableScrollPane = new JScrollPane(categoriesTablePane);
         tableScrollPane.setName("CategoriesViewTableScrollPane");
 
@@ -48,18 +48,12 @@ public class CategoriesViewPane extends JPanel {
         toolbar.getLeftToolbar().add(deleteCategoryBtn);
         add(toolbar, BorderLayout.NORTH);
 
+        add(tableScrollPane, BorderLayout.CENTER);
+
         /* REGISTRATION OF TOOLBAR BUTTON LISTENERS */
         ToolbarListener handler = new ToolbarListener();
         createCategoryBtn.addActionListener(handler);
         deleteCategoryBtn.addActionListener(handler);
-
-        categoriesTablePane.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        tableFormatter();
-        add(tableScrollPane, BorderLayout.CENTER);
-
-
-        /* TESTING PURCHASE FORM VIEW */
-        add(new CategoriesForm(), BorderLayout.WEST);
 
     }
 
@@ -70,6 +64,14 @@ public class CategoriesViewPane extends JPanel {
 
     public void setDeleteCategoryListener(ToolbarButtonListener listener) {
         this.deleteCategoryListener = listener;
+    }
+
+    public void setCategoriesTableModel() {
+        categoriesTablePane.setModel(categoriesTableModel);
+        categoriesTablePane.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        tableFormatter();
+        this.revalidate();
+        this.repaint();
     }
 
     private void tableFormatter() {
@@ -89,9 +91,15 @@ public class CategoriesViewPane extends JPanel {
         this.deleteCategoryForm = deleteCategoryForm;
     }
 
-    public void refreshCategoriesTable(ArrayList<Category> categories) {
+    /* OBSERVER DESIGN PATTERN IMPLEMENTATION */
+    @Override
+    public void setSubject(Subject subject) {
+        this.database = subject;
+    }
 
-        categoriesTableModel.setData(categories);
+    @Override
+    public void update() {
+        categoriesTableModel.setData(database.getCategoriesUpdate(this));
         categoriesTableModel.fireTableDataChanged();
     }
 

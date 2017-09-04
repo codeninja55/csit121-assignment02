@@ -32,6 +32,7 @@ public class Shop {
 
         categories.sort(new CategoriesComparator());
         db.mapCategories();
+        db.notifyObservers();
     }
 
     public void makeCategory(Category category) {

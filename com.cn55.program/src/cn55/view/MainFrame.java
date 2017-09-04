@@ -1,12 +1,12 @@
 package cn55.view;
 
+import cn55.model.Subject;
 import cn55.model.CardModel.Card;
-import cn55.model.Category;
 import cn55.model.Purchase;
-import cn55.view.CardView.*;
-import cn55.view.CategoriesView.*;
+import cn55.view.CardView.CardViewPane;
+import cn55.view.CategoriesView.CategoriesViewPane;
 import cn55.view.CustomComponents.Style;
-import cn55.view.PurchaseView.*;
+import cn55.view.PurchaseView.PurchaseViewPane;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,10 +26,14 @@ public class MainFrame extends JFrame {
     private CategoriesViewPane categoriesViewPane;
     //private SummaryPanel summaryPanel;
 
-    public MainFrame(ArrayList<Purchase> purchases, ArrayList<Card> cards, ArrayList<Category> categories) {
+    public MainFrame(ArrayList<Purchase> purchases, ArrayList<Card> cards, Subject database) {
         super("Marvel Card Rewards");
 
         setLayout(new BorderLayout());
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setUndecorated(false);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setVisible(true);
 
         this.tabPane = new JTabbedPane();
 
@@ -45,12 +49,6 @@ public class MainFrame extends JFrame {
         this.cardViewPane = new CardViewPane();
         this.purchaseViewPane = new PurchaseViewPane();
         this.categoriesViewPane = new CategoriesViewPane();
-        //this.summaryPanel = new SummaryPanel();
-
-        /* Pass in copies of the ArrayList instead of hte db data */
-        cardViewPane.refreshCardsTable(cards);
-        purchaseViewPane.refreshPurchasesTable(purchases);
-        categoriesViewPane.refreshCategoriesTable(categories);
 
         // Add panels, toolbars, and panes to main Frame
         tabPane.setBackground(Style.blueGrey500());
@@ -64,15 +62,9 @@ public class MainFrame extends JFrame {
         tabPane.addTab("Cards", cardViewPane);
         tabPane.addTab("Purchases", purchaseViewPane);
         tabPane.addTab("Categories", categoriesViewPane);
-        //tabPane.addTab("Summary", summaryPanel);
 
         // DEFAULT PANE BEGIN AT
         tabPane.setSelectedIndex(3);
-
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
-        setUndecorated(false);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setVisible(true);
     }
 
     /*============================== ACCESSORS  ==============================*/
