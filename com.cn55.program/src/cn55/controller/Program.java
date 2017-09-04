@@ -295,12 +295,18 @@ public class Program {
                 cardViewPane.setDeleteForm(new DeleteCardForm());
                 cardViewPane.add(cardViewPane.getDeleteForm(), BorderLayout.WEST);
                 cardViewPane.getDeleteForm().setVisible(true);
-                cardViewPane.getResultsPane().setVisible(false);
+
+                /* Setup a text pane to put all the necessary data into */
+                ResultsPane resultsPane = cardViewPane.getResultsPane();
+                resultsPane.setVisible(false);
+                resultsPane.setResultsTextPane();
+                ResultsPane.ResultsTextPane resultsTextPane = resultsPane.getResultsTextPane();
 
                 /* REGISTER A CANCEL BUTTON LISTENER AFTER CREATING FORM */
                 cardViewPane.getDeleteForm().setCancelListener(new ButtonListener() {
                     public void buttonActionOccurred() {
                         cardViewPane.getDeleteForm().setVisible(false);
+                        cardViewPane.getResultsPane().setVisible(false);
                         removeCardForms();
                     }
                 });
@@ -314,10 +320,17 @@ public class Program {
                         FormValidData input = new FormValidData();
                         input.setCardID(cardID);
                         FormRule rule = new CardIDRule();
+                        ExistsRule existsRule = new CardExistsRule();
 
-                        if (!cardID.isEmpty() && shop.cardExists(cardID)) {
+                        int cardIndex = existsRule.existsValidating(input);
+
+                        if (!cardID.isEmpty() && cardIndex >= 0) {
                             e.getErrorLabel().setVisible(false);
                             e.getRuleErrLabel().setVisible(false);
+                            e.getDeleteErrorLabel().setVisible(false);
+
+                            showResultsPane(db.getCards().get(cardIndex).toString(), resultsPane, resultsTextPane);
+
                             String[] btnOptions = {"Yes","Cancel"};
                             String message = "Are you sure you want to DELETE card: " + cardID +
                                     "\nThis cannot be undone." +
@@ -334,7 +347,7 @@ public class Program {
                             );
 
                             if (confirm == JOptionPane.OK_OPTION) {
-                                shop.deleteCard(cardID);
+                                shop.deleteCard(cardIndex);
                                 cardViewPane.refreshCardsTable(db.getCards());
                                 /* Purchases by this card will be changed to cash */
                                 shop.convertPurchase(cardID);
@@ -344,11 +357,15 @@ public class Program {
                                 e.getDeleteErrorLabel().setVisible(true);
                             }
                         } else {
-                            if (!rule.validate(input))
+                            if (!rule.validate(input)){
                                 e.getRuleErrLabel().setVisible(true);
-                            else
+                                e.getErrorLabel().setVisible(false);
+                            } else {
                                 e.getErrorLabel().setVisible(true);
+                                e.getRuleErrLabel().setVisible(false);
+                            }
 
+                            e.getDeleteErrorLabel().setVisible(true);
                             e.getIdTextField().setForeground(Style.redA700());
                             e.getIdLabel().setForeground(Style.redA700());
                         }
@@ -377,8 +394,6 @@ public class Program {
                 /* ADD A CANCEL BUTTON LISTENER AFTER CREATING FORM */
                 cardViewPane.getSearchForm().setSearchListener(new SearchListener() {
                     public void searchEventOccurred(SearchEvent e) {
-                        //JScrollPane resultsScrollPane = cardViewPane.getResultsScrollPane();
-
                         /* Setup a text pane to put all the necessary data into */
                         ResultsPane resultsPane = cardViewPane.getResultsPane();
                         resultsPane.setResultsTextPane();
@@ -390,12 +405,14 @@ public class Program {
                         FormValidData input = new FormValidData();
                         input.setCardID(cardID);
                         FormRule cardIDRule = new CardIDRule();
+                        ExistsRule cardExistsRule = new CardExistsRule();
 
-                        if (!cardID.isEmpty() && shop.cardExists(cardID)) {
+                        int cardIndex = cardExistsRule.existsValidating(input);
+
+                        if (!cardID.isEmpty() && cardIndex >= 0) {
                             e.getErrorLabel().setVisible(false);
                             e.getRuleErrLabel().setVisible(false);
 
-                            int cardIndex = db.getCardMap().get(cardID);
                             String cardText = db.getCards().get(cardIndex).toString();
                             StringBuilder purchaseText = new StringBuilder("");
 
@@ -418,10 +435,13 @@ public class Program {
 
                             e.getSearchIDTextField().setText(null);
                         } else {
-                            if (!cardIDRule.validate(input))
+                            if (!cardIDRule.validate(input)) {
                                 e.getRuleErrLabel().setVisible(true);
-                            else
+                                e.getErrorLabel().setVisible(false);
+                            } else {
                                 e.getErrorLabel().setVisible(true);
+                                e.getRuleErrLabel().setVisible(false);
+                            }
 
                             removeResultsPane(resultsPane);
                             resultsPane.setVisible(false);
