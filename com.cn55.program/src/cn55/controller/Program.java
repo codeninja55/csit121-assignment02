@@ -614,6 +614,35 @@ class Program {
             }
         });
 
+        categoriesViewPane.setDeleteCategoryListener(new ToolbarButtonListener() {
+            public void toolbarButtonEventOccurred() {
+                removeCategoryForms();
+                categoriesViewPane.setDeleteCategoryForm(new DeleteCategoryForm());
+                DeleteCategoryForm form = categoriesViewPane.getDeleteCategoryForm();
+
+                categoriesViewPane.add(form, BorderLayout.WEST);
+                form.setVisible(true);
+
+                /* ADD A CANCEL BUTTON LISTENER AFTER CREATING FORM */
+                form.setCancelListener(new ButtonListener() {
+                    public void buttonActionOccurred() {
+                        form.setVisible(false);
+                        removeCategoryForms();
+                    }
+                });
+
+                /* ADD A DELETE BUTTON LISTENER AFTER CREATING FORM */
+                form.setDeleteListener(new DeleteListener() {
+                    public void deleteEventOccurred(DeleteEvent e) {
+                        /* TEST CODE */
+                        System.err.println("DELETE BUTTON CALLBACK NOT IMPL");
+                        System.out.println("DELETE BUTTON PRESSED");
+                    }
+                });
+
+            }
+        });
+
     }
 
     /*============================== MUTATORS  ==============================*/
