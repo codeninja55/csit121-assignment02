@@ -1,10 +1,9 @@
 package cn55.view.PurchaseView;
 
-import cn55.model.CategoriesComparator;
+import cn55.model.CardType;
 import cn55.model.Category;
 import cn55.model.PurchaseType;
 import cn55.view.ButtonListener;
-import cn55.model.CardType;
 import cn55.view.CustomComponents.*;
 
 import javax.swing.*;
@@ -459,7 +458,7 @@ public class PurchaseForm extends JPanel {
         HashMap<JLabel[], FormTextField> categoriesMap = new HashMap<>();
         for (int i = 0; i < categoriesList.size(); i++) {
             JLabel[] labelArr = new JLabel[2];
-            String categoryStr = categoriesList.get(i) + ": $";
+            String categoryStr = categoriesList.get(i).getName() + ": $";
             labelArr[0] = new FormLabel(categoryStr);
             labelArr[1] = new ErrorLabel("INVALID AMOUNT");
 
@@ -489,11 +488,11 @@ public class PurchaseForm extends JPanel {
         gc.anchor = GridBagConstraints.FIRST_LINE_START;
     }
 
-    private void enableNameAndEmail (boolean isEnabled) {
-        cardNameLabel.setVisible(isEnabled);
-        cardNameTextField.setVisible(isEnabled);
-        cardEmailLabel.setVisible(isEnabled);
-        cardEmailTextField.setVisible(isEnabled);
+    private void enableNameAndEmail (boolean isVisible) {
+        cardNameLabel.setVisible(isVisible);
+        cardNameTextField.setVisible(isVisible);
+        cardEmailLabel.setVisible(isVisible);
+        cardEmailTextField.setVisible(isVisible);
     }
 
     /*============================== ACCESSORS  ==============================*/
