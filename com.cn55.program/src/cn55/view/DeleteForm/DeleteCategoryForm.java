@@ -21,6 +21,8 @@ public class DeleteCategoryForm extends JPanel {
     private FormTextField categoryNameTextField;
     private ErrorLabel errLabel;
     private ErrorLabel idRuleErrLabel;
+    private ErrorLabel othersDeleteErrLabel;
+    private ErrorLabel deleteErrorLabel;
     private FormButton deleteBtn;
 
     private ButtonListener cancelListener;
@@ -43,6 +45,8 @@ public class DeleteCategoryForm extends JPanel {
 
         errLabel = new ErrorLabel("CATEGORY DOES NOT EXIST");
         idRuleErrLabel = new ErrorLabel("INVALID CATEGORY ID");
+        othersDeleteErrLabel = new ErrorLabel("CANNOT DELETE OTHERS CATEGORY");
+        deleteErrorLabel = new ErrorLabel("CATEGORY NOT DELETED");
         deleteBtn = new FormButton("Delete Category");
 
         setLayout(new BorderLayout());
@@ -103,8 +107,13 @@ public class DeleteCategoryForm extends JPanel {
         categoryIDTextField.setVisible(true);
         deleteCategoryForm.add(categoryIDTextField, gc);
 
+        /*========== NEW ROW - ERROR LABEL ==========*/
+        gc.gridy++;
+        gc.anchor = GridBagConstraints.PAGE_START;
+        deleteCategoryForm.add(idRuleErrLabel, gc);
+
         /*========== NEW ROW ==========*/
-        gc.gridy = 0; gc.gridy = 0; gc.weightx = 1; gc.weighty = 0.1;
+        gc.gridy++; gc.weightx = 1; gc.weighty = 0.1;
         gc.anchor = GridBagConstraints.PAGE_END;
         deleteCategoryForm.add(categoryNameLabel, gc);
 
@@ -114,8 +123,29 @@ public class DeleteCategoryForm extends JPanel {
         categoryNameTextField.setPreferredSize(textFieldDim);
         deleteCategoryForm.add(categoryNameTextField, gc);
 
+        /*========== NEW ROW - ERROR LABEL ==========*/
+        gc.gridy++;
+        gc.anchor = GridBagConstraints.PAGE_START;
+        deleteCategoryForm.add(errLabel, gc);
+
+        /*========== NEW ROW - DELETE OTHERS ERROR LABEL ==========*/
+        gc.gridy++;
+        gc.anchor = GridBagConstraints.PAGE_START;
+        deleteCategoryForm.add(othersDeleteErrLabel, gc);
+
+        /*========== NEW ROW - DELETE ERROR LABEL ==========*/
+        gc.gridy++; gc.weighty = 0.1;
+        gc.fill = GridBagConstraints.HORIZONTAL;
+        gc.anchor = GridBagConstraints.CENTER;
+        gc.insets = new Insets(20,0,20,0);
+        deleteErrorLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        deleteErrorLabel.setFont(new Font("Monospaced", Font.BOLD, 32));
+        deleteErrorLabel.setBorder(Style.formBorder(""));
+        deleteCategoryForm.add(deleteErrorLabel, gc);
+
         /*========== BUTTON ROW ==========*/
         gc.gridy++; gc.weighty = 2;
+        gc.fill = GridBagConstraints.NONE;
         gc.anchor = GridBagConstraints.PAGE_START;
         gc.insets = new Insets(20,0,0,0);
         deleteBtn.setVisible(true);
@@ -125,17 +155,13 @@ public class DeleteCategoryForm extends JPanel {
     }
 
     private void deleteByIDForm() {
-        categoryIDLabel.setVisible(true);
-        categoryIDTextField.setVisible(true);
-        categoryNameLabel.setVisible(false);
-        categoryNameTextField.setVisible(false);
+        hideErrorLabels();
+        switchIDAndNameFields(true);
     }
 
     private void deleteByNameForm() {
-        categoryIDLabel.setVisible(false);
-        categoryIDTextField.setVisible(false);
-        categoryNameLabel.setVisible(true);
-        categoryNameTextField.setVisible(true);
+        hideErrorLabels();
+        switchIDAndNameFields(false);
     }
 
     /*============================== MUTATORS  ==============================*/
@@ -146,6 +172,21 @@ public class DeleteCategoryForm extends JPanel {
 
     public void setDeleteListener(DeleteListener listener) {
         this.deleteListener = listener;
+    }
+
+    private void switchIDAndNameFields(boolean isVisible) {
+        categoryIDLabel.setVisible(isVisible);
+        categoryIDTextField.setVisible(isVisible);
+        categoryNameLabel.setVisible(!isVisible);
+        categoryNameTextField.setVisible(!isVisible);
+    }
+
+    private void hideErrorLabels() {
+        for (Component c : deleteCategoryForm.getComponents()) {
+            if (c instanceof ErrorLabel) {
+                c.setVisible(false);
+            }
+        }
     }
 
     /*=========================================================================*/
@@ -160,9 +201,9 @@ public class DeleteCategoryForm extends JPanel {
                 }
             } else if (e.getSource() == deleteBtn) {
                 if (deleteListener != null) {
-                    /* TEST CODE */
-                    System.err.println("DELETE CATEGORY BUTTON NOT IMPL");
-                    DeleteEvent event = new DeleteEvent(this);
+                    DeleteEvent event = new DeleteEvent(this, categoryIDLabel, categoryIDTextField,
+                            categoryNameLabel, categoryNameTextField, errLabel,
+                            idRuleErrLabel, othersDeleteErrLabel, deleteErrorLabel);
                     deleteListener.deleteEventOccurred(event);
                 }
             } else if (e.getSource() == idRB) {
