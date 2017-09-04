@@ -12,14 +12,14 @@ public class Category implements Comparable<Category> {
 
     /*============================== CONSTRUCTORS  ==============================*/
     public Category(String name) {
-        this.id = generateCategoriesID();
+        this.id = Database.generateCategoryID();
         this.name = name;
         this.description = "";
         this.amount = 0;
     }
 
     public Category(String name, String description) {
-        this.id = generateCategoriesID();
+        this.id = Database.generateCategoryID();
         this.name = name;
         this.description = description;
         this.amount = 0D;
@@ -38,10 +38,6 @@ public class Category implements Comparable<Category> {
     }
 
     /*============================== MUTATORS  ==============================*/
-    private int generateCategoriesID() {
-        return idCounter++;
-    }
-
     void setId(int id) { this.id = id; }
 
     void setName(String name) { this.name = name; }
