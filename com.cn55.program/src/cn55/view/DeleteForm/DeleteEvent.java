@@ -7,8 +7,10 @@ import javax.swing.*;
 import java.util.EventObject;
 
 public class DeleteEvent extends EventObject {
-    private FormLabel searchIDLabel;
-    private FormTextField searchIDTextField;
+    private FormLabel idLabel;
+    private FormTextField idTextField;
+    private FormLabel nameLabel;
+    private FormTextField nameTextField;
     private JLabel errorLabel;
     private JLabel ruleErrLabel;
 
@@ -17,23 +19,44 @@ public class DeleteEvent extends EventObject {
         super(source);
     }
 
+    /* DELETE CONSTRUCTOR FOR DELETING CARDS */
     public DeleteEvent(Object source, FormLabel searchIDLabel, FormTextField searchIDTextField,
                        JLabel errorLabel, JLabel ruleErrLabel) {
         super(source);
-        this.searchIDLabel = searchIDLabel;
-        this.searchIDTextField = searchIDTextField;
+        this.idLabel = searchIDLabel;
+        this.idTextField = searchIDTextField;
+        this.errorLabel = errorLabel;
+        this.ruleErrLabel = ruleErrLabel;
+    }
+
+    public DeleteEvent(Object source, FormLabel categoryIDLabel, FormTextField categoryIDTextField,
+                       FormLabel nameLabel, FormTextField nameTextField,
+                       JLabel errorLabel, JLabel ruleErrLabel) {
+        super(source);
+        this.idLabel = categoryIDLabel;
+        this.idTextField = categoryIDTextField;
+        this.nameLabel = nameLabel;
+        this.nameTextField = nameTextField;
         this.errorLabel = errorLabel;
         this.ruleErrLabel = ruleErrLabel;
     }
 
     /*============================== MUTATORS ==============================*/
 
-    public void setSearchIDLabel(FormLabel searchIDLabel) {
-        this.searchIDLabel = searchIDLabel;
+    public void setIdLabel(FormLabel idLabel) {
+        this.idLabel = idLabel;
     }
 
-    public void setSearchIDTextField(FormTextField searchIDTextField) {
-        this.searchIDTextField = searchIDTextField;
+    public void setIdTextField(FormTextField idTextField) {
+        this.idTextField = idTextField;
+    }
+
+    public void setNameLabel(FormLabel nameLabel) {
+        this.nameLabel = nameLabel;
+    }
+
+    public void setNameTextField(FormTextField nameTextField) {
+        this.nameTextField = nameTextField;
     }
 
     public void setErrorLabel(JLabel errorLabel) {
@@ -46,12 +69,20 @@ public class DeleteEvent extends EventObject {
 
     /*============================== ACCESSORS ==============================*/
 
-    public FormLabel getSearchIDLabel() {
-        return searchIDLabel;
+    public FormLabel getIdLabel() {
+        return idLabel;
     }
 
-    public FormTextField getSearchIDTextField() {
-        return searchIDTextField;
+    public FormTextField getIdTextField() {
+        return idTextField;
+    }
+
+    public FormLabel getNameLabel() {
+        return nameLabel;
+    }
+
+    public FormTextField getNameTextField() {
+        return nameTextField;
     }
 
     public JLabel getErrorLabel() {
