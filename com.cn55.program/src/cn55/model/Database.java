@@ -22,11 +22,11 @@ public class Database {
     private HashMap<Integer, Integer> categoriesMap;
 
     // TODO - Fix this problem... if u use a static method for form, this counter will go up
-    //private static int cardIDCounter = 10000;
+    private static int cardIDCounter = 10000;
+    private static int categoryIDCounter = 100;
 
     static HashMap<Integer, Double> categoriesTotalMap = new HashMap<>();
     private static Set<Integer> receiptSet = new HashSet<>();
-    private static Set<String> cardIDSet = new HashSet<>();
 
     /*============================== CONSTRUCTORS  ==============================*/
     // Private modifier prevents any other class from instantiating
@@ -64,23 +64,15 @@ public class Database {
     }
 
     /* SEE ABOVE FOR COMMENT ABOUT cardIDCounter */
-   /* public static String generateCardID() {
-        String cardID = "MC" + (++cardIDCounter);
+    public static String generateCardID() {
+        return "MC" + (++cardIDCounter);
+    }
 
-        if (cardIDSet.contains(cardID)) {
-            return generateCardID();
-        } else {
-            return cardID;
-        }
-    }*/
-
-    /*public static int generateCategoryIDCounter() {
-        if (getCategoriesTotalMap().size() > 0 && )
-    }*/
+    public static int generateCategoryID() {
+        return categoryIDCounter++;
+    }
 
     private static void addReceiptID(int receiptID) { Database.receiptSet.add(receiptID); }
-
-    public static void addCardIDSet(String cardID) { Database.cardIDSet.add(cardID); }
 
     /*============================== MUTATORS  ==============================*/
     public void mapCards() {
@@ -147,6 +139,14 @@ public class Database {
     }
 
     /*============================== ACCESSORS  ==============================*/
+    public static String getNextCardID() {
+        return "MC" + (cardIDCounter + 1);
+    }
+
+    public static int getNextCategoryID() {
+        return categoryIDCounter;
+    }
+
     public ArrayList<Card> getCards() {
         return cards;
     }
