@@ -28,6 +28,7 @@ public class Shop {
         categories.add(new Category("Deals", "#Description"));
 
         categories.sort(new CategoriesComparator());
+        db.mapCategories();
     }
 
     public void makeCategory(Category category) {
@@ -37,11 +38,11 @@ public class Shop {
     public void makePurchase(String cardID, int receiptID, HashMap<Integer, Category> categories) {
 
         if (cardID.equals(CardType.Cash.getName())) {
-            updateCategoriesTotalMap(categories);
+            Database.updateCategoriesTotalMap(categories);
             db.addPurchase(new Purchase(categories, receiptID));
         } else {
             if (cardExists(cardID)) {
-                updateCategoriesTotalMap(categories);
+                Database.updateCategoriesTotalMap(categories);
                 Card card = db.getCards().get(db.getCardMap().get(cardID));
                 String cardType = card.getCardType();
                 Purchase newPurchase = new Purchase(cardID, cardType, categories, receiptID);
@@ -77,8 +78,7 @@ public class Shop {
 
     public boolean cardExists(String cardID) {
         db.mapCards();
-        HashMap<String, Integer> cardMap = db.getCardMap();
-        return cardMap.containsKey(cardID);
+        return db.getCardMap().containsKey(cardID);
     }
 
     public void deleteCard(String cardID) {
