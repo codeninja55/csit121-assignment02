@@ -5,6 +5,7 @@ import cn55.model.Purchase;
 import cn55.view.CustomComponents.Style;
 import cn55.view.CustomComponents.Toolbar;
 import cn55.view.CustomComponents.ToolbarButton;
+import cn55.view.DeleteForm.DeleteCategoryForm;
 import cn55.view.ToolbarButtonListener;
 
 import javax.swing.*;
@@ -21,7 +22,7 @@ public class CategoriesViewPane extends JPanel {
     private JTable categoriesTablePane;
 
     private CategoriesForm createCategoryForm;
-    //private DeleteCategoryForm deleteCategoryForm;
+    private DeleteCategoryForm deleteCategoryForm;
 
     private ToolbarButton createCategoryBtn;
     private ToolbarButton deleteCategoryBtn;
@@ -84,6 +85,10 @@ public class CategoriesViewPane extends JPanel {
         this.createCategoryForm = createCategoryForm;
     }
 
+    public void setDeleteCategoryForm(DeleteCategoryForm deleteCategoryForm) {
+        this.deleteCategoryForm = deleteCategoryForm;
+    }
+
     public void refreshCategoriesTable(ArrayList<Category> categories) {
 
         categoriesTableModel.setData(categories);
@@ -103,6 +108,10 @@ public class CategoriesViewPane extends JPanel {
         return createCategoryForm;
     }
 
+    public DeleteCategoryForm getDeleteCategoryForm() {
+        return deleteCategoryForm;
+    }
+
     /*=========================================================================*/
     /*============================== INNER CLASS ==============================*/
     /*=========================================================================*/
@@ -114,14 +123,12 @@ public class CategoriesViewPane extends JPanel {
                 if (createCategoryListener != null)
                     createCategoryListener.toolbarButtonEventOccurred();
             } else if (e.getSource() == deleteCategoryBtn) {
-                System.out.println("Delete Category Button Pressed");
+                if (deleteCategoryListener != null) {
+                    deleteCategoryListener.toolbarButtonEventOccurred();
+                }
             }
         }
     }
-
-    /*=========================================================================*/
-    /*============================== INNER CLASS ==============================*/
-    /*=========================================================================*/
 
     /*========================== CategoriesTableModel =========================*/
     public class CategoriesTableModel extends AbstractTableModel {
