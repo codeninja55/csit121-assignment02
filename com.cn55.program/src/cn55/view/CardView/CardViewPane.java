@@ -3,8 +3,12 @@ package cn55.view.CardView;
 import cn55.model.CardModel.BasicCard;
 import cn55.model.CardModel.Card;
 import cn55.model.CardModel.PremiumCard;
+import cn55.model.Observer;
+import cn55.model.SortCardType;
+import cn55.model.Subject;
 import cn55.view.CustomComponents.ResultsPane;
 import cn55.view.CustomComponents.Style;
+import cn55.view.CustomComponents.Toolbar;
 import cn55.view.CustomComponents.ToolbarButton;
 import cn55.view.DeleteForm.DeleteCardForm;
 import cn55.view.SearchForm.SearchForm;
@@ -17,20 +21,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class CardViewPane extends JPanel {
+public class CardViewPane extends JPanel implements Observer {
+    private Subject database;
+
+    private ToolbarButton createCardBtn;
+    private ToolbarButton deleteCardBtn;
+    private ToolbarButton searchBtn;
 
     private CardTableModel cardTableModel;
-    private JTable cardTablePanel;
+    private JComboBox<String> sortedCombo;
+    private JTable cardTablePane;
     private ResultsPane resultsPane;
 
     private SearchForm searchForm;
     private CardForm cardForm;
     private DeleteCardForm deleteForm;
-    private CardsViewToolbar toolbar;
-
-    private ToolbarButton createCardBtn;
-    private ToolbarButton deleteCardBtn;
-    private ToolbarButton searchBtn;
 
     private ToolbarButtonListener searchCardListener;
     private ToolbarButtonListener createCardListener;
@@ -38,29 +43,51 @@ public class CardViewPane extends JPanel {
 
     /*============================== CONSTRUCTORS ==============================*/
     public CardViewPane() {
+        Toolbar toolbar = new Toolbar();
+        createCardBtn = new ToolbarButton("Create Card");
+        deleteCardBtn = new ToolbarButton("Delete Card");
+        searchBtn = new ToolbarButton("Search Card");
+
         cardTableModel = new CardTableModel();
-        cardTablePanel = new JTable(cardTableModel);
-        JScrollPane tableScrollPane = new JScrollPane(cardTablePanel);
+        cardTablePane = new JTable();
+        JScrollPane tableScrollPane = new JScrollPane(cardTablePane);
         tableScrollPane.setName("CardsViewTableScrollPane");
         resultsPane = new ResultsPane("CardViewResultsPane");
         //resultsScrollPane = new JScrollPane(resultsPane);
-        toolbar = new CardsViewToolbar();
+        //toolbar = new CardsViewToolbar();
 
+        setName("CardsViewPane");
         setLayout(new BorderLayout());
-        // Formatting for Table
-        tableFormatter();
-        cardTablePanel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        /* SORTED COMBO BOX */
+        String[] sortOptions = {"Sort..",
+                SortCardType.CreatedOrder.getName(),
+                SortCardType.ReverseCreatedOrder.getName(),
+                SortCardType.Name.getName(),
+                SortCardType.Points.getName()};
+        sortedCombo = new JComboBox<>(sortOptions);
+        sortedCombo.setSize(searchBtn.getPreferredSize());
+        sortedCombo.setFont(Style.toolbarButtonFont());
+        sortedCombo.setBackground(Style.grey50());
+        sortedCombo.setForeground(Style.red500());
+        sortedCombo.setBorder(BorderFactory.createMatteBorder(2,2,2,2, Style.red900()));
+        sortedCombo.setSelectedIndex(0);
+
+        /* TOOLBAR */
+        toolbar.getLeftToolbar().add(createCardBtn);
+        toolbar.getLeftToolbar().add(deleteCardBtn);
+        toolbar.getLeftToolbar().add(searchBtn);
+        toolbar.getRightToolbar().add(sortedCombo);
         add(toolbar, BorderLayout.NORTH);
+
         add(tableScrollPane, BorderLayout.CENTER);
+
         add(resultsPane, BorderLayout.EAST);
 
-        /* REGISTRATION OF LISTENERS */
+        /* REGISTRATION OF TOOLBAR BUTTON LISTENERS */
         ToolbarListener handler = new ToolbarListener();
-        searchBtn = toolbar.getSearchBtn();
         searchBtn.addActionListener(handler);
-        createCardBtn = toolbar.getCreateCardBtn();
         createCardBtn.addActionListener(handler);
-        deleteCardBtn = toolbar.getDeleteCardBtn();
         deleteCardBtn.addActionListener(handler);
     }
 
@@ -75,10 +102,6 @@ public class CardViewPane extends JPanel {
         this.deleteCardListener = listener;
     }
 
-    public void setSearchForm(SearchForm searchForm) {
-        this.searchForm = searchForm;
-    }
-
     public void setCardForm(CardForm cardForm) {
         this.cardForm = cardForm;
     }
@@ -87,30 +110,49 @@ public class CardViewPane extends JPanel {
         this.deleteForm = deleteForm;
     }
 
-    private void tableFormatter() {
-        // FORMATTING FOR TABLE
-        cardTablePanel.setRowHeight(45);
-        cardTablePanel.setFont(Style.tableDataFont());
-        cardTablePanel.getColumnModel().getColumn(0).setCellRenderer(Style.centerRenderer());
-        cardTablePanel.getColumnModel().getColumn(0).setPreferredWidth(1);
-        cardTablePanel.getColumnModel().getColumn(1).setCellRenderer(Style.centerRenderer());
-        cardTablePanel.getColumnModel().getColumn(1).setPreferredWidth(5);
-        cardTablePanel.getColumnModel().getColumn(2).setCellRenderer(Style.centerRenderer());
-        cardTablePanel.getColumnModel().getColumn(3).setCellRenderer(Style.centerRenderer());
-        cardTablePanel.getColumnModel().getColumn(4).setCellRenderer(Style.rightRenderer());
-        cardTablePanel.getColumnModel().getColumn(4).setPreferredWidth(5);
-        cardTablePanel.getColumnModel().getColumn(5).setCellRenderer(Style.rightRenderer());
-        cardTablePanel.getColumnModel().getColumn(5).setPreferredWidth(5);
+    public void setSearchForm(SearchForm searchForm) {
+        this.searchForm = searchForm;
     }
 
-    public void refreshCardsTable(ArrayList<Card> cards) {
-        cardTableModel.setData(cards);
+    private void cardTableFormatter() {
+        // FORMATTING FOR TABLE
+        cardTablePane.setRowHeight(45);
+        cardTablePane.setFont(Style.tableDataFont());
+        cardTablePane.getColumnModel().getColumn(0).setCellRenderer(Style.centerRenderer());
+        cardTablePane.getColumnModel().getColumn(0).setPreferredWidth(1);
+        cardTablePane.getColumnModel().getColumn(1).setCellRenderer(Style.centerRenderer());
+        cardTablePane.getColumnModel().getColumn(1).setPreferredWidth(5);
+        cardTablePane.getColumnModel().getColumn(2).setCellRenderer(Style.centerRenderer());
+        cardTablePane.getColumnModel().getColumn(3).setCellRenderer(Style.centerRenderer());
+        cardTablePane.getColumnModel().getColumn(4).setCellRenderer(Style.rightRenderer());
+        cardTablePane.getColumnModel().getColumn(4).setPreferredWidth(5);
+        cardTablePane.getColumnModel().getColumn(5).setCellRenderer(Style.rightRenderer());
+        cardTablePane.getColumnModel().getColumn(5).setPreferredWidth(5);
+    }
+
+    public void setCardTableModel() {
+        cardTablePane.setModel(cardTableModel);
+        cardTablePane.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        cardTableFormatter();
+        this.revalidate();
+        this.repaint();
+    }
+
+    /* OBSERVER DESIGN PATTERN IMPLEMENTATION */
+    @Override
+    public void setSubject(Subject subject) {
+        this.database = subject;
+    }
+
+    @Override
+    public void update() {
+        cardTableModel.setData(database.getCardsUpdate(this));
         cardTableModel.fireTableDataChanged();
     }
 
     /*============================== ACCESSORS  ==============================*/
-    public CardsViewToolbar getCardToolbar() {
-        return toolbar;
+    public JComboBox<String> getSortedCombo() {
+        return sortedCombo;
     }
 
     public SearchForm getSearchForm() {
@@ -148,10 +190,6 @@ public class CardViewPane extends JPanel {
             }
         }
     }
-
-    /*=========================================================================*/
-    /*============================== INNER CLASS ==============================*/
-    /*=========================================================================*/
 
     /*============================= CardTableModel ============================*/
     class CardTableModel extends AbstractTableModel {

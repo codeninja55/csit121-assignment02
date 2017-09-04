@@ -26,7 +26,7 @@ public class MainFrame extends JFrame {
     private CategoriesViewPane categoriesViewPane;
     //private SummaryPanel summaryPanel;
 
-    public MainFrame(ArrayList<Purchase> purchases, ArrayList<Card> cards, Subject database) {
+    public MainFrame() {
         super("Marvel Card Rewards");
 
         setLayout(new BorderLayout());

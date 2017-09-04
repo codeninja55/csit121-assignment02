@@ -16,22 +16,22 @@ import java.util.Collections;
 
 public class CategoriesViewPane extends JPanel implements Observer {
     private Subject database;
+
+    private ToolbarButton createCategoryBtn;
+    private ToolbarButton deleteCategoryBtn;
+
     private CategoriesTableModel categoriesTableModel;
-    private Toolbar toolbar;
     private JTable categoriesTablePane;
 
     private CategoriesForm createCategoryForm;
     private DeleteCategoryForm deleteCategoryForm;
-
-    private ToolbarButton createCategoryBtn;
-    private ToolbarButton deleteCategoryBtn;
 
     private ToolbarButtonListener createCategoryListener;
     private ToolbarButtonListener deleteCategoryListener;
 
     /*============================== CONSTRUCTORS  ==============================*/
     public CategoriesViewPane() {
-        toolbar = new Toolbar();
+        Toolbar toolbar = new Toolbar();
         createCategoryBtn = new ToolbarButton("Create Category");
         deleteCategoryBtn = new ToolbarButton("Delete Category");
 
@@ -66,21 +66,21 @@ public class CategoriesViewPane extends JPanel implements Observer {
         this.deleteCategoryListener = listener;
     }
 
-    public void setCategoriesTableModel() {
-        categoriesTablePane.setModel(categoriesTableModel);
-        categoriesTablePane.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        tableFormatter();
-        this.revalidate();
-        this.repaint();
-    }
-
-    private void tableFormatter() {
+    private void categoriesTableFormatter() {
         categoriesTablePane.setRowHeight(45);
         categoriesTablePane.setFont(Style.tableDataFont());
         categoriesTablePane.getColumnModel().getColumn(0).setCellRenderer(Style.centerRenderer());
         categoriesTablePane.getColumnModel().getColumn(1).setCellRenderer(Style.centerRenderer());
         categoriesTablePane.getColumnModel().getColumn(2).setCellRenderer(Style.leftRenderer());
         categoriesTablePane.getColumnModel().getColumn(3).setCellRenderer(Style.rightRenderer());
+    }
+
+    public void setCategoriesTableModel() {
+        categoriesTablePane.setModel(categoriesTableModel);
+        categoriesTablePane.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        categoriesTableFormatter();
+        this.revalidate();
+        this.repaint();
     }
 
     public void setCreateCategoryForm(CategoriesForm createCategoryForm) {
@@ -110,6 +110,10 @@ public class CategoriesViewPane extends JPanel implements Observer {
 
     public ToolbarButton getDeleteCategoryBtn() {
         return deleteCategoryBtn;
+    }
+
+    public CategoriesTableModel getCategoriesTableModel() {
+        return categoriesTableModel;
     }
 
     public CategoriesForm getCreateCategoryForm() {

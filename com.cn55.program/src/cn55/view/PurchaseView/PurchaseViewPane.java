@@ -1,54 +1,111 @@
 package cn55.view.PurchaseView;
 
+import cn55.model.Observer;
 import cn55.model.Purchase;
+import cn55.model.SortPurchaseType;
+import cn55.model.Subject;
+import cn55.view.CardView.CardViewPane;
 import cn55.view.CustomComponents.ResultsPane;
 import cn55.view.CustomComponents.Style;
+import cn55.view.CustomComponents.Toolbar;
+import cn55.view.CustomComponents.ToolbarButton;
+import cn55.view.ToolbarButtonListener;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class PurchaseViewPane extends JPanel {
+public class PurchaseViewPane extends JPanel implements Observer {
+    private Subject database;
+    private ToolbarButton createPurchaseBtn;
+    private ToolbarButton deletePurchaseBtn;
+    private JComboBox<String> sortPurchaseCombo;
+    private ToolbarButton viewPurchaseBtn;
+
     private PurchaseTableModel purchaseTableModel;
     private JTable purchaseTablePane;
-    private PurchaseForm purchaseForm;
-    private PurchaseViewToolbar toolbar;
+    private PurchaseForm createPurchaseForm;
     private ResultsPane resultsPane;
     private JPopupMenu tablePopup;
 
+    private ToolbarButtonListener createPurchaseListener;
+    //private ToolbarButtonListener deletePurchaseListener;
+    private ToolbarButtonListener viewPurchaseListener;
+
     /*============================== CONSTRUCTORS ==============================*/
     public PurchaseViewPane() {
+        Toolbar toolbar = new Toolbar();
+        createPurchaseBtn = new ToolbarButton("Create Purchase");
+        deletePurchaseBtn = new ToolbarButton("Delete Purchase");
+        viewPurchaseBtn = new ToolbarButton("View Purchase");
+        sortPurchaseCombo = new JComboBox<>();
+        DefaultComboBoxModel<String> options = new DefaultComboBoxModel<>();
+
         purchaseTableModel = new PurchaseTableModel();
-        purchaseTablePane = new JTable(purchaseTableModel);
-        toolbar = new PurchaseViewToolbar();
-        purchaseForm = new PurchaseForm();
+        purchaseTablePane = new JTable();
+        JScrollPane tableScrollPane = new JScrollPane(purchaseTablePane);
+
         resultsPane = new ResultsPane("PurchaseViewResultsPane");
         tablePopup = new JPopupMenu();
         JMenuItem removePurchase = new JMenuItem("Delete Purchase");
 
-        tablePopup.add(removePurchase);
-
+        setName("PurchaseViewPane");
         setLayout(new BorderLayout());
 
+        /* Sort Purchases Combo Setup */
+        options.addElement(SortPurchaseType.All.getName());
+        options.addElement(SortPurchaseType.Card.getName());
+        options.addElement(SortPurchaseType.Cash.getName());
+        sortPurchaseCombo.setModel(options);
+
+        sortPurchaseCombo.setSize(createPurchaseBtn.getPreferredSize());
+        sortPurchaseCombo.setFont(Style.toolbarButtonFont());
+        sortPurchaseCombo.setBackground(Style.grey50());
+        sortPurchaseCombo.setForeground(Style.red500());
+        sortPurchaseCombo.setBorder(BorderFactory.createMatteBorder(2,2,2,2, Style.red900()));
+        sortPurchaseCombo.setSelectedIndex(0);
+
+        /* TOOLBAR */
+        toolbar.getLeftToolbar().add(createPurchaseBtn);
+        //toolbar.getLeftToolbar().add(deletePurchaseBtn);
+        toolbar.getRightToolbar().add(viewPurchaseBtn);
+        toolbar.getRightToolbar().add(sortPurchaseCombo);
         add(toolbar, BorderLayout.NORTH);
 
-        purchaseTablePane.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        tableFormatter();
-        add(new JScrollPane(purchaseTablePane), BorderLayout.CENTER);
+        tablePopup.add(removePurchase);
 
-        add(purchaseForm, BorderLayout.WEST);
-        //add(deletePurchaseForm, BorderLayout.WEST);
+        add(tableScrollPane, BorderLayout.CENTER);
+
         add(resultsPane, BorderLayout.EAST);
+
+        /* REGISTRATION OF TOOLBAR BUTTON LISTENERS */
+        ToolbarListener handler = new ToolbarListener();
+        createPurchaseBtn.addActionListener(handler);
+        deletePurchaseBtn.addActionListener(handler);
+        viewPurchaseBtn.addActionListener(handler);
     }
 
     /*============================== MUTATORS ==============================*/
-    public void refreshPurchasesTable(ArrayList<Purchase> purchases) {
-        purchaseTableModel.setData(purchases);
-        purchaseTableModel.fireTableDataChanged();
+    public void setCreatePurchaseListener(ToolbarButtonListener listener) {
+        this.createPurchaseListener = listener;
     }
 
-    private void tableFormatter() {
+    /*public void setDeletePurchaseListener(ToolbarButtonListener listener) {
+        this.deletePurchaseListener = listener;
+    }*/
+
+    public void setViewPurchaseListener(ToolbarButtonListener listener) {
+        this.viewPurchaseListener = listener;
+    }
+
+    public void setCreatePurchaseForm(PurchaseForm createPurchaseForm) {
+        this.createPurchaseForm = createPurchaseForm;
+    }
+
+    private void purchasesTableFormatter() {
         purchaseTablePane.setRowHeight(45);
         purchaseTablePane.setFont(Style.tableDataFont());
         purchaseTablePane.getColumnModel().getColumn(0).setCellRenderer(Style.leftRenderer());
@@ -58,10 +115,39 @@ public class PurchaseViewPane extends JPanel {
         purchaseTablePane.getColumnModel().getColumn(4).setCellRenderer(Style.centerRenderer());
     }
 
-    /*============================== ACCESSORS ==============================*/
-    public PurchaseForm getPurchaseForm() { return purchaseForm; }
+    public void setPurchaseTableModel() {
+        purchaseTablePane.setModel(purchaseTableModel);
+        purchaseTablePane.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        purchasesTableFormatter();
+        this.revalidate();
+        this.repaint();
+    }
 
-    public PurchaseViewToolbar getPurchaseToolbar() { return toolbar; }
+    public void sortPurchaseTableMode(ArrayList<Purchase> purchases) {
+        purchaseTableModel.setData(purchases);
+        purchaseTableModel.fireTableDataChanged();
+    }
+
+    /* OBSERVER DESIGN PATTERN IMPLEMENTATION */
+    @Override
+    public void update() {
+        purchaseTableModel.setData(database.getPurchaseUpdate(this));
+        purchaseTableModel.fireTableDataChanged();
+    }
+
+    @Override
+    public void setSubject(Subject subject) {
+        this.database = subject;
+    }
+
+    /*============================== ACCESSORS ==============================*/
+    public PurchaseForm getCreatePurchaseForm() {
+        return createPurchaseForm;
+    }
+
+    public JComboBox<String> getSortPurchaseCombo() {
+        return sortPurchaseCombo;
+    }
 
     public JTable getPurchaseTablePane() {
         return purchaseTablePane;
@@ -74,6 +160,24 @@ public class PurchaseViewPane extends JPanel {
     /*=========================================================================*/
     /*============================== INNER CLASS ==============================*/
     /*=========================================================================*/
+    /*============================ TOOLBAR LISTENER ===========================*/
+    public class ToolbarListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            if (e.getSource() == createPurchaseBtn) {
+                if (createPurchaseListener != null)
+                    createPurchaseListener.toolbarButtonEventOccurred();
+            } else if (e.getSource() == deletePurchaseBtn) {
+                /* TEST CODE */
+                System.err.println("Purchase View Delete Purchase Not Impl Yet");
+                System.out.println("Delete Purchase Button Pressed");
+            } else if (e.getSource() == viewPurchaseBtn) {
+                if (viewPurchaseListener != null)
+                    viewPurchaseListener.toolbarButtonEventOccurred();
+            }
+        }
+    }
+
+    /*============================= CardTableModel ============================*/
     public class PurchaseTableModel extends AbstractTableModel {
 
         private ArrayList<Purchase> purchases;

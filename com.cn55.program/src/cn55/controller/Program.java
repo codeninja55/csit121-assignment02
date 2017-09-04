@@ -7,7 +7,6 @@ import cn55.view.ButtonListener;
 import cn55.view.CardView.CardForm;
 import cn55.view.CardView.CardListener;
 import cn55.view.CardView.CardViewPane;
-import cn55.view.CardView.CardsViewToolbar;
 import cn55.view.CategoriesView.CategoriesForm;
 import cn55.view.CategoriesView.CategoriesViewPane;
 import cn55.view.CategoriesView.CategoryEvent;
@@ -41,11 +40,7 @@ public class Program {
     private Database db;
     private JTabbedPane tabPane;
     private CardViewPane cardViewPane;
-    private CardsViewToolbar cardToolbar;
-    private CardForm cardForm;
     private PurchaseViewPane purchaseViewPane;
-    private PurchaseViewToolbar purchaseViewToolbar;
-    private PurchaseForm purchaseForm;
     private CategoriesViewPane categoriesViewPane;
 
     private static Set<Double> testAmountSet = new HashSet<>();
@@ -57,18 +52,21 @@ public class Program {
         createTestCode(shop);
         db.mapCards();
 
-        this.mainFrame = new MainFrame(shop.getDatabase().getPurchases(),
-                                    shop.getDatabase().getCards(), db);
-
+        this.mainFrame = new MainFrame();
 
         this.tabPane = mainFrame.getTabPane();
 
         this.cardViewPane = mainFrame.getCardViewPane();
-        this.cardToolbar = cardViewPane.getCardToolbar();
+        db.register(cardViewPane);
+        cardViewPane.setSubject(db);
+        cardViewPane.update();
+        cardViewPane.setCardTableModel();
 
         this.purchaseViewPane = mainFrame.getPurchaseViewPane();
-        this.purchaseForm = purchaseViewPane.getPurchaseForm();
-        this.purchaseViewToolbar = purchaseViewPane.getPurchaseToolbar();
+        db.register(purchaseViewPane);
+        purchaseViewPane.setSubject(db);
+        purchaseViewPane.update();
+        purchaseViewPane.setPurchaseTableModel();
 
         this.categoriesViewPane = mainFrame.getCategoriesViewPane();
         db.register(categoriesViewPane);
@@ -240,20 +238,10 @@ public class Program {
     private void eventControlling() {
         /* TAB PANE LISTENER */
         tabPane.addChangeListener(e -> {
-
-            /* SELECTED LISTENERS */
-            if (tabPane.getSelectedComponent() == cardViewPane) {
-                cardViewPane.refreshCardsTable(db.getCards());
-            } else if (tabPane.getSelectedComponent() == purchaseViewPane) {
-                purchaseViewPane.refreshPurchasesTable(shop.getDatabase().getPurchases());
-            }
-
             /* DESELECTED LISTENERS */
             if (tabPane.getSelectedComponent() != purchaseViewPane) {
                 purchaseViewPane.getResultsPane().setVisible(false);
-                if (purchaseForm.getCreatePurchaseForm() != null) {
-                    removeCreatePurchaseForm();
-                }
+                removePurchaseForms();
             } else if (tabPane.getSelectedComponent() != cardViewPane) {
                 cardViewPane.getResultsPane().setVisible(false);
                 removeCardForms();
@@ -349,10 +337,8 @@ public class Program {
 
                             if (confirm == JOptionPane.OK_OPTION) {
                                 shop.deleteCard(cardIndex);
-                                cardViewPane.refreshCardsTable(db.getCards());
                                 /* Purchases by this card will be changed to cash */
                                 shop.convertPurchase(cardID);
-                                purchaseViewPane.refreshPurchasesTable(db.getPurchases());
                             } else {
                                 e.getIdTextField().setText(null);
                                 e.getDeleteErrorLabel().setVisible(true);
@@ -455,39 +441,136 @@ public class Program {
         });
 
         /* TOOLBAR REGISTRATION & HANDLER - SORT */
-        cardViewPane.getCardToolbar().getSortedCombo().addItemListener(new ItemListener() {
+        cardViewPane.getSortedCombo().addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
-                    if (e.getItem().equals("Sort..")) {
-                        cardViewPane.refreshCardsTable(db.getCards());
+                    if (e.getItem().equals("Sort..") || e.getItem().equals(SortCardType.CreatedOrder.getName())) {
+                        Collections.sort(db.getCards());
                     } else if (e.getItem().equals(SortCardType.ReverseCreatedOrder.getName())) {
-                        cardViewPane.refreshCardsTable(sortCards(SortCardType.ReverseCreatedOrder));
-                    } else if (e.getItem().equals(SortCardType.CreatedOrder.getName())) {
-                        cardViewPane.refreshCardsTable(sortCards(SortCardType.CreatedOrder));
+                        db.getCards().sort(new CardReverseIDComparator());
                     } else if (e.getItem().equals(SortCardType.Name.getName())) {
-                        cardViewPane.refreshCardsTable(sortCards(SortCardType.Name));
+                        db.getCards().sort(new CardNameComparator());
                     } else if (e.getItem().equals(SortCardType.Points.getName())) {
-                        cardViewPane.refreshCardsTable(sortCards(SortCardType.Points));
+                        db.getCards().sort(new CardPointsComparator());
                     }
+                    db.notifyObservers();
                 }
             }
         });
 
         /*============================== PURCHASE VIEW ==============================*/
         /* TOOLBAR CREATE PURCHASE BUTTON */
-        purchaseViewToolbar.setCreatePurchaseListener(new ToolbarButtonListener() {
+        purchaseViewPane.setCreatePurchaseListener(new ToolbarButtonListener() {
             public void toolbarButtonEventOccurred() {
-                //purchaseViewToolbar.disableCreatePurchaseButton(true);
-                purchaseForm.setGeneratedReceiptID(Database.generateReceiptID());
-                purchaseForm.setCardModel(shop.getDatabase().getCardModel());
-                purchaseForm.setCategoriesList(shop.getDatabase().getCategories());
-                purchaseForm.createPurchaseForm();
-                purchaseForm.setVisible(true);
+                removePurchaseForms();
+                purchaseViewPane.setCreatePurchaseForm(new PurchaseForm());
+                PurchaseForm form = purchaseViewPane.getCreatePurchaseForm();
+                purchaseViewPane.add(form, BorderLayout.WEST);
+
+                form.getPurchaseTypeCombo().setSelectedIndex(0);
+                form.setGeneratedReceiptID(Database.generateReceiptID());
+                form.setCardModel(db.getCardModel());
+                form.setCategoriesList(db.getCategories());
+                form.createBasePurchaseForm();
+                form.setVisible(true);
+
+                /* FORM CANCEL BUTTON */
+                form.setCancelPurchaseListener(new ButtonListener() {
+                    public void buttonActionOccurred() {
+                        form.setVisible(false);
+                        removePurchaseForms();
+                    }
+                });
+
+                /* FORM CREATE BUTTON */
+                form.setCreatePurchaseListener(new PurchaseListener() {
+                    public void formActionOccurred(PurchaseEvent event) {
+                        /* SET UP A RESULTS PANE TO SHOW END RESULT */
+                        ResultsPane resultsPane = purchaseViewPane.getResultsPane();
+                        resultsPane.setResultsTextPane();
+                        ResultsPane.ResultsTextPane resultsTextPane = resultsPane.getResultsTextPane();
+
+                        JComboBox<String> type = event.getPurchaseTypeCombo();
+
+                        String receiptIDStr = event.getReceiptIDTextField().getText();
+                        int receiptID = Integer.parseInt(receiptIDStr);
+
+                        String cardID = getPurchaseFormCardID(event);
+                        HashMap<Integer, Category> categories = getPurchaseFormCategories(event);
+                        String resultsText = "";
+
+                        if (type.getSelectedItem() != null && cardID != null && categories != null) {
+                            if (type.getSelectedItem().equals(PurchaseType.ExistingCardPurchase.getName())) {
+                                shop.makePurchase(cardID, receiptID, categories);
+                                resultsText = db.getPurchases().get(db.getPurchaseMap().get(receiptID)).toString();
+                                showResultsPane(resultsText,resultsPane,resultsTextPane);
+
+                                removePurchaseForms();
+                            } else if (type.getSelectedItem().equals(PurchaseType.NewCardPurchase.getName())) {
+                                String cardType = null;
+                                String name = null;
+                                String email = null;
+
+                                if (event.getAnonCardRB().isSelected()) {
+                                    cardType = CardType.AnonCard.getName();
+                                } else if (event.getBasicCardRB().isSelected()) {
+                                    cardType = CardType.BasicCard.getName();
+                                    name = event.getCardNameTextField().getText();
+                                    email = event.getCardEmailTextField().getText();
+                                } else if (event.getPremiumCardRB().isSelected()) {
+                                    cardType = CardType.PremiumCard.getName();
+                                    name = event.getCardNameTextField().getText();
+                                    email = event.getCardEmailTextField().getText();
+                                }
+
+                                HashMap<String, String> newCard = new HashMap<>();
+                                newCard.put("name", name);
+                                newCard.put("email", email);
+                                newCard.put("cardType", cardType);
+                                newCard.put("cardID", cardID);
+
+                                shop.makeCard(newCard);
+                                shop.makePurchase(cardID, receiptID, categories);
+                                resultsText = db.getCards().get(db.getCardMap().get(cardID)).toString() +
+                                        db.getPurchases().get(db.getPurchaseMap().get(receiptID));
+                                showResultsPane(resultsText,resultsPane,resultsTextPane);
+
+                                removePurchaseForms();
+
+                            } else if (type.getSelectedItem().equals(PurchaseType.CashPurchase.getName())) {
+                                shop.makePurchase(cardID, receiptID, categories);
+                                resultsText = db.getPurchases().get(db.getPurchaseMap().get(receiptID)).toString();
+                                showResultsPane(resultsText,resultsPane,resultsTextPane);
+
+                                removePurchaseForms();
+                            }
+                        } else {
+                            event.getPurchaseErrorLabel().setVisible(true);
+                        }
+
+                        /* SET UP A MOUSE LISTENER TO CLOSE PANEL WHEN CLICKING ON TABLE OR OUTER PANEL*/
+                        purchaseViewPane.addMouseListener(new MouseAdapter() {
+                            public void mouseClicked(MouseEvent e) {
+                                super.mouseClicked(e);
+                                removeResultsPane(purchaseViewPane.getResultsPane());
+                                purchaseViewPane.getResultsPane().setVisible(false);
+                            }
+                        });
+
+                        purchaseViewPane.getPurchaseTablePane().addMouseListener(new MouseAdapter() {
+                            public void mouseClicked(MouseEvent e) {
+                                super.mouseClicked(e);
+                                removeResultsPane(purchaseViewPane.getResultsPane());
+                                purchaseViewPane.getResultsPane().setVisible(false);
+                            }
+                        });
+                    }
+                });
             }
         });
 
         /* TOOLBAR VIEW DETAILS BUTTON */
-        purchaseViewToolbar.setViewPurchaseListener(new ToolbarButtonListener() {
+        purchaseViewPane.setViewPurchaseListener(new ToolbarButtonListener() {
             public void toolbarButtonEventOccurred() {
                 int selectedRow = purchaseViewPane.getPurchaseTablePane().getSelectedRow();
                 Integer receiptID = (Integer) purchaseViewPane.getPurchaseTablePane().getValueAt(selectedRow, 0);
@@ -525,79 +608,29 @@ public class Program {
         });
 
         /* SORT COMBOBOX */
-        purchaseViewToolbar.setSortPurchaseListener(new ItemListener() {
+        purchaseViewPane.getSortPurchaseCombo().addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
+                    ArrayList<Purchase> tempPurchases = new ArrayList<>();
                     if (e.getItem().equals(SortPurchaseType.All.getName())) {
-                        purchaseViewPane.refreshPurchasesTable(sortPurchases(SortPurchaseType.All));
+                        purchaseViewPane.update();
                     } else if (e.getItem().equals(SortPurchaseType.Card.getName())) {
-                        purchaseViewPane.refreshPurchasesTable(sortPurchases(SortPurchaseType.Card));
-                    } else if (e.getItem().equals(SortPurchaseType.Cash.getName())) {
-                        purchaseViewPane.refreshPurchasesTable(sortPurchases(SortPurchaseType.Cash));
-                    }
-                }
-            }
-        });
-
-        /* FORM CANCEL BUTTON */
-        purchaseForm.setCancelPurchaseListener(new ButtonListener() {
-            public void buttonActionOccurred() {
-                removeCreatePurchaseForm();
-            }
-        });
-
-        /* FORM CREATE BUTTON */
-        purchaseForm.setCreatePurchaseListener(new PurchaseListener() {
-            public void formActionOccurred(PurchaseEvent event) {
-                JComboBox<String> type = event.getPurchaseTypeCombo();
-
-                String receiptIDStr = event.getReceiptIDTextField().getText();
-                int receiptID = Integer.parseInt(receiptIDStr);
-
-                String cardID = getPurchaseFormCardID(event);
-                HashMap<Integer, Category> categories = getPurchaseFormCategories(event);
-
-                if (type.getSelectedItem() != null && cardID != null && categories != null) {
-                    if (type.getSelectedItem().equals(PurchaseType.ExistingCardPurchase.getName())) {
-                        shop.makePurchase(cardID, receiptID, categories);
-                        purchaseViewPane.refreshPurchasesTable(db.getPurchases());
-                        removeCreatePurchaseForm();
-                    } else if (type.getSelectedItem().equals(PurchaseType.NewCardPurchase.getName())) {
-                        String cardType = "";
-                        String name = "";
-                        String email = "";
-
-                        if (event.getAnonCardRB().isSelected()) {
-                            cardType = CardType.AnonCard.getName();
-                        } else if (event.getBasicCardRB().isSelected()) {
-                            cardType = CardType.BasicCard.getName();
-                            name = event.getCardNameTextField().getText();
-                            email = event.getCardEmailTextField().getText();
-                        } else if (event.getPremiumCardRB().isSelected()) {
-                            cardType = CardType.PremiumCard.getName();
-                            name = event.getCardNameTextField().getText();
-                            email = event.getCardEmailTextField().getText();
+                        for (Purchase item : db.getPurchases()) {
+                            /* NEGATIVE CASH VALIDATION */
+                            if (item.getCardID() != null) {
+                                tempPurchases.add(item);
+                            }
                         }
-
-                        HashMap<String, String> newCard = new HashMap<>();
-                        newCard.put("name", name);
-                        newCard.put("email", email);
-                        newCard.put("cardType", cardType);
-                        newCard.put("cardID", cardID);
-
-                        shop.makeCard(newCard);
-                        cardViewPane.refreshCardsTable(db.getCards());
-                        shop.makePurchase(cardID, receiptID, categories);
-                        purchaseViewPane.refreshPurchasesTable(db.getPurchases());
-                        removeCreatePurchaseForm();
-
-                    } else if (type.getSelectedItem().equals(PurchaseType.CashPurchase.getName())) {
-                        shop.makePurchase(cardID, receiptID, categories);
-                        purchaseViewPane.refreshPurchasesTable(db.getPurchases());
-                        removeCreatePurchaseForm();
+                        purchaseViewPane.sortPurchaseTableMode(tempPurchases);
+                    } else if (e.getItem().equals(SortPurchaseType.Cash.getName())) {
+                        for (Purchase item : db.getPurchases()) {
+                            /* POSITIVE CASH Validation */
+                            if (item.getCardID() == null) {
+                                tempPurchases.add(item);
+                            }
+                            purchaseViewPane.sortPurchaseTableMode(tempPurchases);
+                        }
                     }
-                } else {
-                    event.getPurchaseErrorLabel().setVisible(true);
                 }
             }
         });
@@ -615,7 +648,7 @@ public class Program {
                 /* ADD A CANCEL BUTTON LISTENER AFTER CREATING FORM */
                 form.setCancelListener(new ButtonListener() {
                     public void buttonActionOccurred() {
-                        categoriesViewPane.getCreateCategoryForm().setVisible(false);
+                        form.setVisible(false);
                         removeCategoryForms();
                     }
                 });
@@ -625,7 +658,6 @@ public class Program {
                     public void createCategoryEventOccurred(CategoryEvent e) {
                         shop.makeCategory(new Category(e.getCategoryNameTextField().getText(),
                                 e.getCategoryDescTextField().getText()));
-                        //categoriesViewPane.refreshCategoriesTable(db.getCategories());
                         removeCategoryForms();
                     }
                 });
@@ -727,6 +759,7 @@ public class Program {
     }
 
     /*============================== MUTATORS  ==============================*/
+
     private void showResultsPane(String text, ResultsPane resultsPane,
                                    ResultsPane.ResultsTextPane resultsTextPane) {
         resultsTextPane.setText(text);
@@ -739,45 +772,32 @@ public class Program {
 
     private void removeCardForms() {
         for (Component comp : cardViewPane.getComponents()) {
-            if (comp instanceof CardForm || comp instanceof DeleteCardForm || comp instanceof SearchForm) {
+            if (comp instanceof CardForm || comp instanceof DeleteCardForm || comp instanceof SearchForm)
                 cardViewPane.remove(comp);
+        }
+    }
+
+    private void removePurchaseForms() {
+        for (Component comp : purchaseViewPane.getComponents()) {
+            if (comp instanceof PurchaseForm) {
+                comp.setVisible(false);
+                if (purchaseViewPane.getCreatePurchaseForm().getBaseCreatePurchaseForm() != null)
+                    purchaseViewPane.getCreatePurchaseForm().remove(purchaseViewPane.getCreatePurchaseForm().getBaseCreatePurchaseForm());
+                purchaseViewPane.remove(comp);
             }
         }
     }
 
-    private void removeCreatePurchaseForm() {
-        /* REMOVE THE FORM FROM PURCHASE */
-        purchaseForm.getPurchaseTypeCombo().setSelectedIndex(0);
-        purchaseForm.setVisible(false);
-        purchaseForm.remove(purchaseForm.getCreatePurchaseForm());
-        //purchaseViewPane.getPurchaseToolbar().disableCreatePurchaseButton(false);
+    private void removeCategoryForms() {
+        for (Component comp : cardViewPane.getComponents()) {
+            if (comp instanceof CategoriesForm || comp instanceof DeleteCategoryForm)
+                categoriesViewPane.remove(comp);
+        }
     }
 
     private void removeResultsPane(ResultsPane resultsPane) {
         resultsPane.remove(resultsPane.getResultsTextPane());
         resultsPane.remove(resultsPane.getScrollPane());
-    }
-
-    private void removeCategoryForms() {
-        for (Component comp : cardViewPane.getComponents()) {
-            if (comp instanceof CategoriesForm) {
-                categoriesViewPane.remove(comp);
-            }
-        }
-    }
-
-    private void reenableAllButtons(JPanel toolbar) {
-        /*for (Component btn : toolbar.getComponents()) {
-            if (!btn.isEnabled()) {
-                btn.setEnabled(true);
-            }
-        }*/
-
-        if (toolbar instanceof CardsViewToolbar) {
-
-        } else if (toolbar instanceof PurchaseViewToolbar) {
-
-        }
     }
 
     private boolean validateCatValueFields(HashMap<JLabel[], FormTextField> rawCategories) {
@@ -804,7 +824,8 @@ public class Program {
     }
 
     private HashMap<Integer, Category> getPurchaseFormCategories(PurchaseEvent event) {
-        HashMap<Integer, Category> categories = new HashMap<>();
+        ArrayList<Category> defaultCategories = db.getCategories();
+        HashMap<Integer, Category> purchaseCategories = new HashMap<>();
 
         if (validateCatValueFields(event.getCategoriesMap())) {
             for (HashMap.Entry<JLabel[], FormTextField> item : event.getCategoriesMap().entrySet()) {
@@ -814,13 +835,18 @@ public class Program {
                 Double catValue = 0D;
                 String textFieldStr = item.getValue().getText();
 
-                if (!(textFieldStr.isEmpty())) {
+                if (!(textFieldStr.isEmpty()))
                     catValue = Double.parseDouble(textFieldStr);
-                }
 
-//                categories.put(catName, catValue);
+                for (Category c : defaultCategories) {
+                    if (c.getName().equals(catName)) {
+                        Category cloneCategory = new Category(c);
+                        cloneCategory.setAmount(catValue);
+                        purchaseCategories.put(c.getId(), cloneCategory);
+                    }
+                }
             }
-            return categories;
+            return purchaseCategories;
         } else {
             return null;
         }
@@ -855,47 +881,4 @@ public class Program {
         return null;
     }
 
-    private ArrayList<Purchase> sortPurchases(SortPurchaseType sortType) {
-        ArrayList<Purchase> tempPurchases = new ArrayList<>();
-
-        if (sortType.equals(SortPurchaseType.All)) {
-            return db.getPurchases();
-        } else if (sortType.equals(SortPurchaseType.Card)) {
-            for (Purchase item : db.getPurchases()) {
-                /* NEGATIVE CASH VALIDATION */
-                if (item.getCardID() != null) {
-                    tempPurchases.add(item);
-                }
-            }
-            return tempPurchases;
-        } else if (sortType.equals(SortPurchaseType.Cash)) {
-            for (Purchase item : db.getPurchases()) {
-                /* POSITIVE CASH Validation */
-                if (item.getCardID() == null) {
-                    tempPurchases.add(item);
-                }
-            }
-            return tempPurchases;
-        } else {
-            return null;
-        }
-    }
-
-    private ArrayList<Card> sortCards(SortCardType sortType) {
-        ArrayList<Card> cards = new ArrayList<>(db.getCards());
-        if (sortType.equals(SortCardType.CreatedOrder)) {
-            Collections.sort(cards);
-            return cards;
-        } else if (sortType.equals(SortCardType.ReverseCreatedOrder)) {
-            cards.sort(new CardReverseIDComparator());
-            return cards;
-        } else if (sortType.equals(SortCardType.Name)) {
-            cards.sort(new CardNameComparator());
-            return cards;
-        } else if (sortType.equals(SortCardType.Points)) {
-            cards.sort(new CardPointsComparator());
-            return cards;
-        }
-        return null;
-    }
 }

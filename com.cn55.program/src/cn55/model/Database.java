@@ -16,7 +16,7 @@ public class Database implements Subject {
     private ArrayList<Card> cards;
     private HashMap<String, Integer> cardMap;
     private ArrayList<Purchase> purchases;
-    private HashMap<String, Integer> purchaseMap;
+    private HashMap<Integer, Integer> purchaseMap;
 
     private ArrayList<Category> categories;
     private HashMap<Integer, Integer> categoriesMap;
@@ -81,10 +81,10 @@ public class Database implements Subject {
         this.cardMap = cardMap;
     }
 
-    void mapPurchases() {
-        HashMap<String, Integer> purchaseMap = new HashMap<>();
+    public void mapPurchases() {
+        HashMap<Integer, Integer> purchaseMap = new HashMap<>();
         for (int index = 0 ; index < purchases.size() ; index++)
-            purchaseMap.put(purchases.get(index).getCardID(), index);
+            purchaseMap.put(purchases.get(index).getReceiptID(), index);
 
         this.purchaseMap = purchaseMap;
     }
@@ -130,13 +130,13 @@ public class Database implements Subject {
         notifyObservers();
     }
 
-    public void removeCard(int index) {
+    void removeCard(int index) {
         cards.remove(index);
         mapCards();
         notifyObservers();
     }
 
-    public void removeCategory(int index) {
+    void removeCategory(int index) {
         categories.remove(index);
         mapCategories();
         notifyObservers();
@@ -159,6 +159,10 @@ public class Database implements Subject {
 
     public ArrayList<Purchase> getPurchases() {
         return purchases;
+    }
+
+    public HashMap<Integer, Integer> getPurchaseMap() {
+        return purchaseMap;
     }
 
     public ArrayList<Category> getCategories() { return categories; }
