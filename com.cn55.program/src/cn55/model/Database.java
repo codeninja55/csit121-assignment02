@@ -100,8 +100,16 @@ public class Database {
         }
     }
 
-    public void addCategory(Category category) {
+    static void updateCategoriesTotalMap(HashMap<Integer, Category> categories) {
+        for (HashMap.Entry<Integer, Category> item : categories.entrySet()) {
+            Double newTotal = Database.categoriesTotalMap.get(item.getKey()) + item.getValue().getAmount();
+            Database.categoriesTotalMap.put(item.getKey(), newTotal);
+        }
+    }
+
+    void addCategory(Category category) {
         categories.add(category);
+        mapCategories();
     }
 
     public void addCards(Card card) {
