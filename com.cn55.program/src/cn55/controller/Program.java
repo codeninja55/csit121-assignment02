@@ -37,7 +37,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.*;
 
-class Program {
+public class Program {
 
     private MainFrame mainFrame;
     private Shop shop;
@@ -53,9 +53,10 @@ class Program {
 
     private static Set<Double> testAmountSet = new HashSet<>();
 
-    Program() {
+    public Program() {
+        // Singleton Design Pattern - Only one instance of Shop available
         shop = new Shop();
-        db = shop.getDatabase();
+        db = Database.getDBInstance();
         createTestCode(shop);
         db.mapCards();
 
