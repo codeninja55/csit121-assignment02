@@ -1,9 +1,6 @@
 package cn55.controller;
 
-import cn55.controller.Validator.CardIDRule;
-import cn55.controller.Validator.CategoryAmountRule;
-import cn55.controller.Validator.FormRule;
-import cn55.controller.Validator.FormValidData;
+import cn55.controller.Validator.*;
 import cn55.model.CardModel.*;
 import cn55.model.*;
 import cn55.view.ButtonListener;
@@ -294,7 +291,6 @@ public class Program {
         /* TOOLBAR REGISTRATION & HANDLER - DELETE CARD BUTTON */
         cardViewPane.setDeleteCardListener(new ToolbarButtonListener() {
             public void toolbarButtonEventOccurred() {
-                System.out.println("DELETE BUTTON PRESSED");
                 removeCardForms();
                 cardViewPane.setDeleteForm(new DeleteCardForm());
                 cardViewPane.add(cardViewPane.getDeleteForm(), BorderLayout.WEST);
@@ -340,11 +336,12 @@ public class Program {
                             if (confirm == JOptionPane.OK_OPTION) {
                                 shop.deleteCard(cardID);
                                 cardViewPane.refreshCardsTable(db.getCards());
-                                /* Purchase by this card will be changed to cash */
+                                /* Purchases by this card will be changed to cash */
                                 shop.convertPurchase(cardID);
                                 purchaseViewPane.refreshPurchasesTable(db.getPurchases());
                             } else {
                                 e.getIdTextField().setText(null);
+                                e.getDeleteErrorLabel().setVisible(true);
                             }
                         } else {
                             if (!rule.validate(input))
@@ -607,7 +604,7 @@ public class Program {
                     public void createCategoryEventOccurred(CategoryEvent e) {
                         shop.makeCategory(new Category(e.getCategoryNameTextField().getText(),
                                 e.getCategoryDescTextField().getText()));
-                        categoriesViewPane.refreshCategoriesTable(shop.getDatabase().getCategories());
+                        categoriesViewPane.refreshCategoriesTable(db.getCategories());
                         removeCategoryForms();
                     }
                 });
@@ -635,9 +632,72 @@ public class Program {
                 /* ADD A DELETE BUTTON LISTENER AFTER CREATING FORM */
                 form.setDeleteListener(new DeleteListener() {
                     public void deleteEventOccurred(DeleteEvent e) {
-                        /* TEST CODE */
-                        System.err.println("DELETE BUTTON CALLBACK NOT IMPL");
-                        System.out.println("DELETE BUTTON PRESSED");
+                        String categoryIDStr = e.getIdTextField().getText();
+
+                        /* SETUP VALIDATOR FOR CATEGORY ID */
+                        FormValidData input = new FormValidData();
+                        input.setCategoryID(categoryIDStr);
+                        FormRule validIDRule = new CategoryIDRule();
+                        ExistsRule existsIDRule = new CategoryExistsRule();
+                        if (!validIDRule.validate(input)) {
+                            e.getErrorLabel().setVisible(false);
+                            e.getOthersDeleteErrLabel().setVisible(false);
+                            e.getRuleErrLabel().setVisible(true);
+                            e.getIdLabel().setForeground(Style.redA700());
+                            e.getIdTextField().setForeground(Style.redA700());
+                            e.getDeleteErrorLabel().setVisible(true);
+                        } else {
+                            int categoryIndex = existsIDRule.existsValidating(input);
+
+                            if (Integer.parseInt(categoryIDStr) == 100) {
+                                // Do NOT allow user to delete category Others
+                                e.getErrorLabel().setVisible(false);
+                                e.getRuleErrLabel().setVisible(false);
+                                e.getOthersDeleteErrLabel().setVisible(true);
+                                e.getDeleteErrorLabel().setVisible(true);
+                            } else if (categoryIndex >= 0) {
+                                int categoryID = Integer.parseInt(categoryIDStr);
+
+                                e.getErrorLabel().setVisible(false);
+                                e.getRuleErrLabel().setVisible(false);
+                                e.getOthersDeleteErrLabel().setVisible(false);
+                                e.getDeleteErrorLabel().setVisible(false);
+
+                                String[] btnOptions = {"Yes","Cancel"};
+                                String message = "Are you sure you want to DELETE Category: " + categoryIDStr +
+                                        "\nThis cannot be undone." +
+                                        "\n\nAll purchases for this category will be moved to Other category.\n\n";
+
+                                int confirm = JOptionPane.showOptionDialog(mainFrame, // frame, can be null
+                                        message, // message
+                                        "Confirm Delete?", // title
+                                        JOptionPane.OK_CANCEL_OPTION, // button options
+                                        JOptionPane.WARNING_MESSAGE, // icon
+                                        null, // do not use custom icon
+                                        btnOptions, // title of buttons
+                                        btnOptions[1] // default button title
+                                );
+
+                                if (confirm == JOptionPane.OK_OPTION) {
+                                    shop.deleteCategory(categoryID);
+                                    categoriesViewPane.refreshCategoriesTable(db.getCategories());
+                                    form.setVisible(false);
+                                    removeCategoryForms();
+                                } else {
+                                    e.getIdLabel().setForeground(Color.BLACK);
+                                    e.getIdTextField().setForeground(Color.BLACK);
+                                    e.getDeleteErrorLabel().setVisible(true);
+                                }
+                            } else {
+                                e.getRuleErrLabel().setVisible(false);
+                                e.getOthersDeleteErrLabel().setVisible(false);
+                                e.getErrorLabel().setVisible(true);
+                                e.getIdLabel().setForeground(Style.redA700());
+                                e.getIdTextField().setForeground(Style.redA700());
+                                e.getDeleteErrorLabel().setVisible(true);
+                            }
+                        }
+
                     }
                 });
 
