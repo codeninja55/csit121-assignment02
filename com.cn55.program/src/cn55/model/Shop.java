@@ -1,5 +1,8 @@
 package cn55.model;
 
+import cn55.controller.Validator.CardExistsRule;
+import cn55.controller.Validator.ExistsRule;
+import cn55.controller.Validator.FormValidData;
 import cn55.model.CardModel.*;
 
 import java.util.*;
@@ -37,11 +40,15 @@ public class Shop {
 
     public void makePurchase(String cardID, int receiptID, HashMap<Integer, Category> categories) {
 
+        ExistsRule cardExistsRule = new CardExistsRule();
+        FormValidData validData = new FormValidData();
+        validData.setCardID(cardID);
+
         if (cardID.equals(CardType.Cash.getName())) {
             Database.updateCategoriesTotalMap(categories);
             db.addPurchase(new Purchase(categories, receiptID));
         } else {
-            if (cardExists(cardID)) {
+            if (cardExistsRule.existsValidating(validData) >= 0) {
                 Database.updateCategoriesTotalMap(categories);
                 Card card = db.getCards().get(db.getCardMap().get(cardID));
                 String cardType = card.getCardType();
@@ -76,21 +83,9 @@ public class Shop {
         }
     }
 
-    public boolean cardExists(String cardID) {
+    public void deleteCard(int cardIndex) {
         db.mapCards();
-        return db.getCardMap().containsKey(cardID);
-    }
-
-    public void deleteCard(String cardID) {
-        db.mapCards();
-        int index = db.getCardMap().get(cardID);
-        if (db.getCardMap().containsKey(cardID)) {
-            try {
-                db.getCards().remove(index);
-            } catch (IndexOutOfBoundsException e) {
-                e.printStackTrace();
-            }
-        }
+        db.removeCard(cardIndex);
     }
 
     public void convertPurchase(String cardID) {
