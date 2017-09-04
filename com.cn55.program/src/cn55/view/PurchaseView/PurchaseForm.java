@@ -58,7 +58,7 @@ public class PurchaseForm extends JPanel {
         /* INITIALIZE ALL COMPONENTS */
         purchaseTypeCombo = new JComboBox<>();
         options = new DefaultComboBoxModel<>();
-        JButton cancelBtn = new JButton("Cancel New Purchase");
+        CancelButton cancelBtn = new CancelButton("Cancel New Purchase");
 
         /* NOTE: All FormLabels and FormTextField are hidden by default */
         receiptIDLabel = new FormLabel("Receipt ID: ");
@@ -110,9 +110,6 @@ public class PurchaseForm extends JPanel {
         purchaseTypeCombo.setFont(Style.comboboxFont());
         add(purchaseTypeCombo, BorderLayout.NORTH);
 
-        cancelBtn.setFont(Style.buttonFont());
-        cancelBtn.setForeground(Style.btnTextColor());
-        cancelBtn.setBackground(Style.red500());
         add(cancelBtn, BorderLayout.SOUTH);
 
         /*========== COMBO BOX LISTENER ==========*/
@@ -227,7 +224,7 @@ public class PurchaseForm extends JPanel {
 
         /*========== NEW ROW ==========*/
         labelGridConstraints(gc);
-        gc.weighty = 0.02;
+        gc.weighty = 0.1;
         gc.insets = new Insets(20,0,0,5);
         createPurchaseForm.add(cardNameLabel, gc);
 
@@ -237,9 +234,11 @@ public class PurchaseForm extends JPanel {
 
         /*========== NEW ROW ==========*/
         labelGridConstraints(gc);
+        gc.insets = new Insets(20,0,20,0);
         createPurchaseForm.add(cardEmailLabel, gc);
 
         textFieldGridConstraints(gc);
+        gc.insets = new Insets(20,0,20,0);
         createPurchaseForm.add(cardEmailTextField, gc);
 
         /*========== NEW ROW - CATEGORIES LIST ==========*/
@@ -260,7 +259,6 @@ public class PurchaseForm extends JPanel {
         }
 
         /*========== NEW ROW - PURCHASE ERROR LABEL ==========*/
-
         gc.gridy++; gc.gridx = 0; gc.weightx = 1; gc.weighty = 0.1; gc.gridwidth = 2;
         gc.fill = GridBagConstraints.HORIZONTAL;
         gc.anchor = GridBagConstraints.CENTER;

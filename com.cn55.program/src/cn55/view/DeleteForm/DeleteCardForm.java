@@ -16,7 +16,6 @@ public class DeleteCardForm extends JPanel {
     private ErrorLabel errorLabel;
     private ErrorLabel ruleErrLabel;
     private FormButton deleteBtn;
-    private JButton cancelBtn;
 
     private ButtonListener cancelListener;
     private DeleteListener deleteListener;
@@ -25,7 +24,7 @@ public class DeleteCardForm extends JPanel {
     public DeleteCardForm() {
 
         deleteForm = new JPanel(new GridBagLayout());
-        cancelBtn = new JButton("Cancel Delete");
+        CancelButton cancelBtn = new CancelButton("Cancel Card Delete");
         cardIDLabel = new FormLabel("Delete by Card ID");
         cardIDTextField = new FormTextField(20);
         errorLabel = new ErrorLabel("CARD DOES NOT EXIST");
@@ -89,10 +88,6 @@ public class DeleteCardForm extends JPanel {
         });
 
         add(deleteForm, BorderLayout.CENTER);
-
-        cancelBtn.setFont(Style.buttonFont());
-        cancelBtn.setForeground(Style.btnTextColor());
-        cancelBtn.setBackground(Style.red500());
         add(cancelBtn, BorderLayout.SOUTH);
 
         cancelBtn.addActionListener(e -> {
@@ -106,7 +101,6 @@ public class DeleteCardForm extends JPanel {
                 c.setVisible(true);
             }
         }
-        //Can be visible because only created when Toolbar button is pressed
         setVisible(false);
     }
 
@@ -123,17 +117,5 @@ public class DeleteCardForm extends JPanel {
 
     public JPanel getDeleteForm() {
         return deleteForm;
-    }
-
-    public FormLabel getCardIDLabel() {
-        return cardIDLabel;
-    }
-
-    public FormTextField getCardIDTextField() {
-        return cardIDTextField;
-    }
-
-    public FormButton getDeleteBtn() {
-        return deleteBtn;
     }
 }

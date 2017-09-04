@@ -24,7 +24,7 @@ public class SearchForm extends JPanel {
     public SearchForm() {
         /* NOTE: searchForm is the form Container within*/
         searchForm = new JPanel(new GridBagLayout());
-        JButton cancelBtn = new JButton("Cancel Search");
+        CancelButton cancelBtn = new CancelButton("Cancel Search");
         searchLabel = new FormLabel("Search by Card ID");
         searchLabel.setVisible(true);
         searchIDTextField = new FormTextField(20);
@@ -89,10 +89,6 @@ public class SearchForm extends JPanel {
         });
 
         add(searchForm, BorderLayout.CENTER);
-
-        cancelBtn.setFont(Style.buttonFont());
-        cancelBtn.setForeground(Style.btnTextColor());
-        cancelBtn.setBackground(Style.red500());
         add(cancelBtn, BorderLayout.SOUTH);
 
         cancelBtn.addActionListener(e -> {

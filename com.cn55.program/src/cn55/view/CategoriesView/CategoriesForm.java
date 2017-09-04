@@ -19,7 +19,7 @@ public class CategoriesForm extends JPanel {
 
     private FormButton createBtn;
     private FormButton clearBtn;
-    private JButton cancelBtn;
+    private CancelButton cancelBtn;
 
     private CategoryListener createCategoryListener;
     private ButtonListener cancelListener;
@@ -33,7 +33,7 @@ public class CategoriesForm extends JPanel {
         categoryDescTextField = new JTextArea(5,35);
         createBtn = new FormButton("Create Category");
         clearBtn = new FormButton("Clear");
-        cancelBtn = new JButton("Cancel New Category");
+        cancelBtn = new CancelButton("Cancel New Category");
 
         /* INITIALIZE THIS PANEL */
         setLayout(new BorderLayout());
@@ -55,7 +55,7 @@ public class CategoriesForm extends JPanel {
         createCategoriesForm.add(categoryNameLabel, gc);
 
         /*========== NEW ROW ==========*/
-        gc.gridy++; gc.gridx = 0; gc.weightx = 1; gc.weighty = 0.1; gc.gridwidth = 2;
+        gc.gridy++;
         gc.anchor = GridBagConstraints.PAGE_START;
         gc.insets = new Insets(20,0,0,0);
         Dimension textFieldDim = getPreferredSize();
@@ -65,17 +65,16 @@ public class CategoriesForm extends JPanel {
         createCategoriesForm.add(categoryNameTextField, gc);
 
         /*========== NEW ROW ==========*/
-        gc.gridy++; gc.gridx = 0; gc.weightx = 1; gc.weighty = 0.1; gc.gridwidth = 2;
+        gc.gridy++;
         gc.anchor = GridBagConstraints.PAGE_START;
         gc.insets = new Insets(20,0,0,0);
         createCategoriesForm.add(categoryDescLabel, gc);
 
         /*========== NEW ROW ==========*/
-        gc.gridy++; gc.gridx = 0; gc.weightx = 1; gc.weighty = 0.1; gc.gridwidth = 2;
+        gc.gridy++;
         gc.anchor = GridBagConstraints.PAGE_START;
         gc.insets = new Insets(20,0,10,0);
         categoryDescTextField.setFont(Style.textAreaFont());
-
         createCategoriesForm.add(categoryDescTextField, gc);
 
         /*========== BUTTON ROW ==========*/
@@ -93,9 +92,6 @@ public class CategoriesForm extends JPanel {
         add(createCategoriesForm, BorderLayout.CENTER);
 
         /* CANCEL BUTTON SETUP */
-        cancelBtn.setFont(Style.buttonFont());
-        cancelBtn.setForeground(Style.btnTextColor());
-        cancelBtn.setBackground(Style.red500());
         add(cancelBtn, BorderLayout.SOUTH);
 
         /* SET FORM CUSTOM COMPONENTS VISIBLE */
