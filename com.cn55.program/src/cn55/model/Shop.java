@@ -10,9 +10,9 @@ public class Shop {
     private Database db;
 
     /*============================== CONSTRUCTORS  ==============================*/
-    // default
+
     public Shop() {
-        this.db = new Database();
+        this.db = Database.getDBInstance();
         generateDefaultCategories();
         Database.mapCategoriesTotalMap(db.getCategories());
     }
