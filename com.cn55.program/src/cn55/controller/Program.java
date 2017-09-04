@@ -19,6 +19,7 @@ import cn55.view.CustomComponents.FormTextField;
 import cn55.view.CustomComponents.ResultsPane;
 import cn55.view.CustomComponents.Style;
 import cn55.view.DeleteForm.DeleteCardForm;
+import cn55.view.DeleteForm.DeleteCategoryForm;
 import cn55.view.DeleteForm.DeleteEvent;
 import cn55.view.DeleteForm.DeleteListener;
 import cn55.view.MainFrame;
@@ -310,7 +311,7 @@ class Program {
                 /* REGISTER A CREATE BUTTON LISTENER AFTER CREATING FORM */
                 cardViewPane.getDeleteForm().setDeleteListener(new DeleteListener() {
                     public void deleteEventOccurred(DeleteEvent e) {
-                        String cardID = e.getSearchIDTextField().getText();
+                        String cardID = e.getIdTextField().getText();
 
                         /* SETUP VALIDATOR FOR CARD ID */
                         FormValidData input = new FormValidData();
@@ -342,7 +343,7 @@ class Program {
                                 shop.convertPurchase(cardID);
                                 purchaseViewPane.refreshPurchasesTable(db.getPurchases());
                             } else {
-                                e.getSearchIDTextField().setText(null);
+                                e.getIdTextField().setText(null);
                             }
                         } else {
                             if (!rule.validate(input))
@@ -350,8 +351,8 @@ class Program {
                             else
                                 e.getErrorLabel().setVisible(true);
 
-                            e.getSearchIDTextField().setForeground(Style.redA700());
-                            e.getSearchIDLabel().setForeground(Style.redA700());
+                            e.getIdTextField().setForeground(Style.redA700());
+                            e.getIdLabel().setForeground(Style.redA700());
                         }
                     }
                 });
