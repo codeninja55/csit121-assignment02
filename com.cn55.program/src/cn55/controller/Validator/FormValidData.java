@@ -16,7 +16,7 @@ public class FormValidData {
 
     /*============================== MUTATORS ==============================*/
     public void setCardID(String cardID) {
-        this.cardID = cardID;
+        this.cardID = cardID.toUpperCase();
     }
 
     public void setCategoryID(String categoryIDStr) {
