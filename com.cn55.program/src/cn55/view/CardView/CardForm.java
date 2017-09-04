@@ -1,6 +1,7 @@
 package cn55.view.CardView;
 
 import cn55.model.CardType;
+import cn55.model.Database;
 import cn55.view.ButtonListener;
 import cn55.view.CustomComponents.FormButton;
 import cn55.view.CustomComponents.FormLabel;
@@ -19,13 +20,11 @@ import java.util.HashMap;
 
 public class CardForm extends JPanel {
     private HashMap<String,String> newCard;
-    private String generatedCardID;
 
     private JComboBox<String> cardTypeCombo;
     private DefaultComboBoxModel<String> options;
 
     private JPanel createCardForm;
-    /* TODO - Cannot use a generatedCardID because everytime you create the form it will increase the card idCounter */
     private FormLabel cardIDLabel;
     private FormTextField cardIDTextField;
     private FormLabel cardNameLabel;
@@ -46,9 +45,9 @@ public class CardForm extends JPanel {
         JButton cancelBtn = new JButton("Cancel New Card");
 
         /* NOTE: All FormLabels and FormTextFields are hidden by default */
-        /*cardIDLabel = new FormLabel("Card ID: ");
-        cardIDTextField = new FormTextField(20);*/
-        cardIDTextField.setText(generatedCardID);
+        cardIDLabel = new FormLabel("Card ID: ");
+        cardIDTextField = new FormTextField(20);
+        cardIDTextField.setText(Database.getNextCardID());
         cardNameLabel = new FormLabel("Name: ");
         cardNameTextField = new FormTextField(20);
         cardEmailLabel = new FormLabel("Email: ");
@@ -311,8 +310,6 @@ public class CardForm extends JPanel {
     }
 
     /*============================== MUTATORS  ==============================*/
-    public void setGeneratedCardID(String cardID) { this.generatedCardID = cardID; }
-
     private void labelGridConstraints(GridBagConstraints gc) {
         gc.gridy++;
         gc.gridx = 0;
@@ -335,5 +332,4 @@ public class CardForm extends JPanel {
         return createCardForm;
     }
     public HashMap<String, String> getCardMap() { return newCard; }
-    public String getCardID() { return generatedCardID; }
 }

@@ -2,6 +2,7 @@ package cn55.view.PurchaseView;
 
 import cn55.model.CardType;
 import cn55.model.Category;
+import cn55.model.Database;
 import cn55.model.PurchaseType;
 import cn55.view.ButtonListener;
 import cn55.view.CustomComponents.*;
@@ -17,8 +18,6 @@ import java.util.HashMap;
 
 public class PurchaseForm extends JPanel {
     private int generatedReceiptID;
-    // TODO - Implement this back into Purchase with New Card form
-    private String generatedCardID;
 
     private DefaultComboBoxModel<String> existingCardModel;
     private ArrayList<Category> categoriesList;
@@ -174,6 +173,7 @@ public class PurchaseForm extends JPanel {
         createPurchaseForm.add(cardIDLabel, gc);
 
         textFieldGridConstraints(gc);
+        cardIDTextField.setEditable(false);
         createPurchaseForm.add(cardIDTextField, gc);
 
         /*========== NEW ROW - CARD ID ERROR LABEL ==========*/
@@ -373,8 +373,8 @@ public class PurchaseForm extends JPanel {
         existingCardLabel.setVisible(false);
         existingCardCombo.setVisible(false);
         cardIDLabel.setVisible(true);
-        cardIDTextField.setText(null);
-        cardIDTextField.setEnabled(true);
+        cardIDTextField.setEditable(false);
+        cardIDTextField.setText(Database.getNextCardID());
         cardIDTextField.setVisible(true);
 
         cardTypeLabel.setVisible(true);
