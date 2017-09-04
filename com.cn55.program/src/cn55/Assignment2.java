@@ -13,15 +13,10 @@ import javax.swing.*;
 
 /* LIST OF TASKS STILL TO DO */
 // TODO - Create Card Form and Event Handler
+// TODO - Add a View button to display card
 // TODO - Error checking for creating card and display of error information
-// TODO - Fix CardID inputs to accept lowercase letters
-// TODO - Fix the delete card form to show the output in a Results Pane as well as confirm dialog
-// TODO - Fix the Purchase Form to show ResultsPane as well as do a confirm dialog
-// TODO - Fix the Purchase Form categories display and also remove CardID
-// TODO - Fix the create category form to remove form when finished after displaying confirm dialog
-// TODO - Fix the generate ID method so ID can be displayed on the form
 // TODO - Refactor CardView and PurchaseView to use the Toolbar custom component
-// TODO - Refactor CardView and PurchaseView to include all listenes in the CardViewPane and PurchaseViewPane
+// TODO - Refactor CardView and PurchaseView to include all listeners in the CardViewPane and PurchaseViewPane
 // NOTE: This is to be done with a ToolbarListener inner class
 
 
