@@ -7,8 +7,11 @@ import cn55.model.CardModel.Card;
 import javax.swing.*;
 import java.util.*;
 
+/* SINGLETON DESIGN PATTERN */
+
 public class Database {
 
+    private static Database db;
     private ArrayList<Card> cards;
     private HashMap<String, Integer> cardMap;
     private ArrayList<Purchase> purchases;
@@ -26,12 +29,23 @@ public class Database {
     private static Set<String> cardIDSet = new HashSet<>();
 
     /*============================== CONSTRUCTORS  ==============================*/
-    Database() {
+    // Private modifier prevents any other class from instantiating
+    private Database() {
         this.cards = new ArrayList<>();
         this.cardMap = new HashMap<>();
         this.purchases = new ArrayList<>();
         this.purchaseMap = new HashMap<>();
         this.categories = new ArrayList<>();
+        this.categoriesMap = new HashMap<>();
+    }
+
+    // Provide global point of access
+    // Double check locking mechanism but only with the initial call
+    public static synchronized Database getDBInstance() {
+        if (db == null)
+            db = new Database();
+
+        return db;
     }
 
     /*============================== STATIC METHODS ==============================*/
