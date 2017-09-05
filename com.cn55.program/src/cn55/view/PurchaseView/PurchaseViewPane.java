@@ -48,6 +48,7 @@ public class PurchaseViewPane extends JPanel implements Observer {
         purchaseTablePane = new JTable();
         JScrollPane tableScrollPane = new JScrollPane(purchaseTablePane);
 
+
         resultsPane = new ResultsPane("PurchaseViewResultsPane");
         tablePopup = new JPopupMenu();
         JMenuItem removePurchase = new JMenuItem("Delete Purchase");
