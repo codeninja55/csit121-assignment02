@@ -52,9 +52,8 @@ public class CardViewPane extends JPanel implements Observer {
         cardTablePane = new JTable();
         JScrollPane tableScrollPane = new JScrollPane(cardTablePane);
         tableScrollPane.setName("CardsViewTableScrollPane");
+
         resultsPane = new ResultsPane("CardViewResultsPane");
-        //resultsScrollPane = new JScrollPane(resultsPane);
-        //toolbar = new CardsViewToolbar();
 
         setName("CardsViewPane");
         setLayout(new BorderLayout());
@@ -165,6 +164,10 @@ public class CardViewPane extends JPanel implements Observer {
 
     public DeleteCardForm getDeleteForm() {
         return deleteForm;
+    }
+
+    public JTable getCardTablePane() {
+        return cardTablePane;
     }
 
     public ResultsPane getResultsPane() {
