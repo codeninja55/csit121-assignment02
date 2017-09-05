@@ -18,6 +18,7 @@ public class CardForm extends JPanel {
 
     private JComboBox<String> cardTypeCombo;
     private DefaultComboBoxModel<String> options;
+    private CancelButton cancelBtn;
 
     private JPanel baseCreateCardForm;
     private FormLabel cardIDLabel;
@@ -37,7 +38,7 @@ public class CardForm extends JPanel {
         /* INITIALIZE ALL COMPONENTS */
         cardTypeCombo = new JComboBox<>();
         options = new DefaultComboBoxModel<>();
-        CancelButton cancelBtn = new CancelButton("Cancel New Card");
+        cancelBtn = new CancelButton("Cancel New Card");
 
         /* NOTE: All FormLabels and FormTextFields are hidden by default */
         cardIDLabel = new FormLabel("Card ID: ");
@@ -59,6 +60,7 @@ public class CardForm extends JPanel {
         setPreferredSize(dim);
         setMinimumSize(getPreferredSize());
         setBorder(Style.formBorder("New Card"));
+        setVisible(false);
 
         /* CARD TYPE COMBO BOX - Create the model and the combobox */
         options.addElement("Please Choose Card Type Below");
@@ -72,30 +74,14 @@ public class CardForm extends JPanel {
         cardTypeCombo.setFont(Style.comboboxFont());
         add(cardTypeCombo, BorderLayout.NORTH);
 
-        /* COMBO BOX LISTENER */
-        cardTypeCombo.addItemListener(e -> {
-            if (e.getStateChange() == ItemEvent.SELECTED) {
-                if (e.getItem().equals(options.getElementAt(0))) {
-                    baseCardForm();
-                } else if (e.getItem().equals(options.getElementAt(1))) {
-                    anonCardForm();
-                } else if (e.getItem().equals(options.getElementAt(2))) {
-                    advancedCardForm();
-                } else if (e.getItem().equals(options.getElementAt(3))) {
-                    advancedCardForm();
-                }
-            }
-        });
-
         add(cancelBtn, BorderLayout.SOUTH);
 
-        /* CANCEL BUTTON LISTENER */
-        cancelBtn.addActionListener(e -> {
-            if (cancelListener != null)
-                cancelListener.buttonActionOccurred();
-        });
-
-        setVisible(false);
+        /* REGISTRATION OF LISTENERS AND CALLBACKS */
+        FormListener handler = new FormListener();
+        cardTypeCombo.addItemListener(handler);
+        cancelBtn.addActionListener(handler);
+        createBtn.addActionListener(handler);
+        clearBtn.addActionListener(handler);
     }
 
     /*============================== BASE CREATE CARD FORM ==============================*/
@@ -145,38 +131,17 @@ public class CardForm extends JPanel {
         gc.insets = new Insets(20,0,0,10);
         baseCreateCardForm.add(createBtn, gc);
 
-        createBtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                CardEvent event = new CardEvent(this);
-
-                if (cardListener != null)
-                    cardListener.formActionOccurred();
-            }
-        });
-
         gc.gridx = 1; gc.weightx = 0.5;
         gc.anchor = GridBagConstraints.FIRST_LINE_START;
         gc.insets = new Insets(20,10,0,0);
         baseCreateCardForm.add(clearBtn, gc);
-
-        clearBtn.addActionListener(e -> {
-            for (Component c : baseCreateCardForm.getComponents()) {
-                if (c instanceof JTextField && ((JTextField) c).isEditable())
-                    ((JTextField) c).setText(null);
-
-                if (c instanceof ErrorLabel)
-                    c.setVisible(false);
-
-                if (c instanceof FormLabel)
-                    c.setForeground(Color.BLACK);
-            }
-        });
 
         /* BY DEFAULT CLEAR ALL TEXT FIELDS */
         for (Component item : baseCreateCardForm.getComponents())
             if (item instanceof FormTextField) ((FormTextField) item).setText("");
 
         cardIDTextField.setText(Database.getNextCardID());
+
     }
 
     private void baseCardForm() {
@@ -238,4 +203,56 @@ public class CardForm extends JPanel {
     }
 
     /*============================== ACCESSORS  ==============================*/
+
+    /*=========================================================================*/
+    /*============================== INNER CLASS ==============================*/
+    /*=========================================================================*/
+    /*=========================== LISTENER HANDLER ============================*/
+    private class FormListener implements ActionListener, ItemListener {
+        public void actionPerformed(ActionEvent e) {
+            if (e.getSource() == cancelBtn) {
+                if (cancelListener != null)
+                    cancelListener.buttonActionOccurred();
+            } else if ( e.getSource() == createBtn) {
+                CardEvent event = new CardEvent(this);
+                event.setCardTypeCombo(cardTypeCombo);
+                event.setCardIDLabel(cardIDLabel);
+                event.setCardIDTextField(cardIDTextField);
+                event.setCardNameLabel(cardNameLabel);
+                event.setCardNameTextField(cardNameTextField);
+                event.setCardEmailLabel(cardEmailLabel);
+                event.setCardEmailTextField(cardEmailTextField);
+
+                if (cardListener != null)
+                    cardListener.formActionOccurred(event);
+            } else if (e.getSource() == clearBtn) {
+                for (Component c : baseCreateCardForm.getComponents()) {
+                    if (c instanceof JTextField && ((JTextField) c).isEditable())
+                        ((JTextField) c).setText(null);
+
+                    if (c instanceof ErrorLabel)
+                        c.setVisible(false);
+
+                    if (c instanceof FormLabel)
+                        c.setForeground(Color.BLACK);
+                }
+            }
+        }
+
+        public void itemStateChanged(ItemEvent e) {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    if (e.getItem().equals(options.getElementAt(0))) {
+                        baseCardForm();
+                    } else if (e.getItem().equals(options.getElementAt(1))) {
+                        anonCardForm();
+                    } else if (e.getItem().equals(options.getElementAt(2))) {
+                        advancedCardForm();
+                    } else if (e.getItem().equals(options.getElementAt(3))) {
+                        advancedCardForm();
+                    }
+                }
+            }
+        }
+    }
 }

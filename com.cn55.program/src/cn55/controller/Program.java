@@ -4,6 +4,7 @@ import cn55.controller.Validator.*;
 import cn55.model.CardModel.*;
 import cn55.model.*;
 import cn55.view.ButtonListener;
+import cn55.view.CardView.CardEvent;
 import cn55.view.CardView.CardForm;
 import cn55.view.CardView.CardListener;
 import cn55.view.CardView.CardViewPane;
@@ -261,19 +262,48 @@ public class Program {
                 form.setVisible(true);
                 form.createBaseCreateCardForm();
 
+                /* Setup a text pane to put all the necessary data into */
+                ResultsPane resultsPane = cardViewPane.getResultsPane();
+                resultsPane.setVisible(false);
+                resultsPane.setResultsTextPane();
+                ResultsPane.ResultsTextPane resultsTextPane = resultsPane.getResultsTextPane();
+
                 /* ADD A CANCEL BUTTON LISTENER AFTER CREATING FORM */
                 form.setCancelListener(new ButtonListener() {
                     public void buttonActionOccurred() {
                         cardViewPane.getCardForm().setVisible(false);
+                        cardViewPane.getResultsPane().setVisible(false);
                         removeCardForms();
+                        removeResultsPane(resultsPane);
                     }
                 });
 
                 /* ADD A CREATE BUTTON LISTENER AFTER CREATING FORM */
-                form.setCardListener(new CardListener() {
-                    public void formActionOccurred() {
-                        System.out.println("Create Card Pressed");
+                form.setCardListener(e -> {
+                    String type = (String)e.getCardTypeCombo().getSelectedItem();
+                    HashMap<String, String> newCard = new HashMap<>();
+                    String name = e.getCardNameTextField().getText();
+                    String email = e.getCardEmailTextField().getText();
+
+                    if (type.equals(CardType.AnonCard.getName())) {
+                        newCard.put("name", "");
+                        newCard.put("email", "");
+                        newCard.put("cardType", CardType.AnonCard.getName());
+                        shop.makeCard(newCard);
+                    } else if (type.equals(CardType.BasicCard.getName())) {
+                        newCard.put("name", name);
+                        newCard.put("email", email);
+                        newCard.put("cardType", CardType.BasicCard.getName());
+                        shop.makeCard(newCard);
+                    } else if (type.equals(CardType.PremiumCard.getName())) {
+                        newCard.put("name", name);
+                        newCard.put("email", email);
+                        newCard.put("cardType", CardType.BasicCard.getName());
+                        shop.makeCard(newCard);
                     }
+
+                    int cardIndex = db.getCardMap().get(e.getCardIDTextField().getText());
+                    showResultsPane(db.getCards().get(cardIndex).toString(), resultsPane, resultsTextPane);
                 });
             }
         });
@@ -299,6 +329,7 @@ public class Program {
                         cardViewPane.getDeleteForm().setVisible(false);
                         cardViewPane.getResultsPane().setVisible(false);
                         removeCardForms();
+                        removeResultsPane(resultsPane);
                     }
                 });
 
