@@ -241,6 +241,7 @@ public class PurchaseForm extends JPanel {
         gc.insets = new Insets(10,0,20,0);
         baseCreatePurchaseForm.add(cardEmailTextField, gc);
 
+        /* TODO - ADD THIS INTO A JSCROLLPANE SO IT CAN BE SCROLLED */
         /*========== NEW ROW - CATEGORIES LIST ==========*/
         for (HashMap.Entry<JLabel[], FormTextField> item : categoriesMap.entrySet()) {
             labelGridConstraints(gc);
@@ -283,9 +284,8 @@ public class PurchaseForm extends JPanel {
                         premiumCardRB, cardNameLabel, cardNameTextField,
                         cardEmailLabel, cardEmailTextField, purchaseErrorLabel);
 
-                if (createPurchaseListener != null) {
+                if (createPurchaseListener != null)
                     createPurchaseListener.formActionOccurred(event);
-                }
             }
         });
 
@@ -315,6 +315,8 @@ public class PurchaseForm extends JPanel {
         }
 
         receiptIDTextField.setText(Integer.toString(generatedReceiptID));
+
+        setVisible(false);
     }
 
     private void basePurchaseForm() {
@@ -362,6 +364,7 @@ public class PurchaseForm extends JPanel {
         cardIDTextField.setText(Database.getNextCardID());
         cardIDTextField.setVisible(true);
 
+        cardTypeLabel.setVisible(true);
         anonCardRB.setSelected(true);
         anonCardRB.setVisible(true);
         basicCardRB.setVisible(true);
@@ -390,7 +393,6 @@ public class PurchaseForm extends JPanel {
         });
 
         setCategoriesVisible(true);
-
         createBtn.setVisible(true);
         createBtn.setEnabled(true);
         clearBtn.setVisible(true);
@@ -448,11 +450,6 @@ public class PurchaseForm extends JPanel {
         }
     }
 
-    private void hideAllFormComponents(boolean isVisible) {
-        for (Component item : baseCreatePurchaseForm.getComponents())
-            item.setVisible(isVisible);
-    }
-
     private void labelGridConstraints(GridBagConstraints gc) {
         gc.gridy++;
         gc.gridx = 0;
@@ -464,6 +461,11 @@ public class PurchaseForm extends JPanel {
         gc.gridx = 1;
         gc.insets = new Insets(10,0,0,0);
         gc.anchor = GridBagConstraints.FIRST_LINE_START;
+    }
+
+    private void hideAllFormComponents(boolean isVisible) {
+        for (Component item : baseCreatePurchaseForm.getComponents())
+            item.setVisible(isVisible);
     }
 
     private void enableNameAndEmail (boolean isVisible) {

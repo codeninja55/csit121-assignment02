@@ -64,7 +64,7 @@ public class MainFrame extends JFrame {
         tabPane.addTab("Categories", categoriesViewPane);
 
         // DEFAULT PANE BEGIN AT
-        tabPane.setSelectedIndex(3);
+        tabPane.setSelectedIndex(1);
     }
 
     /*============================== ACCESSORS  ==============================*/

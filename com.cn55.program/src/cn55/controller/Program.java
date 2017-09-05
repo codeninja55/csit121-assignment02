@@ -283,8 +283,9 @@ public class Program {
             public void toolbarButtonEventOccurred() {
                 removeCardForms();
                 cardViewPane.setDeleteForm(new DeleteCardForm());
-                cardViewPane.add(cardViewPane.getDeleteForm(), BorderLayout.WEST);
-                cardViewPane.getDeleteForm().setVisible(true);
+                DeleteCardForm form = cardViewPane.getDeleteForm();
+                cardViewPane.add(form, BorderLayout.WEST);
+                form.setVisible(true);
 
                 /* Setup a text pane to put all the necessary data into */
                 ResultsPane resultsPane = cardViewPane.getResultsPane();
@@ -293,7 +294,7 @@ public class Program {
                 ResultsPane.ResultsTextPane resultsTextPane = resultsPane.getResultsTextPane();
 
                 /* REGISTER A CANCEL BUTTON LISTENER AFTER CREATING FORM */
-                cardViewPane.getDeleteForm().setCancelListener(new ButtonListener() {
+                form.setCancelListener(new ButtonListener() {
                     public void buttonActionOccurred() {
                         cardViewPane.getDeleteForm().setVisible(false);
                         cardViewPane.getResultsPane().setVisible(false);
@@ -302,7 +303,7 @@ public class Program {
                 });
 
                 /* REGISTER A CREATE BUTTON LISTENER AFTER CREATING FORM */
-                cardViewPane.getDeleteForm().setDeleteListener(new DeleteListener() {
+                form.setDeleteListener(new DeleteListener() {
                     public void deleteEventOccurred(DeleteEvent e) {
                         String cardID = e.getIdTextField().getText();
 
@@ -489,7 +490,10 @@ public class Program {
                 purchaseViewPane.setCreatePurchaseForm(new PurchaseForm());
                 PurchaseForm form = purchaseViewPane.getCreatePurchaseForm();
                 purchaseViewPane.add(form, BorderLayout.WEST);
+                purchaseViewPane.revalidate();
+                purchaseViewPane.repaint();
 
+                /* TODO - ADD A JScrollPane to the baseCreatePurchaseForm */
                 form.getPurchaseTypeCombo().setSelectedIndex(0);
                 form.setGeneratedReceiptID(Database.generateReceiptID());
                 form.setCardModel(db.getCardModel());
