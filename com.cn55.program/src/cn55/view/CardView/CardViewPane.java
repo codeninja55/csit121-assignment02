@@ -27,6 +27,7 @@ public class CardViewPane extends JPanel implements Observer {
     private ToolbarButton createCardBtn;
     private ToolbarButton deleteCardBtn;
     private ToolbarButton searchBtn;
+    private ToolbarButton viewBtn;
 
     private CardTableModel cardTableModel;
     private JComboBox<String> sortedCombo;
@@ -40,6 +41,7 @@ public class CardViewPane extends JPanel implements Observer {
     private ToolbarButtonListener createCardListener;
     private ToolbarButtonListener searchCardListener;
     private ToolbarButtonListener deleteCardListener;
+    private ToolbarButtonListener viewCardListener;
 
     /*============================== CONSTRUCTORS ==============================*/
     public CardViewPane() {
@@ -47,6 +49,7 @@ public class CardViewPane extends JPanel implements Observer {
         createCardBtn = new ToolbarButton("Create Card");
         deleteCardBtn = new ToolbarButton("Delete Card");
         searchBtn = new ToolbarButton("Search Card");
+        viewBtn = new ToolbarButton("View");
 
         cardTableModel = new CardTableModel();
         cardTablePane = new JTable();
@@ -76,6 +79,7 @@ public class CardViewPane extends JPanel implements Observer {
         toolbar.getLeftToolbar().add(createCardBtn);
         toolbar.getLeftToolbar().add(deleteCardBtn);
         toolbar.getLeftToolbar().add(searchBtn);
+        toolbar.getRightToolbar().add(viewBtn);
         toolbar.getRightToolbar().add(sortedCombo);
         add(toolbar, BorderLayout.NORTH);
 
@@ -88,6 +92,7 @@ public class CardViewPane extends JPanel implements Observer {
         createCardBtn.addActionListener(handler);
         searchBtn.addActionListener(handler);
         deleteCardBtn.addActionListener(handler);
+        viewBtn.addActionListener(handler);
     }
 
     /*============================== MUTATORS  ==============================*/
@@ -100,6 +105,10 @@ public class CardViewPane extends JPanel implements Observer {
     }
 
     public void setSearchCardListener(ToolbarButtonListener listener) { this.searchCardListener = listener; }
+
+    public void setViewCardListener(ToolbarButtonListener listener) {
+        this.viewCardListener = listener;
+    }
 
     public void setCardForm(CardForm cardForm) {
         this.cardForm = cardForm;
@@ -190,6 +199,10 @@ public class CardViewPane extends JPanel implements Observer {
             } else if (e.getSource() == deleteCardBtn) {
                 if (deleteCardListener != null)
                     deleteCardListener.toolbarButtonEventOccurred();
+            } else if (e.getSource() == viewBtn) {
+                if (viewCardListener != null) {
+                    viewCardListener.toolbarButtonEventOccurred();
+                }
             }
         }
     }
