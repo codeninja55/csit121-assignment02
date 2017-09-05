@@ -435,7 +435,26 @@ public class Program {
                             e.getSearchIDTextField().setForeground(Style.redA700());
                             e.getSearchIDLabel().setForeground(Style.redA700());
                         }
+
+                        /* SET UP A MOUSE LISTENER TO CLOSE PANEL WHEN CLICKING ON TABLE OR OUTER PANEL*/
+                        cardViewPane.addMouseListener(new MouseAdapter() {
+                            public void mouseClicked(MouseEvent e) {
+                                super.mouseClicked(e);
+                                resultsPane.setVisible(false);
+                                removeResultsPane(resultsPane);
+                            }
+                        });
+
+                        cardViewPane.getCardTablePane().addMouseListener(new MouseAdapter() {
+                            public void mouseClicked(MouseEvent e) {
+                                super.mouseClicked(e);
+                                resultsPane.setVisible(false);
+                                removeResultsPane(resultsPane);
+                            }
+                        });
                     }
+
+
                 });
             }
         });
