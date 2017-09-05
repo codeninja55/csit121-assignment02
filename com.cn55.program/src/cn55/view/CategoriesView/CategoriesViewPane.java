@@ -104,12 +104,8 @@ public class CategoriesViewPane extends JPanel implements Observer {
     }
 
     /*============================== ACCESSORS  ==============================*/
-    public ToolbarButton getCreateCategoryBtn() {
-        return createCategoryBtn;
-    }
-
-    public ToolbarButton getDeleteCategoryBtn() {
-        return deleteCategoryBtn;
+    public JTable getCategoriesTablePane() {
+        return categoriesTablePane;
     }
 
     public CategoriesTableModel getCategoriesTableModel() {
@@ -135,9 +131,8 @@ public class CategoriesViewPane extends JPanel implements Observer {
                 if (createCategoryListener != null)
                     createCategoryListener.toolbarButtonEventOccurred();
             } else if (e.getSource() == deleteCategoryBtn) {
-                if (deleteCategoryListener != null) {
+                if (deleteCategoryListener != null)
                     deleteCategoryListener.toolbarButtonEventOccurred();
-                }
             }
         }
     }
