@@ -4,9 +4,7 @@ import cn55.controller.Validator.*;
 import cn55.model.CardModel.*;
 import cn55.model.*;
 import cn55.view.ButtonListener;
-import cn55.view.CardView.CardEvent;
 import cn55.view.CardView.CardForm;
-import cn55.view.CardView.CardListener;
 import cn55.view.CardView.CardViewPane;
 import cn55.view.CategoriesView.CategoriesForm;
 import cn55.view.CategoriesView.CategoriesViewPane;
@@ -20,18 +18,19 @@ import cn55.view.DeleteForm.DeleteCategoryForm;
 import cn55.view.DeleteForm.DeleteEvent;
 import cn55.view.DeleteForm.DeleteListener;
 import cn55.view.MainFrame;
-import cn55.view.PurchaseView.*;
+import cn55.view.PurchaseView.PurchaseEvent;
+import cn55.view.PurchaseView.PurchaseForm;
+import cn55.view.PurchaseView.PurchaseListener;
+import cn55.view.PurchaseView.PurchaseViewPane;
 import cn55.view.SearchForm.SearchEvent;
 import cn55.view.SearchForm.SearchForm;
 import cn55.view.SearchForm.SearchListener;
 import cn55.view.ToolbarButtonListener;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
 import java.awt.*;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.util.*;
 
 public class Program {
@@ -51,12 +50,12 @@ public class Program {
         shop = new Shop();
         db = Database.getDBInstance();
         createTestCode(shop);
-        db.mapCards();
 
         this.mainFrame = new MainFrame();
 
         this.tabPane = mainFrame.getTabPane();
 
+        /* REGISTRATION AND INITIAL UPDATE CALLS FOR DATABASE OBSERVER PATTERN */
         this.cardViewPane = mainFrame.getCardViewPane();
         db.register(cardViewPane);
         cardViewPane.setSubject(db);
