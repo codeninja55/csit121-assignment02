@@ -384,9 +384,10 @@ public class Program {
                         /* Setup a text pane to put all the necessary data into */
                         ResultsPane resultsPane = cardViewPane.getResultsPane();
                         resultsPane.setResultsTextPane();
+                        //resultsPane.setScrollPane(resultsPane.getResultsTextPane());
                         ResultsPane.ResultsTextPane resultsTextPane = resultsPane.getResultsTextPane();
 
-                        String cardID = e.getSearchIDTextField().getText();
+                        String cardID = e.getSearchIDTextField().getText().toUpperCase();
 
                         /* SETUP VALIDATOR FOR CARD ID */
                         FormValidData input = new FormValidData();
@@ -419,6 +420,8 @@ public class Program {
                             * Then set the ResultsPane to visible and add the new ScrollPane
                             * Achieved in method below - showResultsPane() */
                             showResultsPane(results, resultsPane, resultsTextPane);
+                            cardViewPane.revalidate();
+                            cardViewPane.repaint();
 
                             e.getSearchIDTextField().setText(null);
                         } else {
@@ -784,7 +787,7 @@ public class Program {
         resultsTextPane.setText(text);
         resultsPane.setVisible(true);
         resultsPane.setScrollPane(resultsTextPane);
-        resultsPane.add(resultsPane.getResultsTextPane());
+        resultsPane.add(resultsPane.getScrollPane());
         resultsPane.getResultsTextPane().grabFocus();
         resultsPane.getResultsTextPane().setCaretPosition(0);
     }
