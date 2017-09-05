@@ -3,14 +3,9 @@ package cn55.view.CardView;
 import cn55.model.CardType;
 import cn55.model.Database;
 import cn55.view.ButtonListener;
-import cn55.view.CustomComponents.FormButton;
-import cn55.view.CustomComponents.FormLabel;
-import cn55.view.CustomComponents.FormTextField;
-import cn55.view.CustomComponents.Style;
+import cn55.view.CustomComponents.*;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,7 +19,7 @@ public class CardForm extends JPanel {
     private JComboBox<String> cardTypeCombo;
     private DefaultComboBoxModel<String> options;
 
-    private JPanel createCardForm;
+    private JPanel baseCreateCardForm;
     private FormLabel cardIDLabel;
     private FormTextField cardIDTextField;
     private FormLabel cardNameLabel;
@@ -42,12 +37,11 @@ public class CardForm extends JPanel {
         /* INITIALIZE ALL COMPONENTS */
         cardTypeCombo = new JComboBox<>();
         options = new DefaultComboBoxModel<>();
-        JButton cancelBtn = new JButton("Cancel New Card");
+        CancelButton cancelBtn = new CancelButton("Cancel New Card");
 
         /* NOTE: All FormLabels and FormTextFields are hidden by default */
         cardIDLabel = new FormLabel("Card ID: ");
         cardIDTextField = new FormTextField(20);
-        cardIDTextField.setText(Database.getNextCardID());
         cardNameLabel = new FormLabel("Name: ");
         cardNameTextField = new FormTextField(20);
         cardEmailLabel = new FormLabel("Email: ");
@@ -56,6 +50,7 @@ public class CardForm extends JPanel {
         createBtn = new FormButton("Add Card");
         clearBtn = new FormButton("Clear");
 
+        /* INITIALIZE THIS PANEL */
         setName("CardForm");
         setLayout(new BorderLayout());
         /* SIZING - Make sure the form is at least always 800 pixels */
@@ -63,8 +58,6 @@ public class CardForm extends JPanel {
         dim.width = 800;
         setPreferredSize(dim);
         setMinimumSize(getPreferredSize());
-
-        /* BORDERS - Adding 3 Borders around the form */
         setBorder(Style.formBorder("New Card"));
 
         /* CARD TYPE COMBO BOX - Create the model and the combobox */
@@ -79,45 +72,38 @@ public class CardForm extends JPanel {
         cardTypeCombo.setFont(Style.comboboxFont());
         add(cardTypeCombo, BorderLayout.NORTH);
 
-        cancelBtn.setFont(Style.buttonFont());
-        cancelBtn.setForeground(Style.btnTextColor());
-        cancelBtn.setBackground(Style.red500());
+        /* COMBO BOX LISTENER */
+        cardTypeCombo.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                if (e.getItem().equals(options.getElementAt(0))) {
+                    baseCardForm();
+                } else if (e.getItem().equals(options.getElementAt(1))) {
+                    anonCardForm();
+                } else if (e.getItem().equals(options.getElementAt(2))) {
+                    advancedCardForm();
+                } else if (e.getItem().equals(options.getElementAt(3))) {
+                    advancedCardForm();
+                }
+            }
+        });
+
         add(cancelBtn, BorderLayout.SOUTH);
 
         /* CANCEL BUTTON LISTENER */
         cancelBtn.addActionListener(e -> {
-            if (cancelListener != null) {
+            if (cancelListener != null)
                 cancelListener.buttonActionOccurred();
-            }
-        });
-
-        /* COMBO BOX LISTENER */
-        cardTypeCombo.addItemListener(new ItemListener() {
-            public void itemStateChanged(ItemEvent e) {
-                if (e.getStateChange() == ItemEvent.SELECTED) {
-                    if (e.getItem().equals(options.getElementAt(0))) {
-                        baseCardForm();
-                    } else if (e.getItem().equals(options.getElementAt(1))) {
-                        anonCardForm();
-                    } else if (e.getItem().equals(options.getElementAt(2))) {
-                        basicCardForm();
-                    } else if (e.getItem().equals(options.getElementAt(3))) {
-                        premiumCardForm();
-                    }
-                }
-            }
         });
 
         setVisible(false);
     }
 
     /*============================== BASE CREATE CARD FORM ==============================*/
-    public void createCardForm() {
+    public void createBaseCreateCardForm() {
         /* CREATE BASE FORM - PANEL */
-        createCardForm = new JPanel();
+        baseCreateCardForm = new JPanel(new GridBagLayout());
 
-        createCardForm.setLayout(new GridBagLayout());
-        this.add(createCardForm, BorderLayout.CENTER);
+        this.add(baseCreateCardForm, BorderLayout.CENTER);
 
         GridBagConstraints gc = new GridBagConstraints();
 
@@ -126,61 +112,88 @@ public class CardForm extends JPanel {
         gc.gridy = 0; gc.gridx = 0; gc.weightx = 1; gc.weighty = 0.02;
         gc.anchor = GridBagConstraints.FIRST_LINE_END;
         gc.insets = new Insets(20,0,0,10);
-
-        createCardForm.add(cardIDLabel, gc);
+        baseCreateCardForm.add(cardIDLabel, gc);
 
         gc.gridx = 1;
         gc.anchor = GridBagConstraints.FIRST_LINE_START;
         gc.insets = new Insets(20,0,0,0);
-
         cardIDTextField.setEditable(false);
-        createCardForm.add(cardIDTextField, gc);
+        baseCreateCardForm.add(cardIDTextField, gc);
 
+        /*========== NEW ROW ==========*/
+        labelGridConstraints(gc);
+        baseCreateCardForm.add(cardNameLabel, gc);
 
+        /*========== NEW ROW ==========*/
+        textFieldGridConstraints(gc);
+        baseCreateCardForm.add(cardNameTextField, gc);
+
+        /*========== NEW ROW ==========*/
+        labelGridConstraints(gc);
+        baseCreateCardForm.add(cardEmailLabel,gc);
+
+        /*========== NEW ROW ==========*/
+        textFieldGridConstraints(gc);
+        gc.gridwidth = 1;
+        cardEmailTextField.setEditable(false);
+        baseCreateCardForm.add(cardEmailTextField,gc);
 
         /*========== BUTTON ROW ==========*/
-        gc.gridy++; gc.gridx = 0; gc.weightx = 1; gc.weighty = 2;
+        gc.gridy++; gc.gridx = 0; gc.weightx = 0.5; gc.weighty = 2; gc.gridwidth = 1;
+        gc.fill = GridBagConstraints.HORIZONTAL;
         gc.anchor = GridBagConstraints.FIRST_LINE_END;
         gc.insets = new Insets(20,0,0,10);
-
-        createCardForm.add(createBtn, gc);
+        baseCreateCardForm.add(createBtn, gc);
 
         createBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 CardEvent event = new CardEvent(this);
+
                 if (cardListener != null)
                     cardListener.formActionOccurred();
             }
         });
 
-        gc.gridx = 1;
+        gc.gridx = 1; gc.weightx = 0.5;
         gc.anchor = GridBagConstraints.FIRST_LINE_START;
         gc.insets = new Insets(20,10,0,0);
+        baseCreateCardForm.add(clearBtn, gc);
 
-        createCardForm.add(clearBtn, gc);
+        clearBtn.addActionListener(e -> {
+            for (Component c : baseCreateCardForm.getComponents()) {
+                if (c instanceof JTextField && ((JTextField) c).isEditable())
+                    ((JTextField) c).setText(null);
+
+                if (c instanceof ErrorLabel)
+                    c.setVisible(false);
+
+                if (c instanceof FormLabel)
+                    c.setForeground(Color.BLACK);
+            }
+        });
 
         /* BY DEFAULT CLEAR ALL TEXT FIELDS */
-        for (Component item : createCardForm.getComponents()) {
+        for (Component item : baseCreateCardForm.getComponents())
             if (item instanceof FormTextField) ((FormTextField) item).setText("");
-        }
 
-        setVisible(false);
+        cardIDTextField.setText(Database.getNextCardID());
     }
 
     private void baseCardForm() {
-
+        hideErrorLabels();
+        hideAllFormComponents(false);
     }
 
     private void anonCardForm() {
-
+        hideErrorLabels();
+        hideAllFormComponents(true);
+        enableNameAndEmail(false);
     }
 
-    private void basicCardForm() {
-
-    }
-
-    private void premiumCardForm() {
-
+    private void advancedCardForm() {
+        hideErrorLabels();
+        hideAllFormComponents(true);
+        enableNameAndEmail(true);
     }
 
     /*============================== LISTENER CALLBACKS ==============================*/
@@ -190,124 +203,6 @@ public class CardForm extends JPanel {
     }
 
     public void setCancelListener(ButtonListener listener) { this.cancelListener = listener; }
-
-    /*====================  BASE FORMS ====================*/
-    private void createAnonCard(String cardID) {
-
-        JTextField cardIDTextField = new JTextField(cardID, 15);
-        cardIDTextField.setEditable(false);
-
-        JPanel panel = new JPanel(new GridBagLayout());
-        GridBagConstraints gc = new GridBagConstraints();
-        gc.gridx = 0;
-        gc.gridy = 0;
-        gc.weightx = 1;
-        gc.weighty = 1;
-        gc.fill = GridBagConstraints.NONE;
-        gc.anchor = GridBagConstraints.FIRST_LINE_START;
-        gc.insets = new Insets(10,0,30,0);
-
-        panel.add(new JLabel("Anon Card Created"), gc);
-
-        gc.gridx = 0;
-        gc.gridy = 1;
-        gc.anchor = GridBagConstraints.LINE_START;
-        gc.insets = new Insets(10,0,50,0);
-        panel.add(new JLabel("Card ID: "), gc);
-
-        gc.gridx = 1;
-        gc.gridy = 1;
-        gc.anchor = GridBagConstraints.LINE_START;
-        gc.insets = new Insets(10,0,50,0);
-        panel.add(cardIDTextField, gc);
-
-        // TODO make a temp card
-    }
-
-    private void createOtherCardForm(Object cardChoice, String cardID) {
-
-        String title, cardType;
-
-        if (cardChoice.equals("Basic Card")) {
-            title = "Create Basic Card";
-            cardType = "BasicCard";
-        } else {
-            title = "Create Premium Card";
-            cardType = "PremiumCard";
-        }
-
-        JTextField cardIDTextField = new JTextField(cardID, 15);
-        cardIDTextField.setEditable(false);
-        JTextField name = new JTextField(30);
-        JTextField email = new JTextField(30);
-
-        JPanel createCardForm = new JPanel(new GridBagLayout());
-        GridBagConstraints gc = new GridBagConstraints();
-        gc.gridx = 0;
-        gc.gridy = 0;
-        gc.weightx = 1;
-        gc.weighty = 1;
-        gc.fill = GridBagConstraints.NONE;
-        gc.anchor = GridBagConstraints.LINE_END;
-        gc.insets = new Insets(10,0,30,10);
-        //JTextField totalAmount = new JTextField();
-        //panel.add(new JLabel("Card ID: "), gc);
-        createCardForm.add(new JLabel("Customer Name: "), gc);
-
-        gc.gridx = 1;
-        gc.gridy = 0;
-        gc.anchor = GridBagConstraints.LINE_START;
-        gc.insets = new Insets(10,0,30,0);
-        //panel.add(cardIDTextField, gc);
-        createCardForm.add(name, gc);
-
-        gc.gridx = 0;
-        gc.gridy = 1;
-        gc.insets = new Insets(10,0,0,5);
-        createCardForm.add(new JLabel("Customer Email: "), gc);
-
-        gc.gridx = 1;
-        gc.gridy = 1;
-        gc.insets = new Insets(10,0,0,0);
-        createCardForm.add(email, gc);
-
-        /*gc.gridx = 0;
-        gc.gridy = 2;
-        gc.insets = new Insets(10,0,50,5);
-
-        gc.gridx = 1;
-        gc.gridy = 2;
-        gc.insets = new Insets(10,0,50,0);*/
-
-        /*========== BUTTON ROW ==========*/
-        gc.gridy++; gc.gridx = 0; gc.weightx = 0.5; gc.weighty = 2; gc.gridwidth = 1;
-        gc.fill = GridBagConstraints.HORIZONTAL;
-        gc.anchor = GridBagConstraints.FIRST_LINE_END;
-        gc.insets = new Insets(20,0,0,10);
-        createCardForm.add(createBtn, gc);
-
-        gc.gridx = 1; gc.weightx = 1.5;
-        gc.anchor = GridBagConstraints.FIRST_LINE_START;
-        gc.insets = new Insets(20,10,0,0);
-        createCardForm.add(clearBtn, gc);
-
-        int confirm = JOptionPane.showConfirmDialog(null,
-                createCardForm,
-                title,
-                JOptionPane.OK_CANCEL_OPTION,
-                JOptionPane.PLAIN_MESSAGE);
-
-        if (confirm == JOptionPane.OK_OPTION) {
-            HashMap<String,String> cardMap = new HashMap<>();
-
-            cardMap.put("cardType", cardType);
-            cardMap.put("cardID",cardID);
-            cardMap.put("name", name.getText());
-            cardMap.put("email", email.getText());
-
-            this.newCard = cardMap;
-        }
-    }
 
     /*============================== MUTATORS  ==============================*/
     private void labelGridConstraints(GridBagConstraints gc) {
@@ -323,13 +218,24 @@ public class CardForm extends JPanel {
         gc.anchor = GridBagConstraints.FIRST_LINE_START;
     }
 
-    /*============================== ACCESSORS  ==============================*/
+    private void hideAllFormComponents(boolean isVisible) {
+        for (Component item : baseCreateCardForm.getComponents())
+            item.setVisible(isVisible);
+    }
 
-    public JComboBox<String> getCardTypeCombo() {
-        return cardTypeCombo;
+    private void enableNameAndEmail (boolean isEnabled) {
+        cardNameLabel.setEnabled(isEnabled);
+        cardNameTextField.setEditable(isEnabled);
+        cardEmailLabel.setEnabled(isEnabled);
+        cardEmailTextField.setEditable(isEnabled);
     }
-    public JPanel getCreateCardForm() {
-        return createCardForm;
+
+    private void hideErrorLabels() {
+        for (Component comp : baseCreateCardForm.getComponents()) {
+            if (comp instanceof ErrorLabel)
+                comp.setVisible(false);
+        }
     }
-    public HashMap<String, String> getCardMap() { return newCard; }
+
+    /*============================== ACCESSORS  ==============================*/
 }

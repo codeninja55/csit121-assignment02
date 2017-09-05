@@ -256,12 +256,13 @@ public class Program {
             public void toolbarButtonEventOccurred() {
                 removeCardForms();
                 cardViewPane.setCardForm(new CardForm());
-                cardViewPane.add(cardViewPane.getCardForm(), BorderLayout.WEST);
-                cardViewPane.getCardForm().createCardForm();
-                cardViewPane.getCardForm().setVisible(true);
+                CardForm form = cardViewPane.getCardForm();
+                cardViewPane.add(form, BorderLayout.WEST);
+                form.setVisible(true);
+                form.createBaseCreateCardForm();
 
                 /* ADD A CANCEL BUTTON LISTENER AFTER CREATING FORM */
-                cardViewPane.getCardForm().setCancelListener(new ButtonListener() {
+                form.setCancelListener(new ButtonListener() {
                     public void buttonActionOccurred() {
                         cardViewPane.getCardForm().setVisible(false);
                         removeCardForms();
@@ -269,7 +270,7 @@ public class Program {
                 });
 
                 /* ADD A CREATE BUTTON LISTENER AFTER CREATING FORM */
-                cardViewPane.getCardForm().setCardListener(new CardListener() {
+                form.setCardListener(new CardListener() {
                     public void formActionOccurred() {
                         System.out.println("Create Card Pressed");
                     }

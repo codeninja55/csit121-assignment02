@@ -37,8 +37,8 @@ public class CardViewPane extends JPanel implements Observer {
     private CardForm cardForm;
     private DeleteCardForm deleteForm;
 
-    private ToolbarButtonListener searchCardListener;
     private ToolbarButtonListener createCardListener;
+    private ToolbarButtonListener searchCardListener;
     private ToolbarButtonListener deleteCardListener;
 
     /*============================== CONSTRUCTORS ==============================*/
@@ -85,14 +85,12 @@ public class CardViewPane extends JPanel implements Observer {
 
         /* REGISTRATION OF TOOLBAR BUTTON LISTENERS */
         ToolbarListener handler = new ToolbarListener();
-        searchBtn.addActionListener(handler);
         createCardBtn.addActionListener(handler);
+        searchBtn.addActionListener(handler);
         deleteCardBtn.addActionListener(handler);
     }
 
     /*============================== MUTATORS  ==============================*/
-    public void setSearchCardListener(ToolbarButtonListener listener) { this.searchCardListener = listener; }
-
     public void setCreateCardListener(ToolbarButtonListener listener) {
         this.createCardListener = listener;
     }
@@ -100,6 +98,8 @@ public class CardViewPane extends JPanel implements Observer {
     public void setDeleteCardListener(ToolbarButtonListener listener) {
         this.deleteCardListener = listener;
     }
+
+    public void setSearchCardListener(ToolbarButtonListener listener) { this.searchCardListener = listener; }
 
     public void setCardForm(CardForm cardForm) {
         this.cardForm = cardForm;
