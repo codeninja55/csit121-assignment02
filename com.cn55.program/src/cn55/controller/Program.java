@@ -74,7 +74,7 @@ public class Program {
         categoriesViewPane.update();
         categoriesViewPane.setCategoriesTableModel();
 
-        eventControlling();
+        setupViewListeners();
     }
 
     private ArrayList<Component> getAllComponents(final Container container) {
@@ -235,9 +235,9 @@ public class Program {
     }
 
     /*============================== REGISTER AND HANDLE EVENTS ==============================*/
-    private void eventControlling() {
+    private void setupViewListeners() {
         /* TAB PANE LISTENER */
-        tabPane.addChangeListener(e -> {
+        tabPane.addChangeListener((ChangeEvent e) -> {
             /* DESELECTED LISTENERS */
             if (tabPane.getSelectedComponent() != purchaseViewPane) {
                 purchaseViewPane.getResultsPane().setVisible(false);
