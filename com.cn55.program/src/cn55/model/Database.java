@@ -112,7 +112,7 @@ public class Database implements Subject {
         }
     }
 
-    void addCategory(Category category) {
+    public void addCategory(Category category) {
         categories.add(category);
         mapCategories();
         notifyObservers();
