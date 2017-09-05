@@ -319,34 +319,21 @@ public class PurchaseForm extends JPanel {
 
     private void basePurchaseForm() {
         hideErrorLabels();
-        for (Component item : baseCreatePurchaseForm.getComponents()) {
-            item.setVisible(false);
-        }
+        hideAllFormComponents(false);
     }
 
     private void existingCardPurchase() {
         hideErrorLabels();
+        hideAllFormComponents(false);
+
         receiptIDLabel.setVisible(true);
         receiptIDTextField.setText(Integer.toString(generatedReceiptID));
         receiptIDTextField.setVisible(true);
-
-        cardIDLabel.setVisible(false);
-        cardIDTextField.setVisible(false);
-
-        cardTypeLabel.setVisible(false);
-        anonCardRB.setVisible(false);
-        basicCardRB.setVisible(false);
-        premiumCardRB.setVisible(false);
 
         existingCardCombo.setModel(existingCardModel);
         existingCardCombo.setSelectedIndex(0);
         existingCardLabel.setVisible(true);
         existingCardCombo.setVisible(true);
-
-        cardNameLabel.setVisible(false);
-        cardNameTextField.setVisible(false);
-        cardEmailLabel.setVisible(false);
-        cardEmailTextField.setVisible(false);
 
         setCategoriesVisible(true);
 
@@ -367,21 +354,20 @@ public class PurchaseForm extends JPanel {
 
     private void newCardPurchase() {
         hideErrorLabels();
+        hideAllFormComponents(false);
         receiptIDLabel.setVisible(true);
         receiptIDTextField.setVisible(true);
 
-        existingCardLabel.setVisible(false);
-        existingCardCombo.setVisible(false);
         cardIDLabel.setVisible(true);
-        cardIDTextField.setEditable(false);
         cardIDTextField.setText(Database.getNextCardID());
         cardIDTextField.setVisible(true);
 
-        cardTypeLabel.setVisible(true);
         anonCardRB.setSelected(true);
         anonCardRB.setVisible(true);
         basicCardRB.setVisible(true);
         premiumCardRB.setVisible(true);
+
+        enableNameAndEmail(false);
 
         /*========== RADIO BUTTON REGISTRATION ==========*/
 
@@ -412,26 +398,13 @@ public class PurchaseForm extends JPanel {
 
     private void cashPurchase() {
         hideErrorLabels();
+        hideAllFormComponents(false);
         receiptIDLabel.setVisible(true);
         receiptIDTextField.setVisible(true);
 
         cardIDLabel.setVisible(true);
         cardIDTextField.setText("Cash");
-        cardIDTextField.setEditable(false);
         cardIDTextField.setVisible(true);
-
-        existingCardLabel.setVisible(false);
-        existingCardCombo.setVisible(false);
-
-        cardTypeLabel.setVisible(false);
-        anonCardRB.setVisible(false);
-        basicCardRB.setVisible(false);
-        premiumCardRB.setVisible(false);
-
-        cardNameLabel.setVisible(false);
-        cardNameTextField.setVisible(false);
-        cardEmailLabel.setVisible(false);
-        cardEmailTextField.setVisible(false);
 
         setCategoriesVisible(true);
 
@@ -475,6 +448,11 @@ public class PurchaseForm extends JPanel {
         }
     }
 
+    private void hideAllFormComponents(boolean isVisible) {
+        for (Component item : baseCreatePurchaseForm.getComponents())
+            item.setVisible(isVisible);
+    }
+
     private void labelGridConstraints(GridBagConstraints gc) {
         gc.gridy++;
         gc.gridx = 0;
@@ -489,10 +467,14 @@ public class PurchaseForm extends JPanel {
     }
 
     private void enableNameAndEmail (boolean isVisible) {
-        cardNameLabel.setVisible(isVisible);
-        cardNameTextField.setVisible(isVisible);
-        cardEmailLabel.setVisible(isVisible);
-        cardEmailTextField.setVisible(isVisible);
+        cardNameLabel.setEnabled(isVisible);
+        cardNameTextField.setEditable(isVisible);
+        cardEmailLabel.setEnabled(isVisible);
+        cardEmailTextField.setEditable(isVisible);
+        cardNameLabel.setVisible(true);
+        cardNameTextField.setVisible(true);
+        cardEmailLabel.setVisible(true);
+        cardEmailTextField.setVisible(true);
     }
 
     private void hideErrorLabels() {
