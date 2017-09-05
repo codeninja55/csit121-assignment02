@@ -144,7 +144,7 @@ public class PurchaseForm extends JPanel {
         /* CREATE BASE FORM WITH PURCHASE - PANEL */
         baseCreatePurchaseForm = new JPanel(new GridBagLayout());
 
-        this.add(baseCreatePurchaseForm, BorderLayout.CENTER);
+        this.add(new JScrollPane(baseCreatePurchaseForm), BorderLayout.CENTER);
 
         /* Dynamically creates categoriesMap HashMap<FormLabel, FormTextField> */
         createCategoriesListForm();
