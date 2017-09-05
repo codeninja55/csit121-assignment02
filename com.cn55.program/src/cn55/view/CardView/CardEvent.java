@@ -17,7 +17,7 @@ public class CardEvent extends EventObject {
     private FormTextField cardEmailTextField;
 
     /*============================== CONSTRUCTORS ==============================*/
-    public CardEvent(Object source) {
+    CardEvent(Object source) {
         super(source);
     }
 
