@@ -811,7 +811,7 @@ public class Program {
     }
 
     private void removeCategoryForms() {
-        for (Component comp : cardViewPane.getComponents()) {
+        for (Component comp : categoriesViewPane.getComponents()) {
             if (comp instanceof CategoriesForm || comp instanceof DeleteCategoryForm)
                 categoriesViewPane.remove(comp);
         }
