@@ -19,12 +19,16 @@ public class Style {
     public static Font textPaneFont() { return new Font("Monospaced", Font.BOLD,24); }
     public static Font errorFont() { return new Font("Monospaced", Font.BOLD, 25); }
 
-    public static Color redA700() { return new Color(213,0,0); }
-    public static Color red900() { return new Color(183,28,28); }
-    public static Color red500() { return new Color(244,67,54); }
+    public static Color red100() { return new Color(255,205,210); }
     public static Color red300() { return new Color(229,115,115); }
+    public static Color red500() { return new Color(244,67,54); }
+    public static Color red900() { return new Color(183,28,28); }
+    public static Color redA100() { return new Color(255,138,128); }
+    public static Color redA200() { return new Color(255,82,82); }
+    public static Color redA700() { return new Color(213,0,0); }
     public static Color orange500() { return new Color(255,152,0); }
     public static Color blue500() { return new Color(33,150,243); }
+    public static Color blueGrey100() { return new Color(207,216,220); }
     public static Color blueGrey400() { return new Color(120,144,156); }
     public static Color blueGrey500() { return new Color(96,125,139); }
     public static Color blueGrey800() { return new Color(55,71,89); }
