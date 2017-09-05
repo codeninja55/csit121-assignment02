@@ -13,6 +13,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -21,7 +23,7 @@ public class PurchaseForm extends JPanel {
 
     private DefaultComboBoxModel<String> existingCardModel;
     private ArrayList<Category> categoriesList;
-    private HashMap<JLabel[], FormTextField> categoriesMap;
+    private HashMap<JLabel[], FormFormattedTextField> categoriesMap;
 
     private JComboBox<String> purchaseTypeCombo;
     private DefaultComboBoxModel<String> options;
@@ -144,8 +146,6 @@ public class PurchaseForm extends JPanel {
         /* CREATE BASE FORM WITH PURCHASE - PANEL */
         baseCreatePurchaseForm = new JPanel(new GridBagLayout());
 
-        this.add(new JScrollPane(baseCreatePurchaseForm), BorderLayout.CENTER);
-
         /* Dynamically creates categoriesMap HashMap<FormLabel, FormTextField> */
         createCategoriesListForm();
 
@@ -243,7 +243,7 @@ public class PurchaseForm extends JPanel {
 
         /* TODO - ADD THIS INTO A JSCROLLPANE SO IT CAN BE SCROLLED */
         /*========== NEW ROW - CATEGORIES LIST ==========*/
-        for (HashMap.Entry<JLabel[], FormTextField> item : categoriesMap.entrySet()) {
+        for (HashMap.Entry<JLabel[], FormFormattedTextField> item : categoriesMap.entrySet()) {
             labelGridConstraints(gc);
             baseCreatePurchaseForm.add((FormLabel)item.getKey()[0], gc);
 
@@ -275,18 +275,16 @@ public class PurchaseForm extends JPanel {
         gc.insets = new Insets(20,0,0,10);
         baseCreatePurchaseForm.add(createBtn, gc);
 
-        createBtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                PurchaseEvent event = new PurchaseEvent(this, purchaseTypeCombo,
-                        generatedReceiptID, categoriesMap, receiptIDTextField,
-                        cardIDLabel, cardIDTextField, cardIDErrorLabel,
-                        existingCardCombo, anonCardRB, basicCardRB,
-                        premiumCardRB, cardNameLabel, cardNameTextField,
-                        cardEmailLabel, cardEmailTextField, purchaseErrorLabel);
+        createBtn.addActionListener(e -> {
+            PurchaseEvent event = new PurchaseEvent(this, purchaseTypeCombo,
+                    generatedReceiptID, categoriesMap, receiptIDTextField,
+                    cardIDLabel, cardIDTextField, cardIDErrorLabel,
+                    existingCardCombo, anonCardRB, basicCardRB,
+                    premiumCardRB, cardNameLabel, cardNameTextField,
+                    cardEmailLabel, cardEmailTextField, purchaseErrorLabel);
 
-                if (createPurchaseListener != null)
-                    createPurchaseListener.formActionOccurred(event);
-            }
+            if (createPurchaseListener != null)
+                createPurchaseListener.formActionOccurred(event);
         });
 
         gc.gridx = 1; gc.weightx = 0.5;
@@ -294,18 +292,16 @@ public class PurchaseForm extends JPanel {
         gc.insets = new Insets(20,10,0,0);
         baseCreatePurchaseForm.add(clearBtn, gc);
 
-        clearBtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                for (Component c : baseCreatePurchaseForm.getComponents()) {
-                    if (c instanceof JTextField && ((JTextField) c).isEditable())
-                        ((JTextField) c).setText("");
+        clearBtn.addActionListener(e -> {
+            for (Component c : baseCreatePurchaseForm.getComponents()) {
+                if (c instanceof JTextField && ((JTextField) c).isEditable())
+                    ((JTextField) c).setText("");
 
-                    if (c instanceof ErrorLabel)
-                        ((ErrorLabel) c).setVisible(false);
+                if (c instanceof ErrorLabel)
+                    ((ErrorLabel) c).setVisible(false);
 
-                    if (c instanceof FormLabel)
-                        c.setForeground(Color.BLACK);
-                }
+                if (c instanceof FormLabel)
+                    c.setForeground(Color.BLACK);
             }
         });
 
@@ -316,7 +312,10 @@ public class PurchaseForm extends JPanel {
 
         receiptIDTextField.setText(Integer.toString(generatedReceiptID));
 
-        setVisible(false);
+        baseCreatePurchaseForm.setVisible(true);
+        JScrollPane formScrollPane = new JScrollPane(baseCreatePurchaseForm);
+        formScrollPane.setViewportBorder(BorderFactory.createEmptyBorder(2,2,2,2));
+        this.add(formScrollPane, BorderLayout.CENTER);
     }
 
     private void basePurchaseForm() {
@@ -430,20 +429,25 @@ public class PurchaseForm extends JPanel {
     }
 
     private void createCategoriesListForm() {
-        HashMap<JLabel[], FormTextField> categoriesMap = new HashMap<>();
+        HashMap<JLabel[], FormFormattedTextField> categoriesMap = new HashMap<>();
         for (int i = 0; i < categoriesList.size(); i++) {
             JLabel[] labelArr = new JLabel[2];
             String categoryStr = categoriesList.get(i).getName() + ": $";
             labelArr[0] = new FormLabel(categoryStr);
             labelArr[1] = new ErrorLabel("INVALID AMOUNT");
 
-            categoriesMap.put(labelArr, new FormTextField(20));
+            /*FormFormattedTextField catValFormattedTextField = new FormFormattedTextField();
+            catValFormattedTextField.setColumns(20);*/
+            NumberFormat doubleFormat = DecimalFormat.getInstance();
+            doubleFormat.setMaximumFractionDigits(2);
+            doubleFormat.setMinimumFractionDigits(2);
+            categoriesMap.put(labelArr, new FormFormattedTextField(doubleFormat));
         }
         this.categoriesMap = categoriesMap;
     }
 
     private void setCategoriesVisible(boolean isVisible) {
-        for (HashMap.Entry<JLabel[], FormTextField> item : categoriesMap.entrySet()) {
+        for (HashMap.Entry<JLabel[], FormFormattedTextField> item : categoriesMap.entrySet()) {
             item.getKey()[0].setVisible(isVisible);
             item.getKey()[1].setVisible(!isVisible);
             item.getValue().setVisible(isVisible);

@@ -1,6 +1,7 @@
 package cn55.view.PurchaseView;
 
 import cn55.view.CustomComponents.ErrorLabel;
+import cn55.view.CustomComponents.FormFormattedTextField;
 import cn55.view.CustomComponents.FormLabel;
 import cn55.view.CustomComponents.FormTextField;
 
@@ -13,7 +14,7 @@ public class PurchaseEvent extends EventObject {
     private JComboBox<String> purchaseTypeCombo;
 
     private int generatedReceiptID;
-    private HashMap<JLabel[], FormTextField> categoriesMap;
+    private HashMap<JLabel[], FormFormattedTextField> categoriesMap;
 
     private FormTextField receiptIDTextField;
     private FormLabel cardIDLabel;
@@ -37,7 +38,7 @@ public class PurchaseEvent extends EventObject {
     }
 
     public PurchaseEvent(Object source, JComboBox<String> purchaseTypeCombo,
-                         int generatedReceiptID, HashMap<JLabel[], FormTextField> categoriesMap,
+                         int generatedReceiptID, HashMap<JLabel[], FormFormattedTextField> categoriesMap,
                          FormTextField receiptIDTextField, FormLabel cardIDLabel,
                          FormTextField cardIDTextField, ErrorLabel cardIDErrorLabel,
                          JComboBox<String> existingCardCombo, JRadioButton anonCardRB,
@@ -70,7 +71,7 @@ public class PurchaseEvent extends EventObject {
         return purchaseTypeCombo;
     }
 
-    public HashMap<JLabel[], FormTextField> getCategoriesMap() {
+    public HashMap<JLabel[], FormFormattedTextField> getCategoriesMap() {
         return categoriesMap;
     }
 
@@ -106,16 +107,8 @@ public class PurchaseEvent extends EventObject {
         return premiumCardRB;
     }
 
-    public FormLabel getCardNameLabel() {
-        return cardNameLabel;
-    }
-
     public FormTextField getCardNameTextField() {
         return cardNameTextField;
-    }
-
-    public FormLabel getCardEmailLabel() {
-        return cardEmailLabel;
     }
 
     public FormTextField getCardEmailTextField() {
