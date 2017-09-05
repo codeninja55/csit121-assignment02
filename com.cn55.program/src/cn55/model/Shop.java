@@ -69,18 +69,14 @@ public class Shop {
         String name = newCard.get("name");
         String email = newCard.get("email");
         String cardType = newCard.get("cardType");
-        Card card;
 
         if (!cardType.equals(CardType.AnonCard.getName())) {
             if (cardType.equals(CardType.BasicCard.getName()))
-                card = new BasicCard(name, email);
+                db.addCards(new BasicCard(name, email));
             else
-                card = new PremiumCard(name, email);
-
-            db.addCards(card);
+                db.addCards(new PremiumCard(name, email));
         } else {
-            card = new AnonCard();
-            db.addCards(card);
+            db.addCards(new AnonCard());
         }
     }
 
