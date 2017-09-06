@@ -109,7 +109,7 @@ public class PurchaseViewPane extends JPanel implements Observer {
     private void purchasesTableFormatter() {
         purchaseTablePane.setRowHeight(45);
         purchaseTablePane.setFont(Style.tableDataFont());
-        purchaseTablePane.getColumnModel().getColumn(0).setCellRenderer(Style.leftRenderer());
+        purchaseTablePane.getColumnModel().getColumn(0).setCellRenderer(Style.centerRenderer());
         purchaseTablePane.getColumnModel().getColumn(1).setCellRenderer(Style.centerRenderer());
         purchaseTablePane.getColumnModel().getColumn(2).setCellRenderer(Style.centerRenderer());
         purchaseTablePane.getColumnModel().getColumn(3).setCellRenderer(Style.rightRenderer());
