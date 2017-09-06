@@ -10,8 +10,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class CategoriesForm extends JPanel {
-
     private JPanel createCategoriesForm;
+    private FormLabel categoryIDLabel;
+    private FormTextField categoryIDTextField;
     private FormLabel categoryNameLabel;
     private FormTextField categoryNameTextField;
     private FormLabel categoryDescLabel;
@@ -27,6 +28,8 @@ public class CategoriesForm extends JPanel {
     public CategoriesForm() {
         /* INITIALIZE ALL COMPONENTS */
         createCategoriesForm = new JPanel(new GridBagLayout());
+        categoryIDLabel = new FormLabel("Category ID");
+        categoryIDTextField = new FormTextField(20);
         categoryNameLabel = new FormLabel("Category Name");
         categoryNameTextField = new FormTextField(35);
         categoryDescLabel = new FormLabel("Category Description");
@@ -43,6 +46,7 @@ public class CategoriesForm extends JPanel {
         setPreferredSize(dim);
         setMinimumSize(getPreferredSize());
         setBorder(Style.formBorder("New Category"));
+        setVisible(false);
 
         /* FORM AREA */
         GridBagConstraints gc = new GridBagConstraints();
@@ -52,12 +56,23 @@ public class CategoriesForm extends JPanel {
         gc.gridx = 0; gc.gridy = 0; gc.weightx = 1; gc.weighty = 0.1; gc.gridwidth = 2;
         gc.anchor = GridBagConstraints.PAGE_END;
         gc.insets = new Insets(20,0,0,0);
+        createCategoriesForm.add(categoryIDLabel, gc);
+
+        /*========== NEW ROW ==========*/
+        gc.gridy++;
+        gc.anchor = GridBagConstraints.PAGE_START;
+        categoryIDTextField.setEditable(false);
+        categoryIDTextField.setHorizontalAlignment(SwingConstants.CENTER);
+        createCategoriesForm.add(categoryIDTextField, gc);
+
+        /*========== NEW ROW ==========*/
+        gc.gridy++;
+        gc.anchor = GridBagConstraints.PAGE_START;
         createCategoriesForm.add(categoryNameLabel, gc);
 
         /*========== NEW ROW ==========*/
         gc.gridy++;
         gc.anchor = GridBagConstraints.PAGE_START;
-        gc.insets = new Insets(20,0,0,0);
         Dimension textFieldDim = getPreferredSize();
         textFieldDim.width = 350;
         textFieldDim.height = 50;
@@ -67,7 +82,6 @@ public class CategoriesForm extends JPanel {
         /*========== NEW ROW ==========*/
         gc.gridy++;
         gc.anchor = GridBagConstraints.PAGE_START;
-        gc.insets = new Insets(20,0,0,0);
         createCategoriesForm.add(categoryDescLabel, gc);
 
         /*========== NEW ROW ==========*/
@@ -101,7 +115,7 @@ public class CategoriesForm extends JPanel {
             }
         }
 
-        setVisible(false);
+        categoryIDTextField.setText(Integer.toString(Database.getNextCategoryID()));
 
         /* BUTTON REGISTRATION AND CALLBACKS */
         FormListener handler = new FormListener();
