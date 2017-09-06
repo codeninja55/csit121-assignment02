@@ -3,7 +3,6 @@ package cn55.model;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
 
 /*
  * @author Dinh Che
@@ -11,23 +10,15 @@ import java.util.Map;
  * Email: dbac496@uowmail.edu.au
  */
 
+@SuppressWarnings("SameParameterValue")
 public class Purchase {
     private final int receiptID;
     private String cardID;
     private String cardType;
-    private Date purchaseTime;
-    private HashMap<Integer, Category> categories;
+    private final Date purchaseTime;
+    private final HashMap<Integer, Category> categories;
 
     /*============================== CONSTRUCTORS ==============================*/
-    // Default constructor
-    public Purchase() {
-        this.receiptID = 0;
-        this.cardID = "";
-        this.cardType = null;
-        this.purchaseTime = setPurchaseTime();
-        this.categories = new HashMap<>();
-    }
-
     // Constructor for cash purchases
     Purchase(HashMap<Integer, Category> categories, int receiptID) {
         this.receiptID = receiptID;
@@ -86,21 +77,16 @@ public class Purchase {
 
     public String toString() {
 
-        String firstOutput = String.format(
-                "%n%-20s %s" +
-                        "%n%-20s %s" +
-                        "%n%-20s %s" +
-                        "%n%-20s %-20tc",
+        StringBuilder secondOutput = new StringBuilder();
+        String firstOutput = String.format("%n%-20s %s%n%-20s %s%n%-20s %s%n%-20s %-20tc",
                 "Receipt ID", this.receiptID,
                 "Card ID:",this.cardID,
                 "Card Type:",this.cardType,
                 "Purchase Time:",this.purchaseTime);
 
-        String secondOutput = "";
-
         for (HashMap.Entry<Integer, Category> item : this.categories.entrySet())
-            secondOutput += String.format("%n%-20s $%.2f", (item.getValue().getName() + ":"),
-                    item.getValue().getAmount());
+            secondOutput.append(String.format("%n%-20s $%.2f", (item.getValue().getName() + ":"),
+                    item.getValue().getAmount()));
 
         return firstOutput + secondOutput;
     }

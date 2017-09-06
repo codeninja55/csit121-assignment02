@@ -12,7 +12,7 @@ import java.awt.*;
 *  5. Add the JScrollPane to the ResultsPane
 *  6. Invoke grabFocus() and setCaretPosition(0) on the ResultsTextPane
 *
-*  DO NOT FORGET TO REMOVE BOTH JSrollPane and ResultsTextPane after finishing */
+*  DO NOT FORGET TO REMOVE BOTH JScrollPane and ResultsTextPane after finishing */
 
 public class ResultsPane extends JPanel {
 

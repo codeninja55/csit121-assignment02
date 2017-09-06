@@ -18,11 +18,7 @@ public class DeleteEvent extends EventObject {
     private ErrorLabel deleteErrorLabel;
 
     /*============================== CONSTRUCTORS ==============================*/
-    DeleteEvent(Object source) {
-        super(source);
-    }
-
-    /* DELETE CONSTRUCTOR FOR DELETING CARDS */
+    // DELETE CONSTRUCTOR FOR DELETING CARDS
     DeleteEvent(Object source, FormLabel searchIDLabel, FormTextField searchIDTextField,
                        ErrorLabel errorLabel, ErrorLabel ruleErrLabel, ErrorLabel deleteErrorLabel) {
         super(source);
@@ -33,7 +29,7 @@ public class DeleteEvent extends EventObject {
         this.deleteErrorLabel = deleteErrorLabel;
     }
 
-    /* DELETE CONSTRUCTOR FOR DELETING CATEGORY */
+    // DELETE CONSTRUCTOR FOR DELETING CATEGORY
     DeleteEvent(Object source, FormLabel categoryIDLabel, FormTextField categoryIDTextField,
                     FormLabel nameLabel, FormTextField nameTextField, ErrorLabel errorLabel,
                 ErrorLabel ruleErrLabel, ErrorLabel othersDeleteErrLabel, ErrorLabel deleteErrorLabel) {

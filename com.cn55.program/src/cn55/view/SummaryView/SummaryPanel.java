@@ -2,7 +2,7 @@ package cn55.view.SummaryView;
 import javax.swing.*;
 import java.awt.*;
 
-public class SummaryPanel extends JPanel {
+class SummaryPanel extends JPanel {
     private JPanel summaryPanel;
 
     public SummaryPanel() {

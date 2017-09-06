@@ -16,6 +16,7 @@ public class DeleteCardForm extends JPanel {
     private ErrorLabel errorLabel;
     private ErrorLabel ruleErrLabel;
     private ErrorLabel deleteErrorLabel;
+    @SuppressWarnings("FieldCanBeLocal")
     private FormButton deleteBtn;
 
     private ButtonListener cancelListener;
@@ -128,7 +129,4 @@ public class DeleteCardForm extends JPanel {
 
     /*============================== ACCESSORS ==============================*/
 
-    public JPanel getDeleteForm() {
-        return deleteForm;
-    }
 }

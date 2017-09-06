@@ -1,5 +1,6 @@
 package cn55.model;
 
+@SuppressWarnings("ALL")
 public interface Observer {
 
     // Method to getCategoriesUpdate the observer, used by the observable object

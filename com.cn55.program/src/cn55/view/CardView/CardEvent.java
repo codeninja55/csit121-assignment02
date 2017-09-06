@@ -56,24 +56,12 @@ public class CardEvent extends EventObject {
         return cardTypeCombo;
     }
 
-    public FormLabel getCardIDLabel() {
-        return cardIDLabel;
-    }
-
     public FormTextField getCardIDTextField() {
         return cardIDTextField;
     }
 
-    public FormLabel getCardNameLabel() {
-        return cardNameLabel;
-    }
-
     public FormTextField getCardNameTextField() {
         return cardNameTextField;
-    }
-
-    public FormLabel getCardEmailLabel() {
-        return cardEmailLabel;
     }
 
     public FormTextField getCardEmailTextField() {

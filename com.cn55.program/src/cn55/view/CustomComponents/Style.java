@@ -6,6 +6,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class Style {
     public static Font buttonFont() { return new Font("Verdana", Font.BOLD, 24); }
     public static Font toolbarButtonFont() { return new Font("Verdana", Font.BOLD, 26); }

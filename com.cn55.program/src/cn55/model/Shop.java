@@ -3,14 +3,18 @@ package cn55.model;
 import cn55.controller.Validator.CardExistsRule;
 import cn55.controller.Validator.ExistsRule;
 import cn55.controller.Validator.FormValidData;
-import cn55.model.CardModel.*;
+import cn55.model.CardModel.AnonCard;
+import cn55.model.CardModel.BasicCard;
+import cn55.model.CardModel.Card;
+import cn55.model.CardModel.PremiumCard;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 @SuppressWarnings("ConstantConditions")
 public class Shop {
 
-    private Database db;
+    private final Database db;
 
     /*============================== CONSTRUCTORS  ==============================*/
     public Shop() {
@@ -112,7 +116,9 @@ public class Shop {
         db.removeCategory(db.getCategoriesMap().get(categoryID));
     }
 
-    /*============================== ACCESSORS ==============================*/
-    public Database getDatabase() { return db; }
+// --Commented out by Inspection START (6/09/17 12:10 PM):
+//    /*============================== ACCESSORS ==============================*/
+//    public Database getDatabase() { return db; }
+// --Commented out by Inspection STOP (6/09/17 12:10 PM)
 
 }

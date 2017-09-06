@@ -8,15 +8,16 @@ package cn55.model.CardModel;
 
 import cn55.model.Database;
 
+@SuppressWarnings("ALL")
 public abstract class Card implements Comparable<Card> {
 
-    protected String id;
+    String id;
     double points;
     String cardType;
 
     /*============================== CONSTRUCTORS  ==============================*/
     // Default constructor
-    public Card() {
+    Card() {
         this.id = Database.generateCardID();
         this.points = 0;
         this.cardType = null;

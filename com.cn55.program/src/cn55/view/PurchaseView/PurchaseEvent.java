@@ -13,7 +13,6 @@ public class PurchaseEvent extends EventObject {
 
     private JComboBox<String> purchaseTypeCombo;
 
-    private int generatedReceiptID;
     private HashMap<JLabel[], FormFormattedTextField> categoriesMap;
 
     private FormTextField receiptIDTextField;
@@ -33,23 +32,15 @@ public class PurchaseEvent extends EventObject {
 
     private ErrorLabel purchaseErrorLabel;
 
-    public PurchaseEvent(Object source) {
-        super(source);
-    }
-
-    public PurchaseEvent(Object source, JComboBox<String> purchaseTypeCombo,
-                         int generatedReceiptID, HashMap<JLabel[], FormFormattedTextField> categoriesMap,
-                         FormTextField receiptIDTextField, FormLabel cardIDLabel,
-                         FormTextField cardIDTextField, ErrorLabel cardIDErrorLabel,
-                         JComboBox<String> existingCardCombo, JRadioButton anonCardRB,
-                         JRadioButton basicCardRB, JRadioButton premiumCardRB,
-                         FormLabel cardNameLabel, FormTextField cardNameTextField,
-                         FormLabel cardEmailLabel, FormTextField cardEmailTextField,
-                         ErrorLabel purchaseErrorLabel) {
+    /*============================== CONSTRUCTORS ==============================*/
+    PurchaseEvent(Object source, JComboBox<String> purchaseTypeCombo, HashMap<JLabel[], FormFormattedTextField> categoriesMap,
+                  FormTextField receiptIDTextField, FormLabel cardIDLabel, FormTextField cardIDTextField, ErrorLabel cardIDErrorLabel,
+                  JComboBox<String> existingCardCombo, JRadioButton anonCardRB, JRadioButton basicCardRB, JRadioButton premiumCardRB,
+                  FormLabel cardNameLabel, FormTextField cardNameTextField, FormLabel cardEmailLabel, FormTextField cardEmailTextField,
+                  ErrorLabel purchaseErrorLabel) {
 
         super(source);
         this.purchaseTypeCombo = purchaseTypeCombo;
-        this.generatedReceiptID = generatedReceiptID;
         this.categoriesMap = categoriesMap;
         this.receiptIDTextField = receiptIDTextField;
         this.cardIDLabel = cardIDLabel;

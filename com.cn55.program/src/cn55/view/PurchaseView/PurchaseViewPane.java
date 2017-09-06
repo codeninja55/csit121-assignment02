@@ -4,7 +4,6 @@ import cn55.model.Observer;
 import cn55.model.Purchase;
 import cn55.model.SortPurchaseType;
 import cn55.model.Subject;
-import cn55.view.CardView.CardViewPane;
 import cn55.view.CustomComponents.ResultsPane;
 import cn55.view.CustomComponents.Style;
 import cn55.view.CustomComponents.Toolbar;
@@ -20,16 +19,16 @@ import java.util.ArrayList;
 
 public class PurchaseViewPane extends JPanel implements Observer {
     private Subject database;
-    private ToolbarButton createPurchaseBtn;
-    private ToolbarButton deletePurchaseBtn;
-    private JComboBox<String> sortPurchaseCombo;
-    private ToolbarButton viewPurchaseBtn;
+    private final ToolbarButton createPurchaseBtn;
+    private final ToolbarButton deletePurchaseBtn;
+    private final JComboBox<String> sortPurchaseCombo;
+    private final ToolbarButton viewPurchaseBtn;
 
-    private PurchaseTableModel purchaseTableModel;
-    private JTable purchaseTablePane;
+    private final PurchaseTableModel purchaseTableModel;
+    private final JTable purchaseTablePane;
     private PurchaseForm createPurchaseForm;
-    private ResultsPane resultsPane;
-    private JPopupMenu tablePopup;
+    private final ResultsPane resultsPane;
+    private final JPopupMenu tablePopup;
 
     private ToolbarButtonListener createPurchaseListener;
     //private ToolbarButtonListener deletePurchaseListener;
@@ -182,7 +181,7 @@ public class PurchaseViewPane extends JPanel implements Observer {
     public class PurchaseTableModel extends AbstractTableModel {
 
         private ArrayList<Purchase> purchases;
-        private String[] tableHeaders = {"Receipt ID","Card ID", "Card Type",
+        private final String[] tableHeaders = {"Receipt ID","Card ID", "Card Type",
                 "Total Amount","Purchase Time"};
 
         void setData (ArrayList<Purchase> purchases) { this.purchases = purchases; }

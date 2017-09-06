@@ -1,14 +1,11 @@
 package cn55.model;
 
-import java.util.Comparator;
-
 public class Category implements Comparable<Category> {
 
     private int id;
     private String name;
     private String description;
     private double amount;
-    private static int idCounter = 100;
 
     /*============================== CONSTRUCTORS  ==============================*/
     public Category(String name) {
@@ -37,8 +34,10 @@ public class Category implements Comparable<Category> {
         this(other.getId(), other.getName(), other.getDescription(), other.getAmount());
     }
 
-    /*============================== MUTATORS  ==============================*/
-    void setId(int id) { this.id = id; }
+// --Commented out by Inspection START (6/09/17 12:12 PM):
+//    /*============================== MUTATORS  ==============================*/
+//    void setId(int id) { this.id = id; }
+// --Commented out by Inspection STOP (6/09/17 12:12 PM)
 
     void setName(String name) { this.name = name; }
 

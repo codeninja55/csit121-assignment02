@@ -4,10 +4,9 @@ public enum CardType {
 
     // Declare constants
     Cash("Cash", 0),
-    Card("Card", 1),
-    AnonCard("AnonCard", 2),
-    BasicCard("BasicCard", 3),
-    PremiumCard("PremiumCard", 4)
+    AnonCard("AnonCard", 1),
+    BasicCard("BasicCard", 2),
+    PremiumCard("PremiumCard", 3)
     ;
 
     // Instance Variables

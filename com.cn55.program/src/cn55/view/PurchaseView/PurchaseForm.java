@@ -1,8 +1,5 @@
 package cn55.view.PurchaseView;
 
-import cn55.controller.Validator.CategoryAmountRule;
-import cn55.controller.Validator.FormRule;
-import cn55.controller.Validator.FormValidData;
 import cn55.model.*;
 import cn55.view.ButtonListener;
 import cn55.view.CustomComponents.*;
@@ -10,13 +7,12 @@ import cn55.view.CustomComponents.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+@SuppressWarnings("SameParameterValue")
 public class PurchaseForm extends JPanel {
     private int generatedReceiptID;
 
@@ -227,11 +223,10 @@ public class PurchaseForm extends JPanel {
         gc.insets = new Insets(10,0,20,0);
         baseCreatePurchaseForm.add(cardEmailTextField, gc);
 
-        /* TODO - ADD THIS INTO A JSCROLLPANE SO IT CAN BE SCROLLED */
         /*========== NEW ROW - CATEGORIES LIST ==========*/
         for (HashMap.Entry<JLabel[], FormFormattedTextField> item : categoriesMap.entrySet()) {
             labelGridConstraints(gc);
-            baseCreatePurchaseForm.add((FormLabel)item.getKey()[0], gc);
+            baseCreatePurchaseForm.add(item.getKey()[0], gc);
 
             item.getValue().setFont(Style.textFieldFont());
             textFieldGridConstraints(gc);
@@ -241,7 +236,7 @@ public class PurchaseForm extends JPanel {
             baseCreatePurchaseForm.add(new JLabel(""), gc);
 
             textFieldGridConstraints(gc);
-            baseCreatePurchaseForm.add((ErrorLabel)item.getKey()[1], gc);
+            baseCreatePurchaseForm.add(item.getKey()[1], gc);
         }
 
         /*========== NEW ROW - PURCHASE ERROR LABEL ==========*/
@@ -363,7 +358,7 @@ public class PurchaseForm extends JPanel {
     private void createCategoriesListForm() {
         /* This method extracts each category from the default list and places them
          * into a HashMap with an Array of FormLabel and ErrorLabel with the FormFormattedTextField.
-         * It also adds a ProperyChangeListener and MouseClicked listener to each. */
+         * It also adds a PropertyChangeListener and MouseClicked listener to each. */
         HashMap<JLabel[], FormFormattedTextField> categoriesMap = new HashMap<>();
         for (Category cat : categoriesList) {
             JLabel[] labelArr = new JLabel[2];
@@ -468,12 +463,9 @@ public class PurchaseForm extends JPanel {
                     cancelListener.buttonActionOccurred();
                 }
             } else if (e.getSource() == createBtn) {
-                PurchaseEvent event = new PurchaseEvent(this, purchaseTypeCombo,
-                        generatedReceiptID, categoriesMap, receiptIDTextField,
-                        cardIDLabel, cardIDTextField, cardIDErrorLabel,
-                        existingCardCombo, anonCardRB, basicCardRB,
-                        premiumCardRB, cardNameLabel, cardNameTextField,
-                        cardEmailLabel, cardEmailTextField, purchaseErrorLabel);
+                PurchaseEvent event = new PurchaseEvent(this, purchaseTypeCombo, categoriesMap, receiptIDTextField,
+                        cardIDLabel, cardIDTextField, cardIDErrorLabel, existingCardCombo, anonCardRB, basicCardRB,
+                        premiumCardRB, cardNameLabel, cardNameTextField, cardEmailLabel, cardEmailTextField, purchaseErrorLabel);
 
                 if (createPurchaseListener != null)
                     createPurchaseListener.formActionOccurred(event);
@@ -484,7 +476,7 @@ public class PurchaseForm extends JPanel {
                     else if (c instanceof FormFormattedTextField)
                         ((FormFormattedTextField) c).setValue(0.00D);
                     else if (c instanceof ErrorLabel)
-                        ((ErrorLabel) c).setVisible(false);
+                        c.setVisible(false);
                     else if (c instanceof FormLabel)
                         c.setForeground(Color.BLACK);
                 }

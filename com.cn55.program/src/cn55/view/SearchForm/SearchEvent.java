@@ -12,12 +12,9 @@ public class SearchEvent extends EventObject {
     private JLabel errorLabel;
     private JLabel ruleErrLabel;
 
-    public SearchEvent(Object source) {
-        super(source);
-    }
-
-    public SearchEvent(Object source, FormLabel searchIDLabel, FormTextField searchIDTextField,
-                       JLabel errorLabel, JLabel ruleErrLabel) {
+    /*============================== CONSTRUCTORS ==============================*/
+    SearchEvent(Object source, FormLabel searchIDLabel, FormTextField searchIDTextField,
+                JLabel errorLabel, JLabel ruleErrLabel) {
         super(source);
         this.searchIDLabel = searchIDLabel;
         this.searchIDTextField = searchIDTextField;

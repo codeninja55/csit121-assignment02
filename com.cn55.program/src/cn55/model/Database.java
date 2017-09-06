@@ -9,23 +9,24 @@ import java.util.*;
 
 /* SINGLETON DESIGN PATTERN */
 
+@SuppressWarnings("ConstantConditions")
 public class Database implements Subject {
 
     private static Database db;
-    private ArrayList<Observer> observers;
-    private ArrayList<Card> cards;
+    private final ArrayList<Observer> observers;
+    private final ArrayList<Card> cards;
     private HashMap<String, Integer> cardMap;
-    private ArrayList<Purchase> purchases;
+    private final ArrayList<Purchase> purchases;
     private HashMap<Integer, Integer> purchaseMap;
 
-    private ArrayList<Category> categories;
+    private final ArrayList<Category> categories;
     private HashMap<Integer, Integer> categoriesMap;
 
     private static int cardIDCounter = 10000;
     private static int categoryIDCounter = 100;
 
-    static HashMap<Integer, Double> categoriesTotalMap = new HashMap<>();
-    private static Set<Integer> receiptSet = new HashSet<>();
+    private static final HashMap<Integer, Double> categoriesTotalMap = new HashMap<>();
+    private static final Set<Integer> receiptSet = new HashSet<>();
 
     /*============================== CONSTRUCTORS  ==============================*/
     // Private modifier prevents any other class from instantiating

@@ -1,8 +1,5 @@
 package cn55.view;
 
-import cn55.model.Subject;
-import cn55.model.CardModel.Card;
-import cn55.model.Purchase;
 import cn55.view.CardView.CardViewPane;
 import cn55.view.CategoriesView.CategoriesViewPane;
 import cn55.view.CustomComponents.Style;
@@ -10,7 +7,6 @@ import cn55.view.PurchaseView.PurchaseViewPane;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 
 /* CONTROLLER CLASS */
 /* GUI view package will only interact
@@ -20,10 +16,10 @@ import java.util.ArrayList;
 @SuppressWarnings("Convert2Lambda")
 public class MainFrame extends JFrame {
 
-    private JTabbedPane tabPane;
-    private CardViewPane cardViewPane;
-    private PurchaseViewPane purchaseViewPane;
-    private CategoriesViewPane categoriesViewPane;
+    private final JTabbedPane tabPane;
+    private final CardViewPane cardViewPane;
+    private final PurchaseViewPane purchaseViewPane;
+    private final CategoriesViewPane categoriesViewPane;
     //private SummaryPanel summaryPanel;
 
     public MainFrame() {

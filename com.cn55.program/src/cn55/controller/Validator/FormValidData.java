@@ -1,5 +1,6 @@
 package cn55.controller.Validator;
 
+@SuppressWarnings("unused")
 public class FormValidData {
     private String cardID;
     private String categoryIDStr;

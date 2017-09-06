@@ -1,9 +1,10 @@
 package cn55.model.CardModel;
 
-public abstract class AdvancedCard extends Card {
-    protected String name;
-    protected String email;
-    protected double balance;
+@SuppressWarnings("unused")
+abstract class AdvancedCard extends Card {
+    String name;
+    String email;
+    double balance;
 
     AdvancedCard (String name, String email) {
         super ();

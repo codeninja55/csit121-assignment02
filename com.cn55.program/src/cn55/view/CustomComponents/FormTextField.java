@@ -1,8 +1,6 @@
 package cn55.view.CustomComponents;
 
-import cn55.view.CustomComponents.Style;
-
-import javax.swing.JTextField;
+import javax.swing.*;
 
 public class FormTextField extends JTextField {
 
@@ -13,6 +11,7 @@ public class FormTextField extends JTextField {
         setVisible(false);
     }
 
+    @SuppressWarnings("unused")
     public FormTextField(String text) {
         super(text);
         setMinimumSize(getPreferredSize());
@@ -20,6 +19,7 @@ public class FormTextField extends JTextField {
         setVisible(false);
     }
 
+    @SuppressWarnings("unused")
     public FormTextField(String text, int columns) {
         super(text, columns);
         setMinimumSize(getPreferredSize());

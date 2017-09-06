@@ -4,8 +4,6 @@ import cn55.view.ButtonListener;
 import cn55.view.CustomComponents.*;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -107,20 +105,4 @@ public class SearchForm extends JPanel {
         this.cancelListener = cancelListener;
     }
 
-    /*============================== ACCESSORS ==============================*/
-    public JPanel getSearchForm() {
-        return searchForm;
-    }
-
-    public FormLabel getSearchLabel() {
-        return searchLabel;
-    }
-
-    public FormTextField getSearchIDTextField() {
-        return searchIDTextField;
-    }
-
-    public FormButton getSearchBtn() {
-        return searchBtn;
-    }
 }

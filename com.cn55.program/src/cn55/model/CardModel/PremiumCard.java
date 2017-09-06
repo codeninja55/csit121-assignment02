@@ -10,6 +10,7 @@ import cn55.model.CardType;
 public class PremiumCard extends AdvancedCard {
     private static final double POINTS_RATE_LOW = 0.025;
     private static final double POINTS_RATE_HIGH = 0.03;
+    @SuppressWarnings("unused")
     private static final double SIGNUP_FEE = 25.0;
 
     /*============================== CONSTRUCTORS  ==============================*/

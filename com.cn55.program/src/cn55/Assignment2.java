@@ -11,25 +11,8 @@ import javax.swing.*;
  * Email: dbac496@uowmail.edu.au
  */
 
-/* LIST OF TASKS STILL TO DO */
-// TODO - Create Card Form and Event Handler
-// TODO - Add a View button to display card
-// TODO - Error checking for creating card and display of error information
-// TODO - Refactor CardView and PurchaseView to use the Toolbar custom component
-// TODO - Refactor CardView and PurchaseView to include all listeners in the CardViewPane and PurchaseViewPane
-// NOTE: This is to be done with a ToolbarListener inner class
-
-
-public class Assignment2 {
-
+class Assignment2 {
     public static void main(String[] args) {
-
-        /*try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }*/
-
         UIManager.put("TabbedPane.selected", Style.red500());
         UIManager.put("TabbedPane.selectedForeground", Style.blueGrey500());
 
@@ -60,11 +43,7 @@ public class Assignment2 {
         UIManager.put("ScrollBar.track", Style.red500());
 
         /* Create and display the Program the safe Java way */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Program();
-            }
-        });
+        java.awt.EventQueue.invokeLater(Program::new);
 
 
     }

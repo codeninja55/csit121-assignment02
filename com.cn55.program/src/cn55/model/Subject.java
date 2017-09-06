@@ -4,6 +4,7 @@ import cn55.model.CardModel.Card;
 
 import java.util.ArrayList;
 
+@SuppressWarnings("unused")
 public interface Subject {
 
     // Methods to register and unregister observers

@@ -9,18 +9,19 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class CategoriesForm extends JPanel {
-    private JPanel createCategoriesForm;
-    private FormLabel categoryIDLabel;
-    private FormTextField categoryIDTextField;
-    private FormLabel categoryNameLabel;
-    private FormTextField categoryNameTextField;
-    private FormLabel categoryDescLabel;
-    private JTextArea categoryDescTextField;
+    private final JPanel createCategoriesForm;
+    private final FormLabel categoryIDLabel;
+    private final FormTextField categoryIDTextField;
+    private final FormLabel categoryNameLabel;
+    private final FormTextField categoryNameTextField;
+    private final FormLabel categoryDescLabel;
+    private final JTextArea categoryDescTextField;
 
-    private FormButton createBtn;
-    private FormButton clearBtn;
-    private CancelButton cancelBtn;
+    private final FormButton createBtn;
+    private final FormButton clearBtn;
+    private final CancelButton cancelBtn;
 
     private CategoryListener createCategoryListener;
     private ButtonListener cancelListener;
@@ -142,14 +143,10 @@ public class CategoriesForm extends JPanel {
     class FormListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == createBtn) {
-                CategoryEvent event = new CategoryEvent(this,
-                                                    categoryNameTextField,
-                                                    categoryDescTextField);
+                CategoryEvent event = new CategoryEvent(this, categoryNameTextField, categoryDescTextField);
 
-                if (createCategoryListener != null) {
+                if (createCategoryListener != null)
                     createCategoryListener.createCategoryEventOccurred(event);
-                }
-
             } else if (e.getSource() == clearBtn) {
                 for (Component c : createCategoriesForm.getComponents()) {
                     if (c instanceof JTextField && ((JTextField) c).isEditable())
@@ -162,9 +159,8 @@ public class CategoriesForm extends JPanel {
                         c.setForeground(Color.BLACK);
                 }
             }else if (e.getSource() == cancelBtn) {
-                if (cancelListener != null) {
+                if (cancelListener != null)
                     cancelListener.buttonActionOccurred();
-                }
             }
         }
     }
