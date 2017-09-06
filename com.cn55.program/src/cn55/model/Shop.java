@@ -13,7 +13,6 @@ public class Shop {
     private Database db;
 
     /*============================== CONSTRUCTORS  ==============================*/
-
     public Shop() {
         this.db = Database.getDBInstance();
         generateDefaultCategories();
@@ -46,11 +45,10 @@ public class Shop {
         validData.setCardID(cardID);
 
         if (cardID.equals(CardType.Cash.getName())) {
-            Database.updateCategoriesTotalMap(categories);
             db.addPurchase(new Purchase(categories, receiptID));
+            Database.updateCategoriesTotalMap(categories);
         } else {
             if (cardExistsRule.existsValidating(validData) >= 0) {
-                Database.updateCategoriesTotalMap(categories);
                 Card card = db.getCards().get(db.getCardMap().get(cardID));
                 String cardType = card.getCardType();
                 Purchase newPurchase = new Purchase(cardID, cardType, categories, receiptID);
@@ -60,6 +58,7 @@ public class Shop {
                     card.calcBalance(newPurchase.getCategoriesTotal());
 
                 db.addPurchase(newPurchase);
+                Database.updateCategoriesTotalMap(categories);
             }
         }
     }

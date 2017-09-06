@@ -8,10 +8,7 @@ import cn55.view.CardView.CardForm;
 import cn55.view.CardView.CardViewPane;
 import cn55.view.CategoriesView.CategoriesForm;
 import cn55.view.CategoriesView.CategoriesViewPane;
-import cn55.view.CategoriesView.CategoryEvent;
-import cn55.view.CategoriesView.CategoryListener;
 import cn55.view.CustomComponents.FormFormattedTextField;
-import cn55.view.CustomComponents.FormTextField;
 import cn55.view.CustomComponents.ResultsPane;
 import cn55.view.CustomComponents.Style;
 import cn55.view.DeleteForm.DeleteCardForm;
@@ -26,12 +23,13 @@ import cn55.view.PurchaseView.PurchaseViewPane;
 import cn55.view.SearchForm.SearchEvent;
 import cn55.view.SearchForm.SearchForm;
 import cn55.view.SearchForm.SearchListener;
-import cn55.view.ToolbarButtonListener;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.*;
 
 public class Program {
@@ -47,14 +45,13 @@ public class Program {
     private static Set<Double> testAmountSet = new HashSet<>();
 
     public Program() {
-        // Singleton Design Pattern - Only one instance of Shop available
         shop = new Shop();
+        // Singleton Design Pattern - Only one instance of Database available
         db = Database.getDBInstance();
         createTestCode(shop);
         //createTooManyCategories();
 
         this.mainFrame = new MainFrame();
-
         this.tabPane = mainFrame.getTabPane();
 
         /* REGISTRATION AND INITIAL UPDATE CALLS FOR DATABASE OBSERVER PATTERN */
@@ -260,7 +257,7 @@ public class Program {
         });
 
         /*============================== CARD VIEW ==============================*/
-        /* TOOLBAR REGISTRATION & HANDLER - CREATE CARD BUTTON */
+        /* TOOLBAR | CREATE CARD BUTTON */
         cardViewPane.setCreateCardListener(() -> {
             removeCardForms();
             cardViewPane.setCardForm(new CardForm());
@@ -315,7 +312,7 @@ public class Program {
             });
         });
 
-        /* TOOLBAR REGISTRATION & HANDLER - DELETE CARD BUTTON */
+        /* TOOLBAR | DELETE CARD BUTTON */
         cardViewPane.setDeleteCardListener(() -> {
             removeCardForms();
             cardViewPane.setDeleteForm(new DeleteCardForm());
@@ -400,7 +397,7 @@ public class Program {
             });
         });
 
-        /* TOOLBAR REGISTRATION & HANDLER - SEARCH BUTTON */
+        /* TOOLBAR | SEARCH BUTTON */
         cardViewPane.setSearchCardListener(() -> {
             removeCardForms();
             cardViewPane.setSearchForm(new SearchForm());
@@ -479,6 +476,7 @@ public class Program {
             });
         });
 
+        /* TOOLBAR | VIEW BUTTON */
         cardViewPane.setViewCardListener(() -> {
             if (cardViewPane.getCardTablePane().getSelectedRow() > 0) {
                 int selectedRow = cardViewPane.getCardTablePane().getSelectedRow();
@@ -508,7 +506,7 @@ public class Program {
             }
         });
 
-        /* TOOLBAR REGISTRATION & HANDLER - SORT */
+        /* TOOLBAR | SORT */
         cardViewPane.getSortedCombo().addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 if (e.getItem().equals("Sort..") || e.getItem().equals(SortCardType.CreatedOrder.getName())) {
@@ -525,7 +523,7 @@ public class Program {
         });
 
         /*============================== PURCHASE VIEW ==============================*/
-        /* TOOLBAR CREATE PURCHASE BUTTON */
+        /* TOOLBAR | CREATE PURCHASE BUTTON */
         purchaseViewPane.setCreatePurchaseListener(() -> {
             removePurchaseForms();
             purchaseViewPane.setCreatePurchaseForm(new PurchaseForm());
@@ -618,7 +616,7 @@ public class Program {
             });
         });
 
-        /* TOOLBAR VIEW DETAILS BUTTON */
+        /* TOOLBAR | VIEW  BUTTON */
         purchaseViewPane.setViewPurchaseListener(() -> {
             if (purchaseViewPane.getPurchaseTablePane().getSelectedRow() > 0) {
                 int selectedRow = purchaseViewPane.getPurchaseTablePane().getSelectedRow();
@@ -640,7 +638,7 @@ public class Program {
             }
         });
 
-        /* SORT COMBOBOX */
+        /* TOOLBAR | SORT COMBOBOX */
         purchaseViewPane.getSortPurchaseCombo().addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 ArrayList<Purchase> tempPurchases = new ArrayList<>();
@@ -667,7 +665,7 @@ public class Program {
         });
 
         /*============================== CATEGORIES VIEW ==============================*/
-        /* TOOLBAR REGISTRATION & HANDLER - CREATE CARD BUTTON */
+        /* TOOLBAR | CREATE CATEGORY BUTTON */
         categoriesViewPane.setCreateCategoryListener(() -> {
             removeCategoryForms();
             categoriesViewPane.setCreateCategoryForm(new CategoriesForm());
@@ -691,6 +689,7 @@ public class Program {
             });
         });
 
+        /* TOOLBAR | DELETE CATEGORY BUTTON */
         categoriesViewPane.setDeleteCategoryListener(() -> {
             removeCategoryForms();
             categoriesViewPane.setDeleteCategoryForm(new DeleteCategoryForm());
@@ -779,7 +778,6 @@ public class Program {
     }
 
     /*============================== MUTATORS  ==============================*/
-
     private void showResultsPane(String text, ResultsPane resultsPane,
                                    ResultsPane.ResultsTextPane resultsTextPane) {
         resultsTextPane.setText(text);
@@ -889,12 +887,6 @@ public class Program {
             for (HashMap.Entry<JLabel[], FormFormattedTextField> item : event.getCategoriesMap().entrySet()) {
                 String labelStr = item.getKey()[0].getText();
                 String catName = labelStr.substring(0, labelStr.indexOf(":"));
-
-                /*Double catValue = 0D;
-                String textFieldStr = item.getValue().getText();
-
-                if (!(textFieldStr.isEmpty()))
-                    catValue = Double.parseDouble(textFieldStr);*/
                 Double catValue = ((Number)item.getValue().getValue()).doubleValue();
 
                 for (Category c : defaultCategories) {
