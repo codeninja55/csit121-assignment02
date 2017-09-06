@@ -4,6 +4,7 @@ public class FormValidData {
     private String cardID;
     private String categoryIDStr;
     private String catValueStr;
+    private Double catValue;
     private String email;
 
     /*============================== CONSTRUCTORS ==============================*/
@@ -11,6 +12,7 @@ public class FormValidData {
         this.cardID = null;
         this.categoryIDStr = null;
         this.catValueStr = null;
+        this.catValue = 0D;
         this.email = null;
     }
 
@@ -25,6 +27,10 @@ public class FormValidData {
 
     public void setCatValueStr(String catValueStr) {
         this.catValueStr = catValueStr;
+    }
+
+    public void setCatValue(Double catValue) {
+        this.catValue = catValue;
     }
 
     public void setEmail(String email) {
@@ -42,6 +48,10 @@ public class FormValidData {
 
     public String getCatValueStr() {
         return catValueStr;
+    }
+
+    public Double getCatValue() {
+        return catValue;
     }
 
     public String getEmail() {
