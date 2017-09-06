@@ -480,30 +480,32 @@ public class Program {
         });
 
         cardViewPane.setViewCardListener(() -> {
-            int selectedRow = cardViewPane.getCardTablePane().getSelectedRow();
-            String cardID = (String)cardViewPane.getCardTablePane().getValueAt(selectedRow, 0);
+            if (cardViewPane.getCardTablePane().getSelectedRow() > 0) {
+                int selectedRow = cardViewPane.getCardTablePane().getSelectedRow();
+                String cardID = (String)cardViewPane.getCardTablePane().getValueAt(selectedRow, 0);
 
-            ResultsPane resultsPane = cardViewPane.getResultsPane();
-            resultsPane.setResultsTextPane();
-            ResultsPane.ResultsTextPane resultsTextPane = resultsPane.getResultsTextPane();
-            setCardViewMouseListeners();
+                ResultsPane resultsPane = cardViewPane.getResultsPane();
+                resultsPane.setResultsTextPane();
+                ResultsPane.ResultsTextPane resultsTextPane = resultsPane.getResultsTextPane();
+                setCardViewMouseListeners();
 
-            String cText = db.getCards().get(db.getCardMap().get(cardID)).toString();
-            StringBuilder pText = new StringBuilder("");
+                String cText = db.getCards().get(db.getCardMap().get(cardID)).toString();
+                StringBuilder pText = new StringBuilder("");
 
-            for (Purchase purchase : db.getPurchases()) {
-                if (purchase.getCardID() != null) {
-                    if (purchase.getCardID().equals(cardID)) {
-                        pText.append("\n");
-                        pText.append(purchase.toString());
+                for (Purchase purchase : db.getPurchases()) {
+                    if (purchase.getCardID() != null) {
+                        if (purchase.getCardID().equals(cardID)) {
+                            pText.append("\n");
+                            pText.append(purchase.toString());
+                        }
                     }
                 }
+
+                String textResults = String.format("%s%n%s%n%n%s%n%s","CARD",
+                        cText,"PURCHASE(S)", pText);
+
+                showResultsPane(textResults, resultsPane, resultsTextPane);
             }
-
-            String textResults = String.format("%s%n%s%n%n%s%n%s","CARD",
-                    cText,"PURCHASE(S)", pText);
-
-            showResultsPane(textResults, resultsPane, resultsTextPane);
         });
 
         /* TOOLBAR REGISTRATION & HANDLER - SORT */
@@ -617,23 +619,25 @@ public class Program {
         });
 
         /* TOOLBAR VIEW DETAILS BUTTON */
-        purchaseViewPane.setViewPurchaseListener(() -> {
-            int selectedRow = purchaseViewPane.getPurchaseTablePane().getSelectedRow();
-            Integer receiptID = (Integer) purchaseViewPane.getPurchaseTablePane().getValueAt(selectedRow, 0);
+        purchaseViewPane.setViewPurchaseListener(() -> { ;
+            if (purchaseViewPane.getPurchaseTablePane().getSelectedRow() > 0) {
+                int selectedRow = purchaseViewPane.getPurchaseTablePane().getSelectedRow();
+                Integer receiptID = (Integer) purchaseViewPane.getPurchaseTablePane().getValueAt(selectedRow, 0);
 
-            ResultsPane resultsPane = purchaseViewPane.getResultsPane();
-            resultsPane.setResultsTextPane();
-            ResultsPane.ResultsTextPane resultsTextPane = resultsPane.getResultsTextPane();
-            setPurchaseViewPaneMouseListeners();
+                ResultsPane resultsPane = purchaseViewPane.getResultsPane();
+                resultsPane.setResultsTextPane();
+                ResultsPane.ResultsTextPane resultsTextPane = resultsPane.getResultsTextPane();
+                setPurchaseViewPaneMouseListeners();
 
-            String resultsText = "";
-            for (Purchase purchase : db.getPurchases()) {
-                if (purchase.getReceiptID() == receiptID) {
-                    resultsText = purchase.toString();
+                String resultsText = "";
+                for (Purchase purchase : db.getPurchases()) {
+                    if (purchase.getReceiptID() == receiptID) {
+                        resultsText = purchase.toString();
+                    }
                 }
-            }
 
-            showResultsPane(resultsText, resultsPane, resultsTextPane);
+                showResultsPane(resultsText, resultsPane, resultsTextPane);
+            }
         });
 
         /* SORT COMBOBOX */
