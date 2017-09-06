@@ -14,8 +14,6 @@ import java.awt.event.ItemListener;
 import java.util.HashMap;
 
 public class CardForm extends JPanel {
-    private HashMap<String,String> newCard;
-
     private JComboBox<String> cardTypeCombo;
     private DefaultComboBoxModel<String> options;
     private CancelButton cancelBtn;
