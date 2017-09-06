@@ -15,7 +15,7 @@ public class Style {
     public static Font textFieldFont() { return new Font("Monospaced", Font.PLAIN, 20); }
     public static Font textAreaFont() { return new Font("Monospaced", Font.PLAIN, 20); }
     public static Font tabPaneFont() { return  new Font("Verdana", Font.BOLD, 34); }
-    public static Font tableDataFont() { return new Font("Monospaced", Font.PLAIN, 24); }
+    public static Font tableDataFont() { return new Font("Monospaced", Font.PLAIN, 25); }
     public static Font textPaneFont() { return new Font("Monospaced", Font.BOLD,24); }
     public static Font errorFont() { return new Font("Monospaced", Font.BOLD, 25); }
 
