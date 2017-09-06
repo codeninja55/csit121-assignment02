@@ -874,7 +874,6 @@ public class Program {
                 item.getValue().setForeground(Color.BLACK);
             }
         }
-
         return proceed;
     }
 
