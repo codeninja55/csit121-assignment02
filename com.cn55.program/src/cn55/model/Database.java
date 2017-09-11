@@ -68,32 +68,33 @@ public class Database implements Subject {
         return "MC" + (++cardIDCounter);
     }
 
-    public static int generateCategoryID() {
+    static int generateCategoryID() {
         return categoryIDCounter++;
     }
 
     private static void addReceiptID(int receiptID) { Database.receiptSet.add(receiptID); }
 
     /*============================== MUTATORS  ==============================*/
-    public void mapCards() {
+    void mapCards() {
         HashMap<String, Integer> cardMap = new HashMap<>();
-        for (int index = 0 ; index < cards.size() ; index++) cardMap.put(cards.get(index).getID(), index);
+        for (Card card : cards)
+            cardMap.put(card.getID(), cards.indexOf(card));
 
         this.cardMap = cardMap;
     }
 
-    public void mapPurchases() {
+    void mapPurchases() {
         HashMap<Integer, Integer> purchaseMap = new HashMap<>();
-        for (int index = 0 ; index < purchases.size() ; index++)
-            purchaseMap.put(purchases.get(index).getReceiptID(), index);
+        for (Purchase purchase : purchases)
+            purchaseMap.put(purchase.getReceiptID(), purchases.indexOf(purchase));
 
         this.purchaseMap = purchaseMap;
     }
 
     void mapCategories() {
         HashMap<Integer, Integer> categoriesMap = new HashMap<>();
-        for (int index = 0 ; index < categories.size() ; index++)
-            categoriesMap.put(categories.get(index).getId(), index);
+        for (Category category : categories)
+            categoriesMap.put(category.getId(), categories.indexOf(category));
 
         this.categoriesMap = categoriesMap;
     }
@@ -106,15 +107,22 @@ public class Database implements Subject {
         }
     }
 
+    /* Accepts the same categories HashMap stored in a Purchase object and updates the categoriesTotalMap
+     * to reflect either the new Category added or the updated total amount for an existing category. */
     static void updateCategoriesTotalMap(HashMap<Integer, Category> categories) {
         for (HashMap.Entry<Integer, Category> item : categories.entrySet()) {
-            Double newTotal = Database.categoriesTotalMap.get(item.getKey()) + item.getValue().getAmount();
-            Database.categoriesTotalMap.put(item.getKey(), newTotal);
+            if (!categoriesTotalMap.containsKey(item.getKey())) {
+                Database.categoriesTotalMap.put(item.getKey(), item.getValue().getAmount());
+            } else {
+                Double newTotal = Database.categoriesTotalMap.get(item.getKey()) + item.getValue().getAmount();
+                Database.categoriesTotalMap.put(item.getKey(), newTotal);
+            }
         }
     }
 
     public void addCategory(Category category) {
         categories.add(category);
+
         mapCategories();
         notifyObservers();
     }
