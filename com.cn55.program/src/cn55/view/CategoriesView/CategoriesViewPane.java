@@ -11,6 +11,8 @@ import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -32,8 +34,8 @@ public class CategoriesViewPane extends JPanel implements Observer {
     /*============================== CONSTRUCTORS  ==============================*/
     public CategoriesViewPane() {
         Toolbar toolbar = new Toolbar();
-        createCategoryBtn = new ToolbarButton("Create Category");
-        deleteCategoryBtn = new ToolbarButton("Delete Category");
+        createCategoryBtn = new ToolbarButton("Create");
+        deleteCategoryBtn = new ToolbarButton("Delete");
 
         categoriesTableModel = new CategoriesTableModel();
         categoriesTablePane = new JTable();
@@ -54,7 +56,8 @@ public class CategoriesViewPane extends JPanel implements Observer {
         ToolbarListener handler = new ToolbarListener();
         createCategoryBtn.addActionListener(handler);
         deleteCategoryBtn.addActionListener(handler);
-
+        createCategoryBtn.addMouseListener(handler);
+        deleteCategoryBtn.addMouseListener(handler);
     }
 
     /*============================== MUTATORS  ==============================*/
@@ -67,8 +70,8 @@ public class CategoriesViewPane extends JPanel implements Observer {
     }
 
     private void categoriesTableFormatter() {
+        // Formatting for the table where it renders the text.
         categoriesTablePane.setRowHeight(45);
-        categoriesTablePane.setFont(Style.tableDataFont());
         categoriesTablePane.getColumnModel().getColumn(0).setCellRenderer(Style.centerRenderer());
         categoriesTablePane.getColumnModel().getColumn(1).setCellRenderer(Style.centerRenderer());
         categoriesTablePane.getColumnModel().getColumn(2).setCellRenderer(Style.leftRenderer());
@@ -104,14 +107,6 @@ public class CategoriesViewPane extends JPanel implements Observer {
     }
 
     /*============================== ACCESSORS  ==============================*/
-    public JTable getCategoriesTablePane() {
-        return categoriesTablePane;
-    }
-
-    public CategoriesTableModel getCategoriesTableModel() {
-        return categoriesTableModel;
-    }
-
     public CategoriesForm getCreateCategoryForm() {
         return createCategoryForm;
     }
@@ -125,7 +120,7 @@ public class CategoriesViewPane extends JPanel implements Observer {
     /*=========================================================================*/
 
     /*=========================== TOOLBAR LISTENER ============+===============*/
-    class ToolbarListener implements ActionListener {
+    class ToolbarListener extends MouseAdapter implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == createCategoryBtn) {
                 if (createCategoryListener != null)
@@ -134,6 +129,20 @@ public class CategoriesViewPane extends JPanel implements Observer {
                 if (deleteCategoryListener != null)
                     deleteCategoryListener.toolbarButtonEventOccurred();
             }
+        }
+
+        public void mouseEntered(MouseEvent e) {
+            if (e.getSource() == createCategoryBtn)
+                Style.hoverEffect(createCategoryBtn, true);
+            else if (e.getSource() == deleteCategoryBtn)
+                Style.hoverEffect(deleteCategoryBtn, true);
+        }
+
+        public void mouseExited(MouseEvent e) {
+            if (e.getSource() == createCategoryBtn)
+                Style.hoverEffect(createCategoryBtn, false);
+            else if (e.getSource() == deleteCategoryBtn)
+                Style.hoverEffect(deleteCategoryBtn, false);
         }
     }
 

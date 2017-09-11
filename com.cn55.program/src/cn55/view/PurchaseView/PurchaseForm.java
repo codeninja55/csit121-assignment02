@@ -185,14 +185,12 @@ public class PurchaseForm extends JPanel {
             baseCreatePurchaseForm.add(cardTypeLabel, gc);
 
             textFieldGridConstraints(gc);
-            anonCardRB.setFont(Style.labelFont());
             baseCreatePurchaseForm.add(anonCardRB, gc);
             anonCardRB.setVisible(false);
 
             /*========== NEW ROW - RADIO BUTTON 2 ==========*/
             textFieldGridConstraints(gc);
             gc.gridy++;
-            basicCardRB.setFont(Style.labelFont());
             baseCreatePurchaseForm.add(basicCardRB, gc);
             basicCardRB.setVisible(false);
 
@@ -200,7 +198,6 @@ public class PurchaseForm extends JPanel {
             textFieldGridConstraints(gc);
             gc.gridy++;
             gc.insets = new Insets(10,0,20,0);
-            premiumCardRB.setFont(Style.labelFont());
             baseCreatePurchaseForm.add(premiumCardRB, gc);
             premiumCardRB.setVisible(false);
 

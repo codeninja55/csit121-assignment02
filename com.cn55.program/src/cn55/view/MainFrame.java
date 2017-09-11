@@ -7,11 +7,7 @@ import cn55.view.PurchaseView.PurchaseViewPane;
 
 import javax.swing.*;
 import java.awt.*;
-
-/* CONTROLLER CLASS */
-/* GUI view package will only interact
- * with data through this controller class
- * and Program controller class */
+import java.net.URL;
 
 @SuppressWarnings("Convert2Lambda")
 public class MainFrame extends JFrame {
@@ -23,7 +19,7 @@ public class MainFrame extends JFrame {
     //private SummaryPanel summaryPanel;
 
     public MainFrame() {
-        super("Marvel Card Rewards");
+        super("Marvel Rewards Cards");
 
         setLayout(new BorderLayout());
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -31,16 +27,42 @@ public class MainFrame extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
 
+        // Change the default Java icon to this
+        URL iconURL = getClass().getResource("/cn55/img/favicon.png");
+        ImageIcon mainIcon = new ImageIcon(iconURL);
+        setIconImage(mainIcon.getImage());
+
         this.tabPane = new JTabbedPane();
 
         // Initialize panels for tabs
         JPanel welcomePane = new JPanel();
-        // Without configuring, GridBagLayout automatically puts in middle
         welcomePane.setLayout(new GridBagLayout());
-        JLabel welcomeLabel = new JLabel("Welcome to Marvel Rewards");
-        welcomeLabel.setFont(new Font("Verdana", Font.BOLD,56));
+        URL marvelURL = getClass().getResource("/cn55/img/Marvel-Logo-3-25pc.png");
+        ImageIcon marvelImage = new ImageIcon(marvelURL);
+        JLabel welcomeLabel = new JLabel("WELCOME");
+        JLabel imageLabel = new JLabel("", marvelImage, SwingConstants.CENTER);
+        JLabel rewardsCardLabel = new JLabel("REWARDS CARDS", SwingConstants.CENTER);
+        welcomeLabel.setFont(new Font("Verdana", Font.BOLD,80));
         welcomeLabel.setForeground(Style.red500());
-        welcomePane.add(welcomeLabel);
+        rewardsCardLabel.setFont(new Font("Verdana", Font.BOLD,72));
+        rewardsCardLabel.setForeground(Style.red500());
+
+        GridBagConstraints gc = new GridBagConstraints();
+        gc.fill = GridBagConstraints.NONE;
+        gc.gridx = 0; gc.gridy = 0;
+        gc.weightx = 1; gc.weighty = 0.5;
+        gc.anchor = GridBagConstraints.PAGE_END;
+        gc.insets = new Insets(200,0,80,0);
+
+        welcomePane.add(welcomeLabel, gc);
+
+        gc.gridy++; gc.insets = new Insets(0,0,0,0);
+        welcomePane.add(imageLabel, gc);
+
+        gc.gridy++;  gc.weighty = 2;
+        gc.anchor = GridBagConstraints.PAGE_START;
+        gc.insets = new Insets(20,0,0,0);
+        welcomePane.add(rewardsCardLabel, gc);
 
         this.cardViewPane = new CardViewPane();
         this.purchaseViewPane = new PurchaseViewPane();
@@ -54,7 +76,7 @@ public class MainFrame extends JFrame {
         add(tabPane, BorderLayout.CENTER);
 
         // Add tabs to tabPane group
-        tabPane.addTab("Welcome", welcomePane);
+        tabPane.addTab("Start", welcomePane);
         tabPane.addTab("Cards", cardViewPane);
         tabPane.addTab("Purchases", purchaseViewPane);
         tabPane.addTab("Categories", categoriesViewPane);

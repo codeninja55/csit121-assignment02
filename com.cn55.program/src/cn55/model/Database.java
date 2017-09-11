@@ -18,7 +18,6 @@ public class Database implements Subject {
     private HashMap<String, Integer> cardMap;
     private final ArrayList<Purchase> purchases;
     private HashMap<Integer, Integer> purchaseMap;
-
     private final ArrayList<Category> categories;
     private HashMap<Integer, Integer> categoriesMap;
 
@@ -99,16 +98,15 @@ public class Database implements Subject {
         this.categoriesMap = categoriesMap;
     }
 
+    // Map the Categories to a HashMap to store total amounts for each category across the whole program
     static void mapCategoriesTotalMap(ArrayList<Category> categories) {
-        if (categoriesTotalMap.size() == 0) {
-            for (Category item : categories) {
+        if (categoriesTotalMap.size() == 0)
+            for (Category item : categories)
                 categoriesTotalMap.put(item.getId(), 0D);
-            }
-        }
     }
 
-    /* Accepts the same categories HashMap stored in a Purchase object and updates the categoriesTotalMap
-     * to reflect either the new Category added or the updated total amount for an existing category. */
+    // Accepts the same categories HashMap stored in a Purchase object and updates the categoriesTotalMap
+    // to reflect either the new Category added or the updated total amount for an existing category.
     static void updateCategoriesTotalMap(HashMap<Integer, Category> categories) {
         for (HashMap.Entry<Integer, Category> item : categories.entrySet()) {
             if (!categoriesTotalMap.containsKey(item.getKey())) {
@@ -122,7 +120,6 @@ public class Database implements Subject {
 
     public void addCategory(Category category) {
         categories.add(category);
-
         mapCategories();
         notifyObservers();
     }
@@ -142,6 +139,7 @@ public class Database implements Subject {
     void removeCard(int index) {
         cards.remove(index);
         mapCards();
+        mapPurchases();
         notifyObservers();
     }
 

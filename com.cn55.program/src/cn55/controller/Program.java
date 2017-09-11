@@ -238,6 +238,7 @@ public class Program {
     /*============================== REGISTER AND HANDLE EVENTS ==============================*/
     private void setupViewListeners() {
         /* TAB PANE LISTENER */
+        // This method
         tabPane.addChangeListener((ChangeEvent e) -> {
             /* DESELECTED LISTENERS */
             if (tabPane.getSelectedComponent() != purchaseViewPane) {
@@ -329,9 +330,9 @@ public class Program {
                 removeResultsPane(resultsPane);
             });
 
-            /* REGISTER A CREATE BUTTON LISTENER AFTER CREATING FORM */
+            /* REGISTER A DELETE BUTTON LISTENER AFTER CREATING FORM */
             form.setDeleteListener(e -> {
-                String cardID = e.getIdTextField().getText();
+                String cardID = e.getIdTextField().getText().toUpperCase();
 
                 /* SETUP VALIDATOR FOR CARD ID */
                 FormValidData input = new FormValidData();
@@ -365,8 +366,10 @@ public class Program {
 
                     if (confirm == JOptionPane.OK_OPTION) {
                         shop.deleteCard(cardIndex);
-                        /* Purchases by this card will be changed to cash */
+                        // Purchases by this card will be changed to cash
                         shop.convertPurchase(cardID);
+                        removeCardForms();
+                        removeResultsPane(resultsPane);
                     } else {
                         e.getIdTextField().setText(null);
                         e.getDeleteErrorLabel().setVisible(true);
@@ -807,8 +810,8 @@ public class Program {
 
     private void setCardViewMouseListeners() {
         /* SET UP A MOUSE LISTENER TO CLOSE PANEL WHEN CLICKING ON TABLE OR OUTER PANEL*/
-        /* Only add a new MouseListener if there are less than 3 in the MouseListener[] */
-        /* Unknown reasons why there are already 2 other ones in a JTable */
+        // Only add a new MouseListener if there are less than 3 in the MouseListener[]
+        // Unknown reasons why there are already 2 other ones in a JTable
         if (cardViewPane.getCardTablePane().getMouseListeners().length < 3) {
             cardViewPane.getCardTablePane().addMouseListener(new MouseAdapter() {
                 public void mouseClicked(MouseEvent e) {
@@ -823,8 +826,8 @@ public class Program {
 
     private void setPurchaseViewPaneMouseListeners() {
         /* SET UP A MOUSE LISTENER TO CLOSE PANEL WHEN CLICKING ON TABLE OR OUTER PANEL*/
-        /* Only add a new MouseListener if there are less than 3 in the MouseListener[] */
-        /* Unknown reasons why there are already 2 other ones in a JTable */
+        // Only add a new MouseListener if there are less than 3 in the MouseListener[]
+        // Unknown reasons why there are already 2 other ones in a JTable
         if (purchaseViewPane.getPurchaseTablePane().getMouseListeners().length < 3) {
             purchaseViewPane.getPurchaseTablePane().addMouseListener(new MouseAdapter() {
                 public void mouseClicked(MouseEvent e) {

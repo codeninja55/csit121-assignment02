@@ -46,12 +46,9 @@ public class Purchase {
         return calendar.getTime();
     }
 
-    void setCardID(String cardID) {
-        this.cardID = cardID;
-    }
-
-    void setCardType(String cardType) {
-        this.cardType = cardType;
+    void convertPurchase() {
+        this.cardType = CardType.Cash.getName();
+        this.cardID = null;
     }
 
     /*============================== ACCESSORS  ==============================*/
@@ -76,7 +73,6 @@ public class Purchase {
     }
 
     public String toString() {
-
         StringBuilder secondOutput = new StringBuilder();
         String firstOutput = String.format("%n%-20s %s%n%-20s %s%n%-20s %s%n%-20s %-20tc",
                 "Receipt ID", this.receiptID,

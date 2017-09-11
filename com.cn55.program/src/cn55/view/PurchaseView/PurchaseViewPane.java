@@ -15,6 +15,8 @@ import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 public class PurchaseViewPane extends JPanel implements Observer {
@@ -37,9 +39,9 @@ public class PurchaseViewPane extends JPanel implements Observer {
     /*============================== CONSTRUCTORS ==============================*/
     public PurchaseViewPane() {
         Toolbar toolbar = new Toolbar();
-        createPurchaseBtn = new ToolbarButton("Create Purchase");
-        deletePurchaseBtn = new ToolbarButton("Delete Purchase");
-        viewPurchaseBtn = new ToolbarButton("View Purchase");
+        createPurchaseBtn = new ToolbarButton("Create");
+        deletePurchaseBtn = new ToolbarButton("Delete");
+        viewPurchaseBtn = new ToolbarButton("View");
         sortPurchaseCombo = new JComboBox<>();
         DefaultComboBoxModel<String> options = new DefaultComboBoxModel<>();
 
@@ -60,17 +62,15 @@ public class PurchaseViewPane extends JPanel implements Observer {
         options.addElement(SortPurchaseType.Card.getName());
         options.addElement(SortPurchaseType.Cash.getName());
         sortPurchaseCombo.setModel(options);
-
         sortPurchaseCombo.setSize(createPurchaseBtn.getPreferredSize());
-        sortPurchaseCombo.setFont(Style.toolbarButtonFont());
-        sortPurchaseCombo.setBackground(Style.grey50());
-        sortPurchaseCombo.setForeground(Style.red500());
-        sortPurchaseCombo.setBorder(BorderFactory.createMatteBorder(2,2,2,2, Style.red900()));
+        sortPurchaseCombo.setBorder(BorderFactory.createMatteBorder(2,2,2,2, Style.blue500()));
         sortPurchaseCombo.setSelectedIndex(0);
 
         /* TOOLBAR */
         toolbar.getLeftToolbar().add(createPurchaseBtn);
-        //toolbar.getLeftToolbar().add(deletePurchaseBtn);
+        toolbar.getLeftToolbar().add(deletePurchaseBtn);
+        deletePurchaseBtn.setBackground(Style.blueGrey800());
+        deletePurchaseBtn.setEnabled(false);
         toolbar.getRightToolbar().add(viewPurchaseBtn);
         toolbar.getRightToolbar().add(sortPurchaseCombo);
         add(toolbar, BorderLayout.NORTH);
@@ -86,6 +86,9 @@ public class PurchaseViewPane extends JPanel implements Observer {
         createPurchaseBtn.addActionListener(handler);
         deletePurchaseBtn.addActionListener(handler);
         viewPurchaseBtn.addActionListener(handler);
+        createPurchaseBtn.addMouseListener(handler);
+        deletePurchaseBtn.addMouseListener(handler);
+        viewPurchaseBtn.addMouseListener(handler);
     }
 
     /*============================== MUTATORS ==============================*/
@@ -106,8 +109,8 @@ public class PurchaseViewPane extends JPanel implements Observer {
     }
 
     private void purchasesTableFormatter() {
+        // Formatting for the table where it renders the text.
         purchaseTablePane.setRowHeight(45);
-        purchaseTablePane.setFont(Style.tableDataFont());
         purchaseTablePane.getColumnModel().getColumn(0).setCellRenderer(Style.centerRenderer());
         purchaseTablePane.getColumnModel().getColumn(1).setCellRenderer(Style.centerRenderer());
         purchaseTablePane.getColumnModel().getColumn(2).setCellRenderer(Style.centerRenderer());
@@ -161,7 +164,7 @@ public class PurchaseViewPane extends JPanel implements Observer {
     /*============================== INNER CLASS ==============================*/
     /*=========================================================================*/
     /*============================ TOOLBAR LISTENER ===========================*/
-    public class ToolbarListener implements ActionListener {
+    public class ToolbarListener extends MouseAdapter implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == createPurchaseBtn) {
                 if (createPurchaseListener != null)
@@ -174,6 +177,20 @@ public class PurchaseViewPane extends JPanel implements Observer {
                 if (viewPurchaseListener != null)
                     viewPurchaseListener.toolbarButtonEventOccurred();
             }
+        }
+
+        public void mouseEntered(MouseEvent e) {
+            if (e.getSource() == createPurchaseBtn)
+                Style.hoverEffect(createPurchaseBtn, true);
+            else if (e.getSource() == viewPurchaseBtn)
+                Style.hoverEffect(viewPurchaseBtn, true);
+        }
+
+        public void mouseExited(MouseEvent e) {
+            if (e.getSource() == createPurchaseBtn)
+                Style.hoverEffect(createPurchaseBtn, false);
+            else if (e.getSource() == viewPurchaseBtn)
+                Style.hoverEffect(viewPurchaseBtn, false);
         }
     }
 

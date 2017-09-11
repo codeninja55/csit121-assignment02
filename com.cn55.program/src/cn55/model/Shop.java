@@ -88,13 +88,12 @@ public class Shop {
         db.removeCard(cardIndex);
     }
 
+    // Converts a purchase from a card purchase to a cash purchase when the card has been deleted
     public void convertPurchase(String cardID) {
         db.mapPurchases();
         for (Purchase purchase : db.getPurchases()) {
-            if (purchase.getCardID() != null && purchase.getCardID().equals(cardID)) {
-                purchase.setCardID(null);
-                purchase.setCardType(CardType.Cash.getName());
-            }
+            if (purchase.getCardID() != null && purchase.getCardID().equals(cardID))
+                purchase.convertPurchase();
         }
     }
 

@@ -111,9 +111,8 @@ public class CategoriesForm extends JPanel {
 
         /* SET FORM CUSTOM COMPONENTS VISIBLE */
         for (Component c : createCategoriesForm.getComponents()) {
-            if (c instanceof FormLabel || c instanceof FormTextField || c instanceof FormButton) {
+            if (c instanceof FormLabel || c instanceof FormTextField || c instanceof FormButton)
                 c.setVisible(true);
-            }
         }
 
         categoryIDTextField.setText(Integer.toString(Database.getNextCategoryID()));

@@ -17,8 +17,7 @@ import cn55.view.ToolbarButtonListener;
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.util.ArrayList;
 
 public class CardViewPane extends JPanel implements Observer {
@@ -46,9 +45,9 @@ public class CardViewPane extends JPanel implements Observer {
     /*============================== CONSTRUCTORS ==============================*/
     public CardViewPane() {
         Toolbar toolbar = new Toolbar();
-        createCardBtn = new ToolbarButton("Create Card");
-        deleteCardBtn = new ToolbarButton("Delete Card");
-        searchBtn = new ToolbarButton("Search Card");
+        createCardBtn = new ToolbarButton("Create");
+        deleteCardBtn = new ToolbarButton("Delete");
+        searchBtn = new ToolbarButton("Search");
         viewBtn = new ToolbarButton("View");
 
         cardTableModel = new CardTableModel();
@@ -69,10 +68,7 @@ public class CardViewPane extends JPanel implements Observer {
                 SortCardType.Points.getName()};
         sortedCombo = new JComboBox<>(sortOptions);
         sortedCombo.setSize(searchBtn.getPreferredSize());
-        sortedCombo.setFont(Style.toolbarButtonFont());
-        sortedCombo.setBackground(Style.grey50());
-        sortedCombo.setForeground(Style.red500());
-        sortedCombo.setBorder(BorderFactory.createMatteBorder(2,2,2,2, Style.red900()));
+        sortedCombo.setBorder(BorderFactory.createMatteBorder(2,2,2,2, Style.blueGrey500()));
         sortedCombo.setSelectedIndex(0);
 
         /* TOOLBAR */
@@ -93,6 +89,10 @@ public class CardViewPane extends JPanel implements Observer {
         searchBtn.addActionListener(handler);
         deleteCardBtn.addActionListener(handler);
         viewBtn.addActionListener(handler);
+        createCardBtn.addMouseListener(handler);
+        deleteCardBtn.addMouseListener(handler);
+        searchBtn.addMouseListener(handler);
+        viewBtn.addMouseListener(handler);
     }
 
     /*============================== MUTATORS  ==============================*/
@@ -123,9 +123,8 @@ public class CardViewPane extends JPanel implements Observer {
     }
 
     private void cardTableFormatter() {
-        // FORMATTING FOR TABLE
+        // Formatting for the table where it renders the text.
         cardTablePane.setRowHeight(45);
-        cardTablePane.setFont(Style.tableDataFont());
         cardTablePane.getColumnModel().getColumn(0).setCellRenderer(Style.centerRenderer());
         cardTablePane.getColumnModel().getColumn(0).setPreferredWidth(1);
         cardTablePane.getColumnModel().getColumn(1).setCellRenderer(Style.centerRenderer());
@@ -188,7 +187,7 @@ public class CardViewPane extends JPanel implements Observer {
     /*=========================================================================*/
 
     /*============================ TOOLBAR LISTENER ===========================*/
-    public class ToolbarListener implements ActionListener {
+    public class ToolbarListener extends MouseAdapter implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == searchBtn) {
                 if (searchCardListener != null)
@@ -205,6 +204,30 @@ public class CardViewPane extends JPanel implements Observer {
                 }
             }
         }
+
+        public void mouseEntered(MouseEvent e) {
+            if (e.getSource() == createCardBtn)
+                Style.hoverEffect(createCardBtn, true);
+            else if (e.getSource() == deleteCardBtn)
+                Style.hoverEffect(deleteCardBtn, true);
+            else if (e.getSource() == viewBtn)
+                Style.hoverEffect(viewBtn, true);
+            else if (e.getSource() == searchBtn)
+                Style.hoverEffect(searchBtn, true);
+        }
+
+        public void mouseExited(MouseEvent e) {
+            if (e.getSource() == createCardBtn)
+                Style.hoverEffect(createCardBtn, false);
+            else if (e.getSource() == deleteCardBtn)
+                Style.hoverEffect(deleteCardBtn, false);
+            else if (e.getSource() == viewBtn)
+                Style.hoverEffect(viewBtn, false);
+            else if (e.getSource() == searchBtn)
+                Style.hoverEffect(searchBtn, false);
+        }
+
+
     }
 
     /*============================= CardTableModel ============================*/
