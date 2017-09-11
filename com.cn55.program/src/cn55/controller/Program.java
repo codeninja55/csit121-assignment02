@@ -140,7 +140,7 @@ public class Program {
 
         // AnonCard Test
         db.addCards(new AnonCard()); // MC10001
-        testMakePurchases(3, "MC10001");
+        testMakePurchases(1, "MC10001");
 
         db.addCards(new AnonCard()); // MC10002
         testMakePurchases(2, "MC10002");
@@ -304,6 +304,7 @@ public class Program {
 
                 int cardIndex = db.getCardMap().get(e.getCardIDTextField().getText());
                 showResultsPane(db.getCards().get(cardIndex).toString(), resultsPane, resultsTextPane);
+                removeCardForms();
             });
         });
 
@@ -348,6 +349,8 @@ public class Program {
                     e.getDeleteErrorLabel().setVisible(false);
 
                     showResultsPane(db.getCards().get(cardIndex).toString(), resultsPane, resultsTextPane);
+                    cardViewPane.revalidate();
+                    cardViewPane.repaint();
 
                     String[] btnOptions = {"Yes","Cancel"};
                     String message = "Are you sure you want to DELETE card: " + cardID +
@@ -409,7 +412,6 @@ public class Program {
                 /* Setup a text pane to put all the necessary data into */
                 ResultsPane resultsPane = cardViewPane.getResultsPane();
                 resultsPane.setResultsTextPane();
-                //resultsPane.setScrollPane(resultsPane.getResultsTextPane());
                 ResultsPane.ResultsTextPane resultsTextPane = resultsPane.getResultsTextPane();
                 setCardViewMouseListeners();
 
@@ -439,16 +441,18 @@ public class Program {
                         }
                     }
 
-                    String results = String.format("%s%n%s%n%n%s%n%s","CARD FOUND",
+                    String results = String.format("%s%n%n%s%n%n%s%n%s","CARD FOUND",
                             cardText,"PURCHASE(S)",purchaseText);
 
-                    /* Create the inner class ResultsTextPane and popular first.
-                    * Then set the ResultsPane to visible and add the new ScrollPane
-                    * Achieved in method below - showResultsPane() */
+                    // Create the inner class ResultsTextPane and popular first.
+                    // Then set the ResultsPane to visible and add the new ScrollPane
+                    // Achieved in method below - showResultsPane()
                     showResultsPane(results, resultsPane, resultsTextPane);
+                    cardViewPane.revalidate();
+                    cardViewPane.repaint();
 
                     e.getSearchIDTextField().setText(null);
-                } else {
+                } else { // If card does not exists, it will be a negative number so invoked below
                     if (!cardIDRule.validate(input)) {
                         e.getRuleErrLabel().setVisible(true);
                         e.getErrorLabel().setVisible(false);
@@ -470,7 +474,9 @@ public class Program {
             if (cardViewPane.getCardTablePane().getSelectedRow() > 0) {
                 int selectedRow = cardViewPane.getCardTablePane().getSelectedRow();
                 String cardID = (String)cardViewPane.getCardTablePane().getValueAt(selectedRow, 0);
-
+                /* TODO - TEST CODE */
+                System.out.println("DEBUG: ");
+                System.out.println(cardID);
                 ResultsPane resultsPane = cardViewPane.getResultsPane();
                 resultsPane.setResultsTextPane();
                 ResultsPane.ResultsTextPane resultsTextPane = resultsPane.getResultsTextPane();
@@ -492,6 +498,8 @@ public class Program {
                         cText,"PURCHASE(S)", pText);
 
                 showResultsPane(textResults, resultsPane, resultsTextPane);
+                cardViewPane.revalidate();
+                cardViewPane.repaint();
             }
         });
 
