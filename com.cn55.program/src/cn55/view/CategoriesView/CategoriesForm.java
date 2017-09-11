@@ -158,7 +158,7 @@ public class CategoriesForm extends JPanel {
                     if (c instanceof FormLabel)
                         c.setForeground(Color.BLACK);
                 }
-            }else if (e.getSource() == cancelBtn) {
+            } else if (e.getSource() == cancelBtn) {
                 if (cancelListener != null)
                     cancelListener.buttonActionOccurred();
             }
