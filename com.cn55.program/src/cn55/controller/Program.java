@@ -26,7 +26,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.*;
 
-@SuppressWarnings("unused")
 public class Program {
 
     private final MainFrame mainFrame;
@@ -117,13 +116,11 @@ public class Program {
     private HashMap<Integer, Category> generateRandomCategoriesMap() {
         HashMap<Integer, Category> testingCategoryMap = new HashMap<>();
 
-        for (Category c : db.getCategories()) {
+        for (Category c : db.getCategories())
             testingCategoryMap.put(c.getId(), new Category(c));
-        }
 
-        for (HashMap.Entry<Integer, Category> item : testingCategoryMap.entrySet()) {
+        for (HashMap.Entry<Integer, Category> item : testingCategoryMap.entrySet())
             item.getValue().setAmount(generateRandomValue());
-        }
 
         return testingCategoryMap;
     }
@@ -151,10 +148,10 @@ public class Program {
         // BasicCard Test
         db.addCards(new BasicCard("Natasha Romanov",
                 "blackwidow@avengers.team", 0));
-        testMakePurchases(3,"MC10003");
+        testMakePurchases(2,"MC10003");
 
         // More Cash purchases
-        testMakePurchases(4, "Cash");
+        testMakePurchases(3, "Cash");
 
         // BasicCard Test 2
         db.addCards(new BasicCard("Steve Rogers",
@@ -174,59 +171,61 @@ public class Program {
         testMakePurchases(5,"MC10005");
 
         // More Cash purchases
-        testMakePurchases(1, "Cash");
+        testMakePurchases(2, "Cash");
+
+        // BasicCard Test 2
+        db.addCards(new BasicCard("Bruce Banner", "hulk@avengers.team", 0D));
+        testMakePurchases(2,"MC10006");
 
         // PremiumCard Test 2
         db.addCards(new PremiumCard("Nick Fury",
                 "nick@shield.com",0));
 
-        testMakePurchases(3, "MC10006");
-
-        db.addCards(new AnonCard()); //MC10007
-        testMakePurchases(2,"MC10007");
+        testMakePurchases(3, "MC10007");
 
         db.addCards(new AnonCard()); //MC10008
+        testMakePurchases(2,"MC10008");
+
+        db.addCards(new AnonCard()); //MC10009
         db.getCards().get(7).calcPoints(300D);
 
         db.addCards(new BasicCard("Hank Pym","ants@avengers.team",0)); // MC10009
         db.addCards(new BasicCard("Peter Parker", "spidey@avengers.team",0)); // MC10010
         db.addCards(new PremiumCard("Danny Rand","danny@randcorp.com",5000)); // MC10011
-        testMakePurchases(3, "MC10011");
+        testMakePurchases(3, "MC10012");
         db.addCards(new PremiumCard("Professor Charles Xavier", "x@xmen.com", 1238798)); // MC100012
-        testMakePurchases(2,"MC10012");
+        testMakePurchases(2,"MC10013");
 
         db.addCards(new BasicCard("Matthew Murdock","thedevil@hellskitchen.com", 666));
         db.addCards(new BasicCard("Thor Odinson", "thor@asgard.com",9000));
 
+        testMakePurchases(2,"MC10005");
         shop.makePurchase("Cash", Database.generateReceiptID(),
                 generateRandomCategoriesMap());
 
-        testMakePurchases(2,"MC10015");
-        testMakePurchases(2,"MC10018");
+        testMakePurchases(2,"MC10016");
+        testMakePurchases(2,"MC10005");
+        testMakePurchases(2,"MC10019");
 
         shop.makePurchase("Cash", Database.generateReceiptID(),
                 generateRandomCategoriesMap());
 
         db.addCards(new BasicCard("Clint Barton", "better_than_arrow@marvel.com", 500));
         db.addCards(new AnonCard());
-        testMakePurchases(2,"MC10016");
+        testMakePurchases(2,"MC10017");
         db.addCards(new PremiumCard("Oliver Queen", "the_best_arrow_user@dc.comics", 1500));
-        testMakePurchases(5,"MC10017");
+        testMakePurchases(3,"MC10018");
         db.addCards(new BasicCard("Loki", "the-baddest-dude@asgard.com", 0));
-        testMakePurchases(2,"MC10016");
+        testMakePurchases(2,"MC10017");
         db.addCards(new AnonCard());
         db.addCards(new AnonCard());
-        db.addCards(new PremiumCard("Pepper Potts", "potter@marvel.com", 1987234));
+        db.addCards(new PremiumCard("Pepper Potts", "ceo@starkindustries.com", 1987234));
+        testMakePurchases(1,"MC10005");
         db.addCards(new AnonCard());
         db.addCards(new AnonCard());
-        db.addCards(new PremiumCard("T'Challa", "tokenman@wakanda.africa", 105023));
+        db.addCards(new PremiumCard("King T'Challa", "tokenman@wakanda.africa", 105023));
         db.addCards(new AnonCard());
         db.addCards(new BasicCard("Logan", "wolverine@xmen.com", 0));
-        /* TEST CODE */
-        /*System.err.println("TESTING CODE");
-        for (Purchase p : db.getPurchases()) {
-            System.out.println(p.getCategoriesTotal());
-        }*/
     }
 
     /* TODO - REMOVE TEST CODE */
@@ -494,17 +493,16 @@ public class Program {
         });
 
         /* TOOLBAR | SORT */
-        cardViewPane.getSortedCombo().addItemListener(e -> {
+        cardViewPane.getSortedCombo().addItemListener((ItemEvent e) -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                if (e.getItem().equals("Sort..") || e.getItem().equals(SortCardType.CreatedOrder.getName())) {
+                if (e.getItem().equals("Sort..") || e.getItem().equals(SortCardType.CreatedOrder.getName()))
                     Collections.sort(db.getCards());
-                } else if (e.getItem().equals(SortCardType.ReverseCreatedOrder.getName())) {
+                else if (e.getItem().equals(SortCardType.ReverseCreatedOrder.getName()))
                     db.getCards().sort(new CardReverseIDComparator());
-                } else if (e.getItem().equals(SortCardType.Name.getName())) {
+                else if (e.getItem().equals(SortCardType.Name.getName()))
                     db.getCards().sort(new CardNameComparator());
-                } else if (e.getItem().equals(SortCardType.Points.getName())) {
+                else if (e.getItem().equals(SortCardType.Points.getName()))
                     db.getCards().sort(new CardPointsComparator());
-                }
                 db.notifyObservers();
             }
         });
@@ -695,6 +693,7 @@ public class Program {
                 input.setCategoryID(categoryIDStr);
                 FormRule validIDRule = new CategoryIDRule();
                 ExistsRule existsIDRule = new CategoryExistsRule();
+
                 if (!validIDRule.validate(input)) {
                     e.getErrorLabel().setVisible(false);
                     e.getOthersDeleteErrLabel().setVisible(false);
