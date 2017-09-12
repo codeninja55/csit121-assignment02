@@ -24,7 +24,10 @@ import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Random;
 
 public class Program {
 
@@ -35,8 +38,6 @@ public class Program {
     private final CardViewPane cardViewPane;
     private final PurchaseViewPane purchaseViewPane;
     private final CategoriesViewPane categoriesViewPane;
-
-    private static final Set<Double> testAmountSet = new HashSet<>();
 
     public Program() {
         shop = new Shop();
@@ -467,12 +468,10 @@ public class Program {
 
         /* TOOLBAR | VIEW BUTTON */
         cardViewPane.setViewCardListener(() -> {
-            if (cardViewPane.getCardTablePane().getSelectedRow() > 0) {
+            if (cardViewPane.getCardTablePane().getSelectedRow() >= 0) {
                 int selectedRow = cardViewPane.getCardTablePane().getSelectedRow();
                 String cardID = (String)cardViewPane.getCardTablePane().getValueAt(selectedRow, 0);
-                /* TODO - TEST CODE */
-                System.out.println("DEBUG: ");
-                System.out.println(cardID);
+                
                 ResultsPane resultsPane = cardViewPane.getResultsPane();
                 resultsPane.setResultsTextPane();
                 ResultsPane.ResultsTextPane resultsTextPane = resultsPane.getResultsTextPane();
