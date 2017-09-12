@@ -430,15 +430,13 @@ public class Program {
                     StringBuilder purchaseText = new StringBuilder("");
 
                     for (Purchase purchase : db.getPurchases()) {
-                        if (purchase.getCardID() != null) {
-                            if (purchase.getCardID().equals(cardID)) {
-                                purchaseText.append("\n");
-                                purchaseText.append(purchaseText.append(purchase.toString()));
-                            }
+                        if (purchase.getCardID() != null && purchase.getCardID().equals(cardID)) {
+                            purchaseText.append("\n");
+                            purchaseText.append(purchase.toString());
                         }
                     }
 
-                    String results = String.format("%s%n%n%s%n%n%s%n%s","CARD FOUND",
+                    String results = String.format("%s%n%n%s%n%n%s%s","CARD FOUND",
                             cardText,"PURCHASE(S)",purchaseText);
 
                     // Create the inner class ResultsTextPane and popular first.
@@ -483,11 +481,9 @@ public class Program {
                 StringBuilder pText = new StringBuilder("");
 
                 for (Purchase purchase : db.getPurchases()) {
-                    if (purchase.getCardID() != null) {
-                        if (purchase.getCardID().equals(cardID)) {
-                            pText.append("\n");
-                            pText.append(purchase.toString());
-                        }
+                    if (purchase.getCardID() != null && purchase.getCardID().equals(cardID)) {
+                        pText.append("\n");
+                        pText.append(purchase.toString());
                     }
                 }
 
