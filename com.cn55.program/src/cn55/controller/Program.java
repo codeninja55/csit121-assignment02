@@ -234,7 +234,7 @@ public class Program {
     /*============================== REGISTER AND HANDLE EVENTS ==============================*/
     private void setupViewListeners() {
         /* TAB PANE LISTENER */
-        // This method
+        // This method removes forms from the selected pane if the user selects another pane
         tabPane.addChangeListener((ChangeEvent e) -> {
             /* DESELECTED LISTENERS */
             if (tabPane.getSelectedComponent() != purchaseViewPane) {
@@ -248,7 +248,7 @@ public class Program {
             }
         });
 
-        /*============================== CARD VIEW ==============================*/
+        /*============================== CARD VIEW HANDLERS ==============================*/
         /* TOOLBAR | CREATE CARD BUTTON */
         cardViewPane.setCreateCardListener(() -> {
             removeCardForms();
@@ -499,7 +499,7 @@ public class Program {
             }
         });
 
-        /* TOOLBAR | SORT */
+        /* TOOLBAR | SORT COMBOBOX */
         cardViewPane.getSortedCombo().addItemListener((ItemEvent e) -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 if (e.getItem().equals("Sort..") || e.getItem().equals(SortCardType.CreatedOrder.getName()))
@@ -514,8 +514,8 @@ public class Program {
             }
         });
 
-        /*============================== PURCHASE VIEW ==============================*/
-        /* TOOLBAR | CREATE PURCHASE BUTTON */
+        /*============================== PURCHASE VIEW HANDLERS ==============================*/
+        /* TOOLBAR | CREATE BUTTON */
         purchaseViewPane.setCreatePurchaseListener(() -> {
             removePurchaseForms();
             purchaseViewPane.setCreatePurchaseForm(new PurchaseForm());
@@ -679,7 +679,7 @@ public class Program {
             }
         });
 
-        /*============================== CATEGORIES VIEW ==============================*/
+        /*============================== CATEGORIES VIEW HANDLERS ==============================*/
         /* TOOLBAR | CREATE CATEGORY BUTTON */
         categoriesViewPane.setCreateCategoryListener(() -> {
             removeCategoryForms();
@@ -794,6 +794,7 @@ public class Program {
     }
 
     /*============================== MUTATORS  ==============================*/
+    // Takes some arguments to create and display a ResultsPane to the right for results output
     private void showResultsPane(String text, ResultsPane resultsPane,
                                    ResultsPane.ResultsTextPane resultsTextPane) {
         resultsTextPane.setText(text);
@@ -804,6 +805,8 @@ public class Program {
         resultsPane.getResultsTextPane().setCaretPosition(0);
     }
 
+    /*==================== REMOVING FORMS METHODS ====================*/
+    // These methods all remove forms from their respective panes when they're not needed anymore
     private void removeCardForms() {
         for (Component comp : cardViewPane.getComponents()) {
             if (comp instanceof CardForm || comp instanceof DeleteCardForm || comp instanceof SearchForm) {
@@ -839,7 +842,10 @@ public class Program {
             resultsPane.remove(resultsPane.getScrollPane());
         }
     }
+    /*===============================================================*/
 
+    /*=============== SETTING MOUSE LISTENERS METHODS ===============*/
+    // These methods add a mouse listener to the JTable whenever a ResultsPane is added to the right
     private void setCardViewMouseListeners() {
         /* SET UP A MOUSE LISTENER TO CLOSE PANEL WHEN CLICKING ON TABLE OR OUTER PANEL*/
         // Only add a new MouseListener if there are less than 3 in the MouseListener[]
@@ -871,7 +877,10 @@ public class Program {
             });
         }
     }
+    /*===============================================================*/
 
+    /*=============== ADDITIONAL CREATING PURCHASES METHODS ===============*/
+    // Validates each category field of the form
     private boolean validateCatValueFields(HashMap<JLabel[], FormFormattedTextField> rawCategories) {
         boolean proceed = true;
         /* SETUP VALIDATOR FOR CATEGORY AMOUNT */
@@ -895,6 +904,8 @@ public class Program {
         return proceed;
     }
 
+    // If validation is successful, this method makes a clone of categories ready to be passed
+    // to the makePurchase method in Shop
     private HashMap<Integer, Category> getPurchaseFormCategories(PurchaseEvent event) {
         ArrayList<Category> defaultCategories = db.getCategories();
         HashMap<Integer, Category> purchaseCategories = new HashMap<>();
@@ -919,6 +930,8 @@ public class Program {
         }
     }
 
+    // If a new card is created with a purchase, this method validates and gets the Card ID
+    // from the form and sends it back to the button handler
     private String getPurchaseFormCardID(PurchaseEvent event) {
         JComboBox<String> type = event.getPurchaseTypeCombo();
 
@@ -947,5 +960,6 @@ public class Program {
         }
         return null;
     }
+    /*====================================================================*/
 
 }
