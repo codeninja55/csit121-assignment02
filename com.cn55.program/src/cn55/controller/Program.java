@@ -469,6 +469,8 @@ public class Program {
         /* TOOLBAR | VIEW BUTTON */
         cardViewPane.setViewCardListener(() -> {
             if (cardViewPane.getCardTablePane().getSelectedRow() >= 0) {
+                removeCardForms();
+
                 int selectedRow = cardViewPane.getCardTablePane().getSelectedRow();
                 String cardID = (String)cardViewPane.getCardTablePane().getValueAt(selectedRow, 0);
 
