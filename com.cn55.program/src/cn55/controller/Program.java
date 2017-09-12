@@ -88,28 +88,24 @@ public class Program {
     @SuppressWarnings("ConstantConditions")
     private Double generateRandomValue() {
         Random randomValueObj = new Random();
-        int value1, value2, result;
-        Double finalVal;
-        value1 = randomValueObj.ints(0,99).findFirst().getAsInt();
-        value2 = randomValueObj.ints(0,9).findFirst().getAsInt();
+        ArrayList<Double> valueOptions = new ArrayList<>();
+        valueOptions.add(0D);
+        valueOptions.add(10D);
+        valueOptions.add(20D);
+        valueOptions.add(30D);
+        valueOptions.add(40D);
+        valueOptions.add(50D);
+        valueOptions.add(60D);
+        valueOptions.add(70D);
+        valueOptions.add(80D);
+        valueOptions.add(90D);
+        valueOptions.add(100D);
+        valueOptions.add(200D);
+        valueOptions.add(300D);
+        valueOptions.add(400D);
+        valueOptions.add(500D);
 
-        result = value1 * value2;
-        if (result < 100) {
-            finalVal = result * 10D;
-        } else if (result > 100 && result < 300) {
-            finalVal = result / 5D;
-        } else if (result > 300) {
-            finalVal = result / 2D;
-        } else {
-            finalVal = result * 5D;
-        }
-
-        if (testAmountSet.contains(finalVal)) {
-            return generateRandomValue();
-        } else {
-            testAmountSet.add(finalVal);
-            return finalVal;
-        }
+        return valueOptions.get(randomValueObj.nextInt(valueOptions.size()));
     }
 
     /* TODO - REMOVE TEST CODE */
@@ -605,6 +601,34 @@ public class Program {
                     event.getPurchaseErrorLabel().setVisible(true);
                 }
             });
+        });
+
+        /* TOOLBAR | SUMMARY BUTTON */
+        purchaseViewPane.setSummaryListener(() -> {
+            ResultsPane resultsPane = purchaseViewPane.getResultsPane();
+            resultsPane.setResultsTextPane();
+            ResultsPane.ResultsTextPane resultsTextPane = resultsPane.getResultsTextPane();
+            setPurchaseViewPaneMouseListeners();
+
+            double cashTotal = 0;
+            double cardTotal = 0;
+            double allTotal = 0;
+
+            for (Purchase purchase : db.getPurchases()) {
+                double purchaseTotal = purchase.getCategoriesTotal();
+                if (purchase.getCardType().equals(CardType.Cash.getName()))
+                    cashTotal += purchaseTotal;
+                else
+                    cardTotal += purchaseTotal;
+                allTotal += purchaseTotal;
+            }
+
+            String resultsText = String.format("%n%n%s%n%n%s: $%.2f%n%n%s: $%.2f%n%n%s: $%.2f", "SUMMARY OF PURCHASES",
+                    "Card Purchase Total", cardTotal,
+                    "Cash Purchase Total", cashTotal,
+                    "Total for All Purchases", allTotal);
+
+            showResultsPane(resultsText, resultsPane, resultsTextPane);
         });
 
         /* TOOLBAR | VIEW  BUTTON */
