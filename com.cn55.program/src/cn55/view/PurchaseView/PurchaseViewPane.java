@@ -23,6 +23,7 @@ public class PurchaseViewPane extends JPanel implements Observer {
     private Subject database;
     private final ToolbarButton createPurchaseBtn;
     private final ToolbarButton deletePurchaseBtn;
+    private final ToolbarButton summaryBtn;
     private final JComboBox<String> sortPurchaseCombo;
     private final ToolbarButton viewPurchaseBtn;
 
@@ -34,6 +35,7 @@ public class PurchaseViewPane extends JPanel implements Observer {
 
     private ToolbarButtonListener createPurchaseListener;
     //private ToolbarButtonListener deletePurchaseListener;
+    private ToolbarButtonListener summaryListener;
     private ToolbarButtonListener viewPurchaseListener;
 
     /*============================== CONSTRUCTORS ==============================*/
@@ -41,6 +43,7 @@ public class PurchaseViewPane extends JPanel implements Observer {
         Toolbar toolbar = new Toolbar();
         createPurchaseBtn = new ToolbarButton("Create");
         deletePurchaseBtn = new ToolbarButton("Delete");
+        summaryBtn = new ToolbarButton("Summary");
         viewPurchaseBtn = new ToolbarButton("View");
         sortPurchaseCombo = new JComboBox<>();
         DefaultComboBoxModel<String> options = new DefaultComboBoxModel<>();
@@ -69,6 +72,7 @@ public class PurchaseViewPane extends JPanel implements Observer {
         /* TOOLBAR */
         toolbar.getLeftToolbar().add(createPurchaseBtn);
         toolbar.getLeftToolbar().add(deletePurchaseBtn);
+        toolbar.getLeftToolbar().add(summaryBtn);
         deletePurchaseBtn.setBackground(Style.blueGrey800());
         deletePurchaseBtn.setEnabled(false);
         toolbar.getRightToolbar().add(viewPurchaseBtn);
@@ -85,9 +89,11 @@ public class PurchaseViewPane extends JPanel implements Observer {
         ToolbarListener handler = new ToolbarListener();
         createPurchaseBtn.addActionListener(handler);
         deletePurchaseBtn.addActionListener(handler);
+        summaryBtn.addActionListener(handler);
         viewPurchaseBtn.addActionListener(handler);
         createPurchaseBtn.addMouseListener(handler);
         deletePurchaseBtn.addMouseListener(handler);
+        summaryBtn.addMouseListener(handler);
         viewPurchaseBtn.addMouseListener(handler);
     }
 
@@ -99,6 +105,10 @@ public class PurchaseViewPane extends JPanel implements Observer {
     /*public void setDeletePurchaseListener(ToolbarButtonListener listener) {
         this.deletePurchaseListener = listener;
     }*/
+
+    public void setSummaryListener(ToolbarButtonListener listener) {
+        this.summaryListener = listener;
+    }
 
     public void setViewPurchaseListener(ToolbarButtonListener listener) {
         this.viewPurchaseListener = listener;
@@ -176,21 +186,30 @@ public class PurchaseViewPane extends JPanel implements Observer {
             } else if (e.getSource() == viewPurchaseBtn) {
                 if (viewPurchaseListener != null)
                     viewPurchaseListener.toolbarButtonEventOccurred();
+            } else if (e.getSource() == summaryBtn) {
+                if (summaryListener != null)
+                    summaryListener.toolbarButtonEventOccurred();
             }
         }
 
         public void mouseEntered(MouseEvent e) {
             if (e.getSource() == createPurchaseBtn)
                 Style.hoverEffect(createPurchaseBtn, true);
-            else if (e.getSource() == viewPurchaseBtn)
+            else if (e.getSource() == summaryBtn)
+                Style.hoverEffect(summaryBtn, true);
+            else if (e.getSource() == viewPurchaseBtn) {
                 Style.hoverEffect(viewPurchaseBtn, true);
+            }
         }
 
         public void mouseExited(MouseEvent e) {
-            if (e.getSource() == createPurchaseBtn)
+            if (e.getSource() == createPurchaseBtn) {
                 Style.hoverEffect(createPurchaseBtn, false);
-            else if (e.getSource() == viewPurchaseBtn)
+            } else if (e.getSource() == viewPurchaseBtn)
                 Style.hoverEffect(viewPurchaseBtn, false);
+            else if (e.getSource() == summaryBtn)
+                Style.hoverEffect(summaryBtn, false);
+
         }
     }
 
