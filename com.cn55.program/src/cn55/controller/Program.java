@@ -299,7 +299,7 @@ public class Program {
                     shop.makeCard(newCard);
                 }
 
-                int cardIndex = db.getCardMap().get(e.getCardIDTextField().getText());
+                int cardIndex = db.getCardMap().get(e.getCardIDTextField().getText().toUpperCase());
                 showResultsPane(db.getCards().get(cardIndex).toString(), resultsPane, resultsTextPane);
                 removeCardForms();
             });
@@ -556,7 +556,6 @@ public class Program {
                         shop.makePurchase(cardID, receiptID, categories);
                         resultsText = db.getPurchases().get(db.getPurchaseMap().get(receiptID)).toString();
                         showResultsPane(resultsText,resultsPane,resultsTextPane);
-
                         removePurchaseForms();
                     } else if (type.getSelectedItem().equals(PurchaseType.NewCardPurchase.getName())) {
                         String cardType = null;
@@ -586,14 +585,11 @@ public class Program {
                         resultsText = db.getCards().get(db.getCardMap().get(cardID)).toString() +
                                 db.getPurchases().get(db.getPurchaseMap().get(receiptID));
                         showResultsPane(resultsText,resultsPane,resultsTextPane);
-
                         removePurchaseForms();
-
                     } else if (type.getSelectedItem().equals(PurchaseType.CashPurchase.getName())) {
                         shop.makePurchase(cardID, receiptID, categories);
                         resultsText = db.getPurchases().get(db.getPurchaseMap().get(receiptID)).toString();
                         showResultsPane(resultsText,resultsPane,resultsTextPane);
-
                         removePurchaseForms();
                     }
                 } else {
@@ -887,7 +883,6 @@ public class Program {
         FormRule catAmountRule = new CategoryAmountRule();
 
         for (HashMap.Entry<JLabel[], FormFormattedTextField> item : rawCategories.entrySet()) {
-            //input.setCatValueStr(((Number)item.getValue().getValue()).doubleValue());
             input.setCatValueStr(item.getValue().getText());
             if (!catAmountRule.validate(input)) {
                 item.getKey()[0].setForeground(Style.redA700());
@@ -923,7 +918,14 @@ public class Program {
                     }
                 }
             }
-            return purchaseCategories;
+
+            double checkTotal = 0;
+            for (Category item : purchaseCategories.values())
+                checkTotal += item.getAmount();
+
+            if (checkTotal <= 0) return null;
+            else return purchaseCategories;
+
         } else {
             return null;
         }

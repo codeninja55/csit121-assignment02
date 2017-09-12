@@ -190,6 +190,8 @@ public class CardForm extends JPanel {
         cardNameTextField.setEditable(isEnabled);
         cardEmailLabel.setEnabled(isEnabled);
         cardEmailTextField.setEditable(isEnabled);
+        cardNameTextField.setText(null);
+        cardEmailTextField.setText(null);
     }
 
     private void hideErrorLabels() {
