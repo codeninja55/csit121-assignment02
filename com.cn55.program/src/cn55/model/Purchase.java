@@ -80,10 +80,7 @@ public class Purchase {
                 "Card Type:",this.cardType,
                 "Purchase Time:",this.purchaseTime);
 
-        for (HashMap.Entry<Integer, Category> item : this.categories.entrySet())
-            secondOutput.append(String.format("%n%-20s $%.2f", (item.getValue().getName() + ":"),
-                    item.getValue().getAmount()));
-
+        categories.forEach((k, v) -> secondOutput.append(String.format("%n%-20s $%.2f", (v.getName() + ":"), v.getAmount())));
         return firstOutput + secondOutput;
     }
 }

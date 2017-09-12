@@ -91,22 +91,19 @@ public class Shop {
     // Converts a purchase from a card purchase to a cash purchase when the card has been deleted
     public void convertPurchase(String cardID) {
         db.mapPurchases();
-        for (Purchase purchase : db.getPurchases()) {
-            if (purchase.getCardID() != null && purchase.getCardID().equals(cardID))
-                purchase.convertPurchase();
-        }
+        db.getPurchases().forEach(p -> {
+            if (p.getCardID() != null && p.getCardID().equals(cardID)) p.convertPurchase();
+        });
     }
 
     public void deleteCategory(int categoryID) {
         db.mapCategories();
         // MOVE AMOUNT TO OTHERS FOR EACH PURCHASE
-        for (Purchase purchase : db.getPurchases()) {
-            // Get the Others Category
-            Category other = purchase.getCategories().get(100);
-            Category deletedCat = purchase.getCategories().get(categoryID);
-            other.setAmount(other.getAmount() + deletedCat.getAmount());
-            purchase.getCategories().remove(categoryID);
-        }
+        db.getPurchases().forEach((Purchase p) -> {
+            Category other = p.getCategories().get(100);
+            other.setAmount(other.getAmount() + p.getCategories().get(categoryID).getAmount());
+            p.getCategories().remove(categoryID);
+        });
 
         Double newValue = Database.getCategoriesTotalMap().get(100) + Database.getCategoriesTotalMap().get(categoryID);
         Database.getCategoriesTotalMap().replace(100, newValue);
@@ -114,10 +111,4 @@ public class Shop {
 
         db.removeCategory(db.getCategoriesMap().get(categoryID));
     }
-
-// --Commented out by Inspection START (6/09/17 12:10 PM):
-//    /*============================== ACCESSORS ==============================*/
-//    public Database getDatabase() { return db; }
-// --Commented out by Inspection STOP (6/09/17 12:10 PM)
-
 }

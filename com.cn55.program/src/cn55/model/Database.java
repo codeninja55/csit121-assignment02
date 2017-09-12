@@ -76,33 +76,26 @@ public class Database implements Subject {
     /*============================== MUTATORS  ==============================*/
     void mapCards() {
         HashMap<String, Integer> cardMap = new HashMap<>();
-        for (Card card : cards)
-            cardMap.put(card.getID(), cards.indexOf(card));
-
+        cards.forEach((card)->cardMap.put(card.getID(), cards.indexOf(card)));
         this.cardMap = cardMap;
     }
 
     void mapPurchases() {
         HashMap<Integer, Integer> purchaseMap = new HashMap<>();
-        for (Purchase purchase : purchases)
-            purchaseMap.put(purchase.getReceiptID(), purchases.indexOf(purchase));
-
+        purchases.forEach((purchase)->purchaseMap.put(purchase.getReceiptID(), purchases.indexOf(purchase)));
         this.purchaseMap = purchaseMap;
     }
 
     void mapCategories() {
         HashMap<Integer, Integer> categoriesMap = new HashMap<>();
-        for (Category category : categories)
-            categoriesMap.put(category.getId(), categories.indexOf(category));
-
+        categories.forEach((category)->categoriesMap.put(category.getId(), categories.indexOf(category)));
         this.categoriesMap = categoriesMap;
     }
 
     // Map the Categories to a HashMap to store total amounts for each category across the whole program
     static void mapCategoriesTotalMap(ArrayList<Category> categories) {
         if (categoriesTotalMap.size() == 0)
-            for (Category item : categories)
-                categoriesTotalMap.put(item.getId(), 0D);
+            categories.forEach((item)->categoriesTotalMap.put(item.getId(), 0D));
     }
 
     // Accepts the same categories HashMap stored in a Purchase object and updates the categoriesTotalMap
@@ -184,8 +177,11 @@ public class Database implements Subject {
 
     public DefaultComboBoxModel<String> getCardModel() {
         DefaultComboBoxModel<String> cardModel = new DefaultComboBoxModel<>();
+        ArrayList<Card> cardsClone = new ArrayList<>();
+        cardsClone.addAll(cards);
+        cardsClone.sort(Comparator.comparing(Card::getID));
         cardModel.addElement("Please Select");
-        for (Card card : cards) cardModel.addElement(card.getID());
+        cardsClone.forEach((card)->cardModel.addElement(card.getID()));
         return cardModel;
     }
 

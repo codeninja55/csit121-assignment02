@@ -78,6 +78,7 @@ public class Program {
             if (c instanceof Container)
                 compList.addAll(getAllComponents((Container) c));
         }
+
         return compList;
     }
 
@@ -108,12 +109,8 @@ public class Program {
     /* TODO - REMOVE TEST CODE */
     private HashMap<Integer, Category> generateRandomCategoriesMap() {
         HashMap<Integer, Category> testingCategoryMap = new HashMap<>();
-
-        for (Category c : db.getCategories())
-            testingCategoryMap.put(c.getId(), new Category(c));
-
-        for (HashMap.Entry<Integer, Category> item : testingCategoryMap.entrySet())
-            item.getValue().setAmount(generateRandomValue());
+        db.getCategories().forEach((cat) -> testingCategoryMap.put(cat.getId(), new Category(cat)));
+        testingCategoryMap.forEach((k,v)->v.setAmount(generateRandomValue()));
 
         return testingCategoryMap;
     }
@@ -425,12 +422,12 @@ public class Program {
                     String cardText = db.getCards().get(cardIndex).toString();
                     StringBuilder purchaseText = new StringBuilder("");
 
-                    for (Purchase purchase : db.getPurchases()) {
-                        if (purchase.getCardID() != null && purchase.getCardID().equals(cardID)) {
+                    db.getPurchases().forEach((p)->{
+                        if (p.getCardID() != null && p.getCardID().equals(cardID)) {
                             purchaseText.append("\n");
-                            purchaseText.append(purchase.toString());
+                            purchaseText.append(p.toString());
                         }
-                    }
+                    });
 
                     String results = String.format("%s%n%n%s%n%n%s%s","CARD FOUND",
                             cardText,"PURCHASE(S)",purchaseText);
@@ -476,12 +473,12 @@ public class Program {
                 String cText = db.getCards().get(db.getCardMap().get(cardID)).toString();
                 StringBuilder pText = new StringBuilder("");
 
-                for (Purchase purchase : db.getPurchases()) {
-                    if (purchase.getCardID() != null && purchase.getCardID().equals(cardID)) {
+                db.getPurchases().forEach((p)-> {
+                    if (p.getCardID() != null && p.getCardID().equals(cardID)) {
                         pText.append("\n");
-                        pText.append(purchase.toString());
+                        pText.append(p.toString());
                     }
-                }
+                });
 
                 String textResults = String.format("%s%n%s%n%n%s%n%s","CARD",
                         cText,"PURCHASE(S)", pText);
@@ -630,6 +627,8 @@ public class Program {
                     "Total for All Purchases", allTotal);
 
             showResultsPane(resultsText, resultsPane, resultsTextPane);
+            purchaseViewPane.revalidate();
+            purchaseViewPane.repaint();
         });
 
         /* TOOLBAR | VIEW  BUTTON */
@@ -645,12 +644,12 @@ public class Program {
 
                 String resultsText = "";
                 for (Purchase purchase : db.getPurchases()) {
-                    if (purchase.getReceiptID() == receiptID) {
+                    if (purchase.getReceiptID() == receiptID)
                         resultsText = purchase.toString();
-                    }
                 }
 
                 showResultsPane(resultsText, resultsPane, resultsTextPane);
+
             }
         });
 
@@ -661,21 +660,15 @@ public class Program {
                 if (e.getItem().equals(SortPurchaseType.All.getName())) {
                     purchaseViewPane.update();
                 } else if (e.getItem().equals(SortPurchaseType.Card.getName())) {
-                    for (Purchase item : db.getPurchases()) {
-                        /* NEGATIVE CASH VALIDATION */
-                        if (item.getCardID() != null) {
-                            tempPurchases.add(item);
-                        }
-                    }
+                    /* NEGATIVE CASH VALIDATION */
+                    for (Purchase item : db.getPurchases())
+                        if (item.getCardID() != null) tempPurchases.add(item);
                     purchaseViewPane.sortPurchaseTableMode(tempPurchases);
                 } else if (e.getItem().equals(SortPurchaseType.Cash.getName())) {
-                    for (Purchase item : db.getPurchases()) {
-                        /* POSITIVE CASH Validation */
-                        if (item.getCardID() == null) {
-                            tempPurchases.add(item);
-                        }
-                        purchaseViewPane.sortPurchaseTableMode(tempPurchases);
-                    }
+                    /* POSITIVE CASH Validation */
+                    for (Purchase item : db.getPurchases())
+                        if (item.getCardID() == null) tempPurchases.add(item);
+                    purchaseViewPane.sortPurchaseTableMode(tempPurchases);
                 }
             }
         });
@@ -854,10 +847,10 @@ public class Program {
         if (cardViewPane.getCardTablePane().getMouseListeners().length < 3) {
             cardViewPane.getCardTablePane().addMouseListener(new MouseAdapter() {
                 public void mouseClicked(MouseEvent e) {
-                    super.mouseClicked(e);
-                    cardViewPane.getResultsPane().setVisible(false);
-                    removeCardForms();
-                    removeResultsPane(cardViewPane.getResultsPane());
+                super.mouseClicked(e);
+                cardViewPane.getResultsPane().setVisible(false);
+                removeCardForms();
+                removeResultsPane(cardViewPane.getResultsPane());
                 }
             });
         }
@@ -870,10 +863,10 @@ public class Program {
         if (purchaseViewPane.getPurchaseTablePane().getMouseListeners().length < 3) {
             purchaseViewPane.getPurchaseTablePane().addMouseListener(new MouseAdapter() {
                 public void mouseClicked(MouseEvent e) {
-                    super.mouseClicked(e);
-                    purchaseViewPane.getResultsPane().setVisible(false);
-                    removePurchaseForms();
-                    removeResultsPane(purchaseViewPane.getResultsPane());
+                super.mouseClicked(e);
+                purchaseViewPane.getResultsPane().setVisible(false);
+                removePurchaseForms();
+                removeResultsPane(purchaseViewPane.getResultsPane());
                 }
             });
         }
@@ -916,22 +909,20 @@ public class Program {
                 String catName = labelStr.substring(0, labelStr.indexOf(":"));
                 Double catValue = ((Number)item.getValue().getValue()).doubleValue();
 
-                for (Category c : defaultCategories) {
-                    if (c.getName().equals(catName)) {
-                        Category cloneCategory = new Category(c);
+                defaultCategories.forEach((cat) -> {
+                    if (cat.getName().equals(catName)) {
+                        Category cloneCategory = new Category(cat);
                         cloneCategory.setAmount(catValue);
-                        purchaseCategories.put(c.getId(), cloneCategory);
+                        purchaseCategories.put(cat.getId(), cloneCategory);
                     }
-                }
+                });
             }
 
             double checkTotal = 0;
             for (Category item : purchaseCategories.values())
                 checkTotal += item.getAmount();
 
-            if (checkTotal <= 0) return null;
-            else return purchaseCategories;
-
+            return (checkTotal <= 0) ? null : purchaseCategories;
         } else {
             return null;
         }
