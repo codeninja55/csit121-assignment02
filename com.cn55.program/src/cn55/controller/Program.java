@@ -471,7 +471,7 @@ public class Program {
             if (cardViewPane.getCardTablePane().getSelectedRow() >= 0) {
                 int selectedRow = cardViewPane.getCardTablePane().getSelectedRow();
                 String cardID = (String)cardViewPane.getCardTablePane().getValueAt(selectedRow, 0);
-                
+
                 ResultsPane resultsPane = cardViewPane.getResultsPane();
                 resultsPane.setResultsTextPane();
                 ResultsPane.ResultsTextPane resultsTextPane = resultsPane.getResultsTextPane();
