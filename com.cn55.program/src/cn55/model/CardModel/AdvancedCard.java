@@ -1,7 +1,7 @@
 package cn55.model.CardModel;
 
 @SuppressWarnings("unused")
-abstract class AdvancedCard extends Card {
+public abstract class AdvancedCard extends Card {
     String name;
     String email;
     double balance;
@@ -14,4 +14,16 @@ abstract class AdvancedCard extends Card {
     }
 
     public boolean equals (AdvancedCard other) { return this.name.equals(other.name); }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
 }

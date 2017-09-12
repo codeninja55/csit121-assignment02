@@ -24,10 +24,7 @@ import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Random;
+import java.util.*;
 
 public class Program {
 
@@ -78,9 +75,8 @@ public class Program {
 
         for (Component c : comps) {
             compList.add(c);
-            if (c instanceof Container) {
+            if (c instanceof Container)
                 compList.addAll(getAllComponents((Container) c));
-            }
         }
         return compList;
     }
@@ -497,16 +493,28 @@ public class Program {
         });
 
         /* TOOLBAR | SORT COMBOBOX */
-        cardViewPane.getSortedCombo().addItemListener((ItemEvent e) -> {
+        cardViewPane.getSortedCombo().addItemListener((e) -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 if (e.getItem().equals("Sort..") || e.getItem().equals(SortCardType.CreatedOrder.getName()))
-                    Collections.sort(db.getCards());
+                    // Lambda version of sorting with Comparator comparing method
+                    db.getCards().sort(Comparator.comparing(Card::getID));
                 else if (e.getItem().equals(SortCardType.ReverseCreatedOrder.getName()))
-                    db.getCards().sort(new CardReverseIDComparator());
+                    // Lambda version of sorting with Comparator
+                    db.getCards().sort((Card c1, Card c2)->c2.getID().compareTo(c1.getID()));
                 else if (e.getItem().equals(SortCardType.Name.getName()))
-                    db.getCards().sort(new CardNameComparator());
+                    // Lambda version of sorting with Comparator
+                    db.getCards().sort(((c1, c2) -> {
+                        if (c1 instanceof AdvancedCard && c2 instanceof AdvancedCard)
+                            return ((AdvancedCard) c1).getName().compareTo(((AdvancedCard) c2).getName());
+
+                        if (c1 instanceof AnonCard && c2 instanceof AdvancedCard)
+                            return -1;
+                        else
+                            return 1;
+                    }));
                 else if (e.getItem().equals(SortCardType.Points.getName()))
-                    db.getCards().sort(new CardPointsComparator());
+                    // Lambda version of sorting with Comparator comparingDouble method
+                    db.getCards().sort(Comparator.comparingDouble(Card::getPoints));
                 db.notifyObservers();
             }
         });
@@ -672,7 +680,7 @@ public class Program {
             }
         });
 
-        /*============================== CATEGORIES VIEW HANDLERS ==============================*/
+        /*=========================== CATEGORIES VIEW HANDLERS ===========================*/
         /* TOOLBAR | CREATE CATEGORY BUTTON */
         categoriesViewPane.setCreateCategoryListener(() -> {
             removeCategoryForms();

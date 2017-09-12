@@ -1,15 +1,9 @@
 package cn55.model.CardModel;
 
-/*
- * @author Dinh Che
- * Student Number: 5721970
- * Email: dbac496@uowmail.edu.au
- */
-
 import cn55.model.CardType;
 
 public class BasicCard extends AdvancedCard {
-    private static final double POINTS_RATE = 0.015;
+    private final double POINTS_RATE = 0.015;
 
     /*============================== CONSTRUCTORS  ==============================*/
     public BasicCard(String name, String email) {
@@ -39,8 +33,4 @@ public class BasicCard extends AdvancedCard {
                 "Customer Name",this.name,
                 "Customer Email",this.email);
     }
-
-    public String getName() { return name; }
-    public String getEmail() { return email; }
-    public double getBalance() { return balance; }
 }

@@ -40,8 +40,6 @@ public abstract class Card implements Comparable<Card> {
 
     @Override
     public int compareTo(Card o) {
-        int id = Integer.parseInt(this.getID().substring(2, this.getID().length()));
-        int oid = Integer.parseInt(o.getID().substring(2, o.getID().length()));
-        return Integer.compare(id, oid);
+        return this.id.compareTo(o.getID());
     }
 }
