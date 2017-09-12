@@ -4,12 +4,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
-/*
- * @author Dinh Che
- * Student Number: 5721970
- * Email: dbac496@uowmail.edu.au
- */
-
 @SuppressWarnings("SameParameterValue")
 public class Purchase {
     private final int receiptID;
@@ -40,10 +34,8 @@ public class Purchase {
     /*============================== MUTATORS  ==============================*/
 
     private Date setPurchaseTime() {
-        // create a java calendar instance and sets that to a Date object
         // REFERENCE: https://alvinalexander.com/java/java-timestamp-example-current-time-now
-        Calendar calendar = Calendar.getInstance();
-        return calendar.getTime();
+        return Calendar.getInstance().getTime();
     }
 
     void convertPurchase() {
@@ -65,11 +57,9 @@ public class Purchase {
     public Date getPurchaseTime() { return purchaseTime; }
 
     public double getCategoriesTotal() {
-        double total = 0;
-        for (HashMap.Entry<Integer, Category> item : this.categories.entrySet())
-            total = total + item.getValue().getAmount();
-
-        return total;
+        return categories.values().stream()
+                .mapToDouble(Category::getAmount)
+                .sum();
     }
 
     public String toString() {

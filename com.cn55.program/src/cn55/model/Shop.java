@@ -9,6 +9,7 @@ import cn55.model.CardModel.Card;
 import cn55.model.CardModel.PremiumCard;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 
 @SuppressWarnings("ConstantConditions")
@@ -33,7 +34,6 @@ public class Shop {
         categories.add(new Category("Toys", "#Description"));
         categories.add(new Category("Deals", "#Description"));
 
-        categories.sort(new CategoriesComparator());
         db.mapCategories();
         db.notifyObservers();
     }

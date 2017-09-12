@@ -190,41 +190,28 @@ public class CardViewPane extends JPanel implements Observer {
     public class ToolbarListener extends MouseAdapter implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == searchBtn) {
-                if (searchCardListener != null)
-                    searchCardListener.toolbarButtonEventOccurred();
+                if (searchCardListener != null) searchCardListener.toolbarButtonEventOccurred();
             } else if (e.getSource() == createCardBtn) {
-                if (createCardListener != null)
-                    createCardListener.toolbarButtonEventOccurred();
+                if (createCardListener != null) createCardListener.toolbarButtonEventOccurred();
             } else if (e.getSource() == deleteCardBtn) {
-                if (deleteCardListener != null)
-                    deleteCardListener.toolbarButtonEventOccurred();
+                if (deleteCardListener != null) deleteCardListener.toolbarButtonEventOccurred();
             } else if (e.getSource() == viewBtn) {
-                if (viewCardListener != null) {
-                    viewCardListener.toolbarButtonEventOccurred();
-                }
+                if (viewCardListener != null) viewCardListener.toolbarButtonEventOccurred();
             }
         }
 
         public void mouseEntered(MouseEvent e) {
-            if (e.getSource() == createCardBtn)
-                Style.hoverEffect(createCardBtn, true);
-            else if (e.getSource() == deleteCardBtn)
-                Style.hoverEffect(deleteCardBtn, true);
-            else if (e.getSource() == viewBtn)
-                Style.hoverEffect(viewBtn, true);
-            else if (e.getSource() == searchBtn)
-                Style.hoverEffect(searchBtn, true);
+            if (e.getSource() == createCardBtn) Style.hoverEffect(createCardBtn, true);
+            else if (e.getSource() == deleteCardBtn) Style.hoverEffect(deleteCardBtn, true);
+            else if (e.getSource() == viewBtn) Style.hoverEffect(viewBtn, true);
+            else if (e.getSource() == searchBtn) Style.hoverEffect(searchBtn, true);
         }
 
         public void mouseExited(MouseEvent e) {
-            if (e.getSource() == createCardBtn)
-                Style.hoverEffect(createCardBtn, false);
-            else if (e.getSource() == deleteCardBtn)
-                Style.hoverEffect(deleteCardBtn, false);
-            else if (e.getSource() == viewBtn)
-                Style.hoverEffect(viewBtn, false);
-            else if (e.getSource() == searchBtn)
-                Style.hoverEffect(searchBtn, false);
+            if (e.getSource() == createCardBtn) Style.hoverEffect(createCardBtn, false);
+            else if (e.getSource() == deleteCardBtn) Style.hoverEffect(deleteCardBtn, false);
+            else if (e.getSource() == viewBtn) Style.hoverEffect(viewBtn, false);
+            else if (e.getSource() == searchBtn) Style.hoverEffect(searchBtn, false);
         }
 
 

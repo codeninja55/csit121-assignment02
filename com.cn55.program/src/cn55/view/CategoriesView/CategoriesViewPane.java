@@ -15,6 +15,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 
 public class CategoriesViewPane extends JPanel implements Observer {
     private Subject database;
@@ -40,9 +41,7 @@ public class CategoriesViewPane extends JPanel implements Observer {
         categoriesTableModel = new CategoriesTableModel();
         categoriesTablePane = new JTable();
         JScrollPane tableScrollPane = new JScrollPane(categoriesTablePane);
-        tableScrollPane.setName("CategoriesViewTableScrollPane");
 
-        setName("CategoriesViewPane");
         setLayout(new BorderLayout());
 
         /* TOOLBAR */
@@ -123,11 +122,13 @@ public class CategoriesViewPane extends JPanel implements Observer {
     class ToolbarListener extends MouseAdapter implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == createCategoryBtn) {
-                if (createCategoryListener != null)
+                if (createCategoryListener != null) {
                     createCategoryListener.toolbarButtonEventOccurred();
+                }
             } else if (e.getSource() == deleteCategoryBtn) {
-                if (deleteCategoryListener != null)
+                if (deleteCategoryListener != null) {
                     deleteCategoryListener.toolbarButtonEventOccurred();
+                }
             }
         }
 
@@ -154,6 +155,7 @@ public class CategoriesViewPane extends JPanel implements Observer {
 
         void setData(ArrayList<Category> categories) {
             Collections.sort(categories);
+            categories.sort(Comparator.comparingInt(Category::getId));
             this.categories = categories;
         }
 

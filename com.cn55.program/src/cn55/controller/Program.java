@@ -117,9 +117,8 @@ public class Program {
 
     /* TODO - REMOVE TEST CODE */
     private void testMakePurchases(int numOfPurchases, String id) {
-        for (int i = 0; i < numOfPurchases; i++) {
+        for (int i = 0; i < numOfPurchases; i++)
             shop.makePurchase(id, Database.generateReceiptID(), generateRandomCategoriesMap());
-        }
     }
 
     /* TODO - REMOVE TEST CODE */
@@ -220,9 +219,8 @@ public class Program {
 
     /* TODO - REMOVE TEST CODE */
     private void createTooManyCategories() {
-        for (int i = 0; i < 35; i++) {
+        for (int i = 0; i < 35; i++)
             db.addCategory(new Category(String.format("%s%d","Testing", i)));
-        }
     }
 
     /*============================== REGISTER AND HANDLE EVENTS ==============================*/
@@ -899,12 +897,12 @@ public class Program {
 
     // If validation is successful, this method makes a clone of categories ready to be passed
     // to the makePurchase method in Shop
-    private HashMap<Integer, Category> getPurchaseFormCategories(PurchaseEvent event) {
+    private HashMap<Integer, Category> getPurchaseFormCategories(PurchaseEvent e) {
         ArrayList<Category> defaultCategories = db.getCategories();
         HashMap<Integer, Category> purchaseCategories = new HashMap<>();
 
-        if (validateCatValueFields(event.getCategoriesMap())) {
-            for (HashMap.Entry<JLabel[], FormFormattedTextField> item : event.getCategoriesMap().entrySet()) {
+        if (validateCatValueFields(e.getCategoriesMap())) {
+            for (HashMap.Entry<JLabel[], FormFormattedTextField> item : e.getCategoriesMap().entrySet()) {
                 String labelStr = item.getKey()[0].getText();
                 String catName = labelStr.substring(0, labelStr.indexOf(":"));
                 Double catValue = ((Number)item.getValue().getValue()).doubleValue();
@@ -918,10 +916,7 @@ public class Program {
                 });
             }
 
-            double checkTotal = 0;
-            for (Category item : purchaseCategories.values())
-                checkTotal += item.getAmount();
-
+            double checkTotal = purchaseCategories.values().stream().mapToDouble(Category::getAmount).sum();
             return (checkTotal <= 0) ? null : purchaseCategories;
         } else {
             return null;

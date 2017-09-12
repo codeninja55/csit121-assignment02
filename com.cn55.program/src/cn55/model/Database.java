@@ -42,9 +42,7 @@ public class Database implements Subject {
     // Provide global point of access
     // Double check locking mechanism but only with the initial call
     public static synchronized Database getDBInstance() {
-        if (db == null)
-            db = new Database();
-
+        if (db == null) db = new Database();
         return db;
     }
 
@@ -95,7 +93,7 @@ public class Database implements Subject {
     // Map the Categories to a HashMap to store total amounts for each category across the whole program
     static void mapCategoriesTotalMap(ArrayList<Category> categories) {
         if (categoriesTotalMap.size() == 0)
-            categories.forEach((item)->categoriesTotalMap.put(item.getId(), 0D));
+            categories.forEach((item) -> categoriesTotalMap.put(item.getId(), 0D));
     }
 
     // Accepts the same categories HashMap stored in a Purchase object and updates the categoriesTotalMap
@@ -199,9 +197,7 @@ public class Database implements Subject {
 
     @Override
     public void notifyObservers() {
-        for (Observer obs : observers) {
-            obs.update();
-        }
+        observers.forEach(Observer::update);
     }
 
     @Override

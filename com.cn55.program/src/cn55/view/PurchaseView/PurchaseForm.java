@@ -10,6 +10,8 @@ import java.awt.event.*;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 
 @SuppressWarnings("SameParameterValue")
@@ -128,7 +130,7 @@ public class PurchaseForm extends JPanel {
         /* CREATE BASE FORM WITH PURCHASE - PANEL */
         baseCreatePurchaseForm = new JPanel(new GridBagLayout());
 
-        /* Dynamically creates categoriesMap HashMap<FormLabel, FormTextField> */
+        // Dynamically creates categoriesMap HashMap<FormLabel, FormTextField>
         createCategoriesListForm();
 
         GridBagConstraints gc = new GridBagConstraints();
@@ -259,9 +261,9 @@ public class PurchaseForm extends JPanel {
         baseCreatePurchaseForm.add(clearBtn, gc);
 
         /* BY DEFAULT CLEAR ALL TEXT FIELDS */
-        for (Component item : baseCreatePurchaseForm.getComponents()) {
-            if (item instanceof FormTextField) ((FormTextField) item).setText("");
-        }
+        Arrays.stream(baseCreatePurchaseForm.getComponents()).forEach((Component comp) ->{
+            if (comp instanceof FormTextField)  ((FormTextField) comp).setText(null);
+        });
 
         receiptIDTextField.setText(Integer.toString(generatedReceiptID));
 
@@ -348,16 +350,16 @@ public class PurchaseForm extends JPanel {
     public void setCardModel(DefaultComboBoxModel<String> cardModel) { this.existingCardModel = cardModel; }
 
     public void setCategoriesList(ArrayList<Category> categoriesList) {
-        categoriesList.sort(new CategoriesIDComparator());
+        categoriesList.sort(Comparator.comparingInt(Category::getId));
         this.categoriesList = categoriesList;
     }
 
     private void createCategoriesListForm() {
-        /* This method extracts each category from the default list and places them
-         * into a HashMap with an Array of FormLabel and ErrorLabel with the FormFormattedTextField.
-         * It also adds a PropertyChangeListener and MouseClicked listener to each. */
+        // This method extracts each category from the default list and places them
+        // into a HashMap with an Array of FormLabel and ErrorLabel with the FormFormattedTextField.
+        // It also adds a PropertyChangeListener and MouseClicked listener to each.
         HashMap<JLabel[], FormFormattedTextField> categoriesMap = new HashMap<>();
-        for (Category cat : categoriesList) {
+        categoriesList.forEach((cat) -> {
             JLabel[] labelArr = new JLabel[2];
             String categoryStr = cat.getName() + ": $";
             labelArr[0] = new FormLabel(categoryStr);
@@ -392,16 +394,15 @@ public class PurchaseForm extends JPanel {
                 }
             });
             categoriesMap.put(labelArr, catValueTextField);
-        }
+        });
         this.categoriesMap = categoriesMap;
     }
 
     private void setCategoriesVisible(boolean isVisible) {
-        for (HashMap.Entry<JLabel[], FormFormattedTextField> item : categoriesMap.entrySet()) {
-            item.getKey()[0].setVisible(isVisible);
-            item.getKey()[1].setVisible(!isVisible);
-            item.getValue().setVisible(isVisible);
-        }
+        categoriesMap.forEach((JLabel[] k, FormFormattedTextField v) ->{
+            k[0].setVisible(isVisible);
+            k[1].setVisible(!isVisible);
+            v.setVisible(isVisible); });
     }
 
     private void labelGridConstraints(GridBagConstraints gc) {
@@ -418,8 +419,7 @@ public class PurchaseForm extends JPanel {
     }
 
     private void hideAllFormComponents(boolean isVisible) {
-        for (Component item : baseCreatePurchaseForm.getComponents())
-            item.setVisible(isVisible);
+        Arrays.stream(baseCreatePurchaseForm.getComponents()).forEach((c)-> c.setVisible(isVisible));
     }
 
     private void enableNameAndEmail (boolean isVisible) {
@@ -434,10 +434,9 @@ public class PurchaseForm extends JPanel {
     }
 
     private void hideErrorLabels() {
-        for (Component comp : baseCreatePurchaseForm.getComponents()) {
-            if (comp instanceof ErrorLabel)
-                comp.setVisible(false);
-        }
+        Arrays.stream(baseCreatePurchaseForm.getComponents()).forEach((comp) -> {
+            if (comp instanceof ErrorLabel) comp.setVisible(false);
+        });
     }
 
     /*============================== ACCESSORS  ==============================*/
